@@ -35,11 +35,11 @@ Roda::RodaPlugins::Chunked
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The chunked plugin allows you to stream responses to clients using Transfer-Encoding: chunked.  This can significantly improve performance of page rendering on the client, as it flushes the headers and top part of the layout template (generally containing references to the stylesheet and javascript assets) before rendering the content template.</p>
+<p>The chunked plugin allows you to stream rendered views to clients. This can significantly improve performance of page rendering on the client, as it flushes the headers and top part of the layout template (generally containing references to the stylesheet and javascript assets) before rendering the content template.</p>
 
 <p>This allows the client to fetch the assets while the template is still being rendered.  Additionally, this plugin makes it easy to defer executing code required to render the content template until after the top part of the layout has been flushed, so the client can fetch the assets while the application is still doing the necessary processing in order to render the content template, such as retrieving values from a database.</p>
 
-<p>There are a couple disadvantages of streaming using chunked encoding. First is that the layout must be rendered before the content, so any state  changes made in your content template will not affect the layout template. Second, error handling is reduced, since if an error occurs while rendering a template, a successful response code has already been sent.</p>
+<p>There are a couple disadvantages of streaming.  First is that the layout must be rendered before the content, so any state changes made in your content template will not affect the layout template.  Second, error handling is reduced, since if an error occurs while rendering a template, a successful response code has already been sent.</p>
 
 <p>To use chunked encoding for a response, just call the chunked method instead of view:</p>
 
@@ -122,12 +122,14 @@ Roda::RodaPlugins::Chunked
 
 <p>It is possible to set @_out_buf to an error notification and call flush to output the message to the client inside handle_chunk_error.</p>
 
-<p>In order for chunking to work, you must make sure that no proxies between the application and the client buffer responses.  Also, this plugin only works for HTTP/1.1 requests since Transfer-Encoding: chunked is not supported in HTTP/1.0.  If an HTTP/1.0 request is submitted, this plugin will automatically fallback to the normal template rendering. Note that some proxies including nginx default to HTTP/1.0 even if the client supports HTTP/1.1.  For nginx, set the proxy_http_version to 1.1.</p>
+<p>In order for chunking to work, you must make sure that no proxies between the application and the client buffer responses.</p>
 
 <p>If you are using nginx and have it set to buffer proxy responses by default, you can turn this off on a per response basis using the X-Accel-Buffering header.  To set this header or similar headers for all chunked responses, pass a :headers option when loading the plugin:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:chunked</span>, <span class="ruby-value">headers:</span> {<span class="ruby-string">&#39;X-Accel-Buffering&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;no&#39;</span>}
 </pre>
+
+<p>By default, this plugin does not use Transfer-Encoding: chunked, it only returns a body that will stream the response in chunks.  If you would like to force the use of Transfer-Encoding: chunked, you can use the :force_chunked_encoding plugin option.  If using the :force_chunked_encoding plugin option, chunking will only be used for  HTTP/1.1 requests since Transfer-Encoding: chunked is only supported in HTTP/1.1 (non-HTTP/1.1 requests will have behavior similar to calling no_chunk!).</p>
 
 <p>The chunked plugin requires the render plugin, and only works for template engines that store their template output variable in @_out_buf.  Also, it only works if the content template is directly injected into the layout template without modification.</p>
 
@@ -148,6 +150,7 @@ Roda::RodaPlugins::Chunked
 <ol>
 <li><a href="Chunked/InstanceMethods.html">Roda::RodaPlugins::Chunked::InstanceMethods</a></li>
 <li><a href="Chunked/Body.html">Roda::RodaPlugins::Chunked::Body</a></li>
+<li><a href="Chunked/StreamBody.html">Roda::RodaPlugins::Chunked::StreamBody</a></li>
 </ol>
 </div>
 <div id='section'>
@@ -174,12 +177,13 @@ Roda::RodaPlugins::Chunked
 [show source]
 </a>
 <pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/chunked.rb</span>
-<span class="line-num">156</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
-<span class="line-num">157</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:chunk_by_default</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:chunk_by_default</span>]
-<span class="line-num">158</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]
-<span class="line-num">159</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:chunk_headers</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:chunk_headers</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]).<span class="ruby-identifier">freeze</span>
-<span class="line-num">160</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">161</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">159</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">160</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:chunk_by_default</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:chunk_by_default</span>]
+<span class="line-num">161</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:force_chunked_encoding</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:force_chunked_encoding</span>]
+<span class="line-num">162</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]
+<span class="line-num">163</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:chunk_headers</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:chunk_headers</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]).<span class="ruby-identifier">freeze</span>
+<span class="line-num">164</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">165</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -198,9 +202,9 @@ Roda::RodaPlugins::Chunked
 [show source]
 </a>
 <pre id='method-c-load_dependencies-source'>    <span class="ruby-comment"># File lib/roda/plugins/chunked.rb</span>
-<span class="line-num">149</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
-<span class="line-num">150</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>
-<span class="line-num">151</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">152</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">153</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>
+<span class="line-num">154</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.54.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.54.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.54.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2022-03-14 08:32:37 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>You can now override the type attribute for script tags produced by the assets plugin, by providing a :type attribute when calling the assets method.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Reloading the render plugin after the additional_view_directories plugin no longer removes the additional view directories from the allowed paths for templates.</p>
+</li><li>
+<p>When using Rack 3, <a href="../../../classes/Roda.html"><code>Roda</code></a> will now use an instance of Rack::Headers instead of a plain hash for the headers, allowing for compliance with the Rack 3 SPEC (which will require lowercase header keys).</p>
+</li><li>
+<p>The public, multi_public, and sinatra_helpers plugin now use Rack::Files instead of Rack::File if available, as Rack::File will be deprecated in Rack 3.0.</p>
+</li><li>
+<p>The json_parser plugin no longer rewinds the request body before and after reading it when used with Rack 3.0, as Rack 3.0 has dropped the requirement for rewindable input.</p>
+</li><li>
+<p>The run_handler plugin now closes bodies for upstream 404 responses when using the not_found: :pass option.</p>
+</li><li>
+<p>The chunked plugin no longer uses Transfer-Encoding: chunked by default.  Requiring the use of Transfer-Encoding: chunked made the plugin only work on HTTP 1.1, and not older or newer versions. The plugin still allows for streaming template bodies as they are being rendered.  To get the previous behavior of forcing the use of Transfer-Encoding: chunked, you can use the :force_chunked_encoding plugin option</p>
+</li><li>
+<p><a href="../../../classes/Roda.html"><code>Roda</code></a> now supports testing with Rack::Lint.  This found multiple violations of the Rack SPEC which are fixed in this version, and should ensure that <a href="../../../classes/Roda.html"><code>Roda</code></a> stays in compliance with the Rack SPEC going forward.</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p><a href="../../../classes/Roda.html"><code>Roda</code></a> will no longer set the Content-Length header for 205 responses when using Rack &lt;2.0.2, as doing so violates the Rack SPEC for those Rack versions.</p>
+</li><li>
+<p>The drop_body plugin now drops response bodies for all 1xx responses, not just for 100 and 101 responses, in compliance with the Rack SPEC.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
