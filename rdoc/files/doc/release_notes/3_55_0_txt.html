@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>version.rb</title>
+<title>3.55.0.txt</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -23,10 +23,10 @@
 <body class='page'>
 <div class='file' id='wrapper'>
 <div class='header'>
-<h1 class='name'>version.rb
+<h1 class='name'>3.55.0.txt
 </h1>
 <div class='paths'>
-lib/roda/version.rb
+doc/release_notes/3.55.0.txt
 </div>
 <div class='last-update'>
 Last Update:
@@ -35,7 +35,14 @@ Last Update:
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'></div>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A :forward_response_headers option has been added to the middleware plugin, which uses the response headers added by the middleware as default response headers even if the middleware does not handle the response. Response headers set by the underlying application take precedence over response headers set by the middleware.</p>
+</li><li>
+<p>The render plugin view method now accepts a block and will pass the block to the underlying render method call.  This is useful for rendering a template that yields inside of an existing layout. Previously, you had to nest render calls to do that.</p>
+</li></ul>
+</div>
 <div id='context'>
 </div>
 
