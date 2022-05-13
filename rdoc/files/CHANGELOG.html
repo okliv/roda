@@ -30,12 +30,29 @@ CHANGELOG
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2022-04-12 08:20:49 -0700</span>
+<span class='datetime'>2022-05-13 10:22:16 -0700</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
+<h1 id="label-3.56.0+-282022-05-13-29"><a href="doc/release_notes/3_56_0_txt.html">3.56.0</a> (2022-05-13)<span><a href="#label-3.56.0+-282022-05-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Make status_303 plugin use 303 responses for HTTP/2 and higher versions (jeremyevans)</p>
+</li><li>
+<p>Add RodaRequest#http_version for determining the HTTP version in use (jeremyevans)</p>
+</li><li>
+<p>Do not set a body for 405 responses when using the verb methods in the not_allowed plugin (jeremyevans) (#267)</p>
+</li><li>
+<p>Support status_handler method :keep_headers option in status_handler plugin (jeremyevans) (#267)</p>
+</li><li>
+<p>Make not_allowed plugin have r.root return 405 responses for non-GET requests (jeremyevans) (#266)</p>
+</li><li>
+<p>In Rack 3, only require the parts of rack used by <a href="../classes/Roda.html"><code>Roda</code></a>, instead of requiring rack itself and relying on autoload (jeremyevans)</p>
+</li><li>
+<p>Add run_require_slash plugin, for skipping application dispatch for remaining paths that would violate Rack SPEC (jeremyevans)</p>
+</li></ul>
+
 <h1 id="label-3.55.0+-282022-04-12-29"><a href="doc/release_notes/3_55_0_txt.html">3.55.0</a> (2022-04-12)<span><a href="#label-3.55.0+-282022-04-12-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Allow passing blocks to the view method in the render plugin (jeremyevans) (#262)</p>

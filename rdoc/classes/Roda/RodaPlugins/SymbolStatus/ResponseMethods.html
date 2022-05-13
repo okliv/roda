@@ -63,10 +63,10 @@ Roda::RodaPlugins::SymbolStatus::ResponseMethods
 [show source]
 </a>
 <pre id='method-i-status-3D-source'>   <span class="ruby-comment"># File lib/roda/plugins/symbol_status.rb</span>
-<span class="line-num">21</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">status=</span>(<span class="ruby-identifier">code</span>)
-<span class="line-num">22</span>   <span class="ruby-identifier">code</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">status_code</span>(<span class="ruby-identifier">code</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">code</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>)
-<span class="line-num">23</span>   <span class="ruby-keyword">super</span>(<span class="ruby-identifier">code</span>)
-<span class="line-num">24</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">23</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">status=</span>(<span class="ruby-identifier">code</span>)
+<span class="line-num">24</span>   <span class="ruby-identifier">code</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">status_code</span>(<span class="ruby-identifier">code</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">code</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>)
+<span class="line-num">25</span>   <span class="ruby-keyword">super</span>(<span class="ruby-identifier">code</span>)
+<span class="line-num">26</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

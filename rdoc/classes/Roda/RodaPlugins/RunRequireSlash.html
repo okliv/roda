@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::RunRequireSlash</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::RunRequireSlash
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/run_require_slash_rb.html">lib/roda/plugins/run_require_slash.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The run_require_slash plugin makes <code>r.run</code> a no-op if the remaining path is not empty and does not start with <code>/</code>. The Rack SPEC requires that <code>PATH_INFO</code> start with a slash if not empty, so this plugin prevents dispatching to the application with an environment that would violate the Rack SPEC.</p>
+
+<p>You are unlikely to want to use this plugin unless are consuming partial segments of the request path, or using the match_affix plugin to change how routing is done:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:match_affix</span>, <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-regexp">/(\/|\z)/</span>
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;/a&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-comment"># with run_require_slash:</span>
+<span class="ruby-comment"># GET /a/b/e =&gt; App not dispatched to</span>
+<span class="ruby-comment"># GET /a/b =&gt; App gets &quot;&quot; as PATH_INFO</span>
+
+<span class="ruby-comment"># with run_require_slash:</span>
+<span class="ruby-comment"># GET /a/b/e =&gt; App gets &quot;e&quot; as PATH_INFO, violating rack SPEC</span>
+<span class="ruby-comment"># GET /a/b =&gt; App gets &quot;&quot; as PATH_INFO</span>
+</pre>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="RunRequireSlash/RequestMethods.html">Roda::RodaPlugins::RunRequireSlash::RequestMethods</a></li>
+</ol>
+</div>
+<div id='section'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

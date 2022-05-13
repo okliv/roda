@@ -49,6 +49,7 @@ Roda::RodaPlugins::Base::RequestMethods
 <li><a href="#attribute-i-captures">captures</a></li>
 <li><a href="#method-i-get">get</a></li>
 <li><a href="#method-i-halt">halt</a></li>
+<li><a href="#method-i-http_version">http_version</a></li>
 <li><a href="#method-i-inspect">inspect</a></li>
 <li><a href="#method-i-is">is</a></li>
 <li><a href="#method-i-is_get-3F">is_get?</a></li>
@@ -144,12 +145,12 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">73</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">scope</span>, <span class="ruby-identifier">env</span>)
-<span class="line-num">74</span>   <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>
-<span class="line-num">75</span>   <span class="ruby-ivar">@captures</span> = []
-<span class="line-num">76</span>   <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-identifier">_remaining_path</span>(<span class="ruby-identifier">env</span>)
-<span class="line-num">77</span>   <span class="ruby-ivar">@env</span> = <span class="ruby-identifier">env</span>
-<span class="line-num">78</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">86</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">scope</span>, <span class="ruby-identifier">env</span>)
+<span class="line-num">87</span>   <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>
+<span class="line-num">88</span>   <span class="ruby-ivar">@captures</span> = []
+<span class="line-num">89</span>   <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-identifier">_remaining_path</span>(<span class="ruby-identifier">env</span>)
+<span class="line-num">90</span>   <span class="ruby-ivar">@env</span> = <span class="ruby-identifier">env</span>
+<span class="line-num">91</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -168,13 +169,13 @@ Roda::RodaPlugins::Base::RequestMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-block_result-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-block_result-source'>   <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">82</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">block_result</span>(<span class="ruby-identifier">result</span>)
-<span class="line-num">83</span>   <span class="ruby-identifier">res</span> = <span class="ruby-identifier">response</span>
-<span class="line-num">84</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">body</span> = <span class="ruby-identifier">block_result_body</span>(<span class="ruby-identifier">result</span>))
-<span class="line-num">85</span>     <span class="ruby-identifier">res</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">body</span>)
-<span class="line-num">86</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">87</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-block_result-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
+<span class="line-num"> 95</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">block_result</span>(<span class="ruby-identifier">result</span>)
+<span class="line-num"> 96</span>   <span class="ruby-identifier">res</span> = <span class="ruby-identifier">response</span>
+<span class="line-num"> 97</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">body</span> = <span class="ruby-identifier">block_result_body</span>(<span class="ruby-identifier">result</span>))
+<span class="line-num"> 98</span>     <span class="ruby-identifier">res</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">body</span>)
+<span class="line-num"> 99</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">100</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-get'>
@@ -192,10 +193,10 @@ Roda::RodaPlugins::Base::RequestMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-get-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-get-source'>   <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">92</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">get</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">93</span>   <span class="ruby-identifier">_verb</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_get?</span>
-<span class="line-num">94</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-get-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
+<span class="line-num">105</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">get</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">106</span>   <span class="ruby-identifier">_verb</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_get?</span>
+<span class="line-num">107</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-halt'>
@@ -222,9 +223,32 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-halt-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">106</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">halt</span>(<span class="ruby-identifier">res</span>=<span class="ruby-identifier">response</span>.<span class="ruby-identifier">finish</span>)
-<span class="line-num">107</span>   <span class="ruby-identifier">throw</span> <span class="ruby-value">:halt</span>, <span class="ruby-identifier">res</span>
-<span class="line-num">108</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">119</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">halt</span>(<span class="ruby-identifier">res</span>=<span class="ruby-identifier">response</span>.<span class="ruby-identifier">finish</span>)
+<span class="line-num">120</span>   <span class="ruby-identifier">throw</span> <span class="ruby-value">:halt</span>, <span class="ruby-identifier">res</span>
+<span class="line-num">121</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-http_version'>
+<a name='method-i-http_version'></a>
+<div class='synopsis'>
+<span class='name'>http_version</span><span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-http_version-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-http_version-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
+<span class="line-num">134</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">http_version</span>
+<span class="line-num">135</span>   <span class="ruby-comment"># Prefer SERVER_PROTOCOL as it is required in Rack 3.</span>
+<span class="line-num">136</span>   <span class="ruby-comment"># Still fall back to HTTP_VERSION if SERVER_PROTOCOL</span>
+<span class="line-num">137</span>   <span class="ruby-comment"># is not set, in case the server in use is not Rack 3</span>
+<span class="line-num">138</span>   <span class="ruby-comment"># compliant.</span>
+<span class="line-num">139</span>   <span class="ruby-ivar">@env</span>[<span class="ruby-string">&#39;SERVER_PROTOCOL&#39;</span>] <span class="ruby-operator">||</span> <span class="ruby-ivar">@env</span>[<span class="ruby-string">&#39;HTTP_VERSION&#39;</span>]
+<span class="line-num">140</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-inspect'>
@@ -247,9 +271,9 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-inspect-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">115</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inspect</span>
-<span class="line-num">116</span>   <span class="ruby-node">&quot;#&lt;#{self.class.inspect} #{@env[&quot;REQUEST_METHOD&quot;]} #{path}&gt;&quot;</span>
-<span class="line-num">117</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">128</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inspect</span>
+<span class="line-num">129</span>   <span class="ruby-node">&quot;#&lt;#{self.class.inspect} #{@env[&quot;REQUEST_METHOD&quot;]} #{path}&gt;&quot;</span>
+<span class="line-num">130</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-is'>
@@ -309,16 +333,16 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-is-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">162</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">is</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">163</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>
-<span class="line-num">164</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">empty_path?</span>
-<span class="line-num">165</span>       <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">166</span>     <span class="ruby-keyword">end</span>
-<span class="line-num">167</span>   <span class="ruby-keyword">else</span>
-<span class="line-num">168</span>     <span class="ruby-identifier">args</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">TERM</span>
-<span class="line-num">169</span>     <span class="ruby-identifier">if_match</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">170</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">171</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">196</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">is</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">197</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>
+<span class="line-num">198</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">empty_path?</span>
+<span class="line-num">199</span>       <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">200</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">201</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">202</span>     <span class="ruby-identifier">args</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">TERM</span>
+<span class="line-num">203</span>     <span class="ruby-identifier">if_match</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">204</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">205</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-is_get-3F'>
@@ -337,9 +361,9 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-is_get-3F-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">176</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">is_get?</span>
-<span class="line-num">177</span>   <span class="ruby-ivar">@env</span>[<span class="ruby-string">&quot;REQUEST_METHOD&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;GET&#39;</span>
-<span class="line-num">178</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">210</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">is_get?</span>
+<span class="line-num">211</span>   <span class="ruby-ivar">@env</span>[<span class="ruby-string">&quot;REQUEST_METHOD&quot;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;GET&#39;</span>
+<span class="line-num">212</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-matched_path'>
@@ -358,10 +382,10 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-matched_path-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">216</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">matched_path</span>
-<span class="line-num">217</span>   <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@env</span>
-<span class="line-num">218</span>   <span class="ruby-identifier">e</span>[<span class="ruby-string">&quot;SCRIPT_NAME&quot;</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">e</span>[<span class="ruby-string">&quot;PATH_INFO&quot;</span>].<span class="ruby-identifier">chomp</span>(<span class="ruby-ivar">@remaining_path</span>)
-<span class="line-num">219</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">250</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">matched_path</span>
+<span class="line-num">251</span>   <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@env</span>
+<span class="line-num">252</span>   <span class="ruby-identifier">e</span>[<span class="ruby-string">&quot;SCRIPT_NAME&quot;</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">e</span>[<span class="ruby-string">&quot;PATH_INFO&quot;</span>].<span class="ruby-identifier">chomp</span>(<span class="ruby-ivar">@remaining_path</span>)
+<span class="line-num">253</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-on'>
@@ -401,13 +425,13 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-on-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">207</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">on</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">208</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>
-<span class="line-num">209</span>     <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">210</span>   <span class="ruby-keyword">else</span>
-<span class="line-num">211</span>     <span class="ruby-identifier">if_match</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">212</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">213</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">241</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">on</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">242</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>
+<span class="line-num">243</span>     <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">244</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">245</span>     <span class="ruby-identifier">if_match</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">246</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">247</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-path'>
@@ -432,10 +456,10 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-path-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">227</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">path</span>
-<span class="line-num">228</span>   <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@env</span>
-<span class="line-num">229</span>   <span class="ruby-node">&quot;#{e[&quot;SCRIPT_NAME&quot;]}#{e[&quot;PATH_INFO&quot;]}&quot;</span>
-<span class="line-num">230</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">261</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">path</span>
+<span class="line-num">262</span>   <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@env</span>
+<span class="line-num">263</span>   <span class="ruby-node">&quot;#{e[&quot;SCRIPT_NAME&quot;]}#{e[&quot;PATH_INFO&quot;]}&quot;</span>
+<span class="line-num">264</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-post'>
@@ -454,9 +478,9 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-post-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">242</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">post</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">243</span>   <span class="ruby-identifier">_verb</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">post?</span>
-<span class="line-num">244</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">276</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">post</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">277</span>   <span class="ruby-identifier">_verb</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">post?</span>
+<span class="line-num">278</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-redirect'>
@@ -494,10 +518,10 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-redirect-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">269</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">redirect</span>(<span class="ruby-identifier">path</span>=<span class="ruby-identifier">default_redirect_path</span>, <span class="ruby-identifier">status</span>=<span class="ruby-identifier">default_redirect_status</span>)
-<span class="line-num">270</span>   <span class="ruby-identifier">response</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">status</span>)
-<span class="line-num">271</span>   <span class="ruby-identifier">throw</span> <span class="ruby-value">:halt</span>, <span class="ruby-identifier">response</span>.<span class="ruby-identifier">finish</span>
-<span class="line-num">272</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">303</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">redirect</span>(<span class="ruby-identifier">path</span>=<span class="ruby-identifier">default_redirect_path</span>, <span class="ruby-identifier">status</span>=<span class="ruby-identifier">default_redirect_status</span>)
+<span class="line-num">304</span>   <span class="ruby-identifier">response</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">status</span>)
+<span class="line-num">305</span>   <span class="ruby-identifier">throw</span> <span class="ruby-value">:halt</span>, <span class="ruby-identifier">response</span>.<span class="ruby-identifier">finish</span>
+<span class="line-num">306</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-response'>
@@ -520,9 +544,9 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-response-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">280</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">response</span>
-<span class="line-num">281</span>   <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">response</span>
-<span class="line-num">282</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">314</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">response</span>
+<span class="line-num">315</span>   <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">response</span>
+<span class="line-num">316</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-roda_class'>
@@ -541,9 +565,9 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-roda_class-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">285</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">roda_class</span>
-<span class="line-num">286</span>   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">roda_class</span>
-<span class="line-num">287</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">319</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">roda_class</span>
+<span class="line-num">320</span>   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">roda_class</span>
+<span class="line-num">321</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-root'>
@@ -608,11 +632,11 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-root-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">336</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">root</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">337</span>   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@remaining_path</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;/&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">is_get?</span>
-<span class="line-num">338</span>     <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">339</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">340</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">370</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">root</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">371</span>   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@remaining_path</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;/&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">is_get?</span>
+<span class="line-num">372</span>     <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">373</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">374</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-run'>
@@ -638,22 +662,22 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-run-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">353</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">run</span>(<span class="ruby-identifier">app</span>)
-<span class="line-num">354</span>   <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@env</span>
-<span class="line-num">355</span>   <span class="ruby-identifier">path</span> = <span class="ruby-identifier">real_remaining_path</span>
-<span class="line-num">356</span>   <span class="ruby-identifier">sn</span> = <span class="ruby-string">&quot;SCRIPT_NAME&quot;</span>
-<span class="line-num">357</span>   <span class="ruby-identifier">pi</span> = <span class="ruby-string">&quot;PATH_INFO&quot;</span>
-<span class="line-num">358</span>   <span class="ruby-identifier">script_name</span> = <span class="ruby-identifier">e</span>[<span class="ruby-identifier">sn</span>]
-<span class="line-num">359</span>   <span class="ruby-identifier">path_info</span> = <span class="ruby-identifier">e</span>[<span class="ruby-identifier">pi</span>]
-<span class="line-num">360</span>   <span class="ruby-keyword">begin</span>
-<span class="line-num">361</span>     <span class="ruby-identifier">e</span>[<span class="ruby-identifier">sn</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">path_info</span>.<span class="ruby-identifier">chomp</span>(<span class="ruby-identifier">path</span>)
-<span class="line-num">362</span>     <span class="ruby-identifier">e</span>[<span class="ruby-identifier">pi</span>] = <span class="ruby-identifier">path</span>
-<span class="line-num">363</span>     <span class="ruby-identifier">throw</span> <span class="ruby-value">:halt</span>, <span class="ruby-identifier">app</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">e</span>)
-<span class="line-num">364</span>   <span class="ruby-keyword">ensure</span>
-<span class="line-num">365</span>     <span class="ruby-identifier">e</span>[<span class="ruby-identifier">sn</span>] = <span class="ruby-identifier">script_name</span>
-<span class="line-num">366</span>     <span class="ruby-identifier">e</span>[<span class="ruby-identifier">pi</span>] = <span class="ruby-identifier">path_info</span>
-<span class="line-num">367</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">368</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">387</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">run</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">388</span>   <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@env</span>
+<span class="line-num">389</span>   <span class="ruby-identifier">path</span> = <span class="ruby-identifier">real_remaining_path</span>
+<span class="line-num">390</span>   <span class="ruby-identifier">sn</span> = <span class="ruby-string">&quot;SCRIPT_NAME&quot;</span>
+<span class="line-num">391</span>   <span class="ruby-identifier">pi</span> = <span class="ruby-string">&quot;PATH_INFO&quot;</span>
+<span class="line-num">392</span>   <span class="ruby-identifier">script_name</span> = <span class="ruby-identifier">e</span>[<span class="ruby-identifier">sn</span>]
+<span class="line-num">393</span>   <span class="ruby-identifier">path_info</span> = <span class="ruby-identifier">e</span>[<span class="ruby-identifier">pi</span>]
+<span class="line-num">394</span>   <span class="ruby-keyword">begin</span>
+<span class="line-num">395</span>     <span class="ruby-identifier">e</span>[<span class="ruby-identifier">sn</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">path_info</span>.<span class="ruby-identifier">chomp</span>(<span class="ruby-identifier">path</span>)
+<span class="line-num">396</span>     <span class="ruby-identifier">e</span>[<span class="ruby-identifier">pi</span>] = <span class="ruby-identifier">path</span>
+<span class="line-num">397</span>     <span class="ruby-identifier">throw</span> <span class="ruby-value">:halt</span>, <span class="ruby-identifier">app</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">e</span>)
+<span class="line-num">398</span>   <span class="ruby-keyword">ensure</span>
+<span class="line-num">399</span>     <span class="ruby-identifier">e</span>[<span class="ruby-identifier">sn</span>] = <span class="ruby-identifier">script_name</span>
+<span class="line-num">400</span>     <span class="ruby-identifier">e</span>[<span class="ruby-identifier">pi</span>] = <span class="ruby-identifier">path_info</span>
+<span class="line-num">401</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">402</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-session'>
@@ -672,9 +696,9 @@ Roda::RodaPlugins::Base::RequestMethods
 [show source]
 </a>
 <pre id='method-i-session-source'>    <span class="ruby-comment"># File lib/roda/request.rb</span>
-<span class="line-num">372</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">session</span>
-<span class="line-num">373</span>   <span class="ruby-ivar">@env</span>[<span class="ruby-string">&#39;rack.session&#39;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;You&#39;re missing a session handler, try using the sessions plugin.&quot;</span>)
-<span class="line-num">374</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">406</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">session</span>
+<span class="line-num">407</span>   <span class="ruby-ivar">@env</span>[<span class="ruby-string">&#39;rack.session&#39;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;You&#39;re missing a session handler, try using the sessions plugin.&quot;</span>)
+<span class="line-num">408</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

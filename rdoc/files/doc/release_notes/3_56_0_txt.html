@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.56.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.56.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.56.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2022-05-13 10:22:16 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>RodaRequest#http_version has been added for determining the HTTP version the request was submitted with.  This will be a string such as “HTTP/1.0”, “HTTP/1.1”, “HTTP/2”, etc. This will use the SERVER_PROTOCOL and HTTP_VERSION entries from the environment to determine which HTTP version is in use.</p>
+</li><li>
+<p>The status_handler method in the status_handler plugin now supports a :keep_headers option.  The value for this option should be an array of header names to keep.  All other headers are removed. The default behavior without the option is still to remove all headers.</p>
+</li><li>
+<p>A run_require_slash plugin has been added, which will skip dispatching to another rack application if the remaining path is not empty and does not start with a slash.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The status_303 plugin will use 303 as the default redirect status for non-GET requests for HTTP/2 and higher HTTP versions. Previously, it only used 303 for HTTP/1.1.</p>
+</li><li>
+<p>The not_allowed plugin now overrides the r.root method to return 405 responses to non-GET requests to the root.</p>
+</li><li>
+<p>The not_allowed plugin no longer sets the body when returning 405 responses using methods such as r.get and r.post. Previously, the body was unintentionally set to the same value as the Allow header.</p>
+</li><li>
+<p>When using the Rack master branch (what will become Rack 3), <a href="../../../classes/Roda.html"><code>Roda</code></a> only requires the parts of rack that it uses, instead of requiring rack and relying on autoload to load the parts of rack in use.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
