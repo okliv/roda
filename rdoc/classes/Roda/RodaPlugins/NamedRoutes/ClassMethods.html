@@ -162,14 +162,13 @@ Roda::RodaPlugins::NamedRoutes::ClassMethods
 <span class="line-num">145</span>     <span class="ruby-identifier">routes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>][<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> {}
 <span class="line-num">146</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>
 <span class="line-num">147</span>       <span class="ruby-identifier">routes</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">define_roda_method</span>(<span class="ruby-identifier">routes</span>[<span class="ruby-identifier">name</span>] <span class="ruby-operator">||</span> <span class="ruby-node">&quot;named_routes_#{namespace}_#{name}&quot;</span>, <span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">convert_route_block</span>(<span class="ruby-identifier">block</span>))
-<span class="line-num">148</span>     <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">meth</span> = <span class="ruby-identifier">routes</span>[<span class="ruby-identifier">name</span>]
-<span class="line-num">149</span>       <span class="ruby-identifier">routes</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">name</span>)
-<span class="line-num">150</span>       <span class="ruby-identifier">remove_method</span>(<span class="ruby-identifier">meth</span>)
-<span class="line-num">151</span>     <span class="ruby-keyword">end</span>
-<span class="line-num">152</span>   <span class="ruby-keyword">else</span>
-<span class="line-num">153</span>     <span class="ruby-keyword">super</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">154</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">155</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">148</span>     <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">meth</span> = <span class="ruby-identifier">routes</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">name</span>)
+<span class="line-num">149</span>       <span class="ruby-identifier">remove_method</span>(<span class="ruby-identifier">meth</span>)
+<span class="line-num">150</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">151</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">152</span>     <span class="ruby-keyword">super</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">153</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">154</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

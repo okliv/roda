@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::HashBranches::ClassMethods</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::HashBranches::ClassMethods
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../../files/lib/roda/plugins/hash_branches_rb.html">lib/roda/plugins/hash_branches.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-freeze">freeze</a></li>
+<li><a href="#method-i-hash_branch">hash_branch</a></li>
+<li><a href="#method-i-inherited">inherited</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-freeze'>
+<a name='method-i-freeze'></a>
+<div class='synopsis'>
+<span class='name'>freeze</span><span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Freeze the hash_branches metadata when freezing the app.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-freeze-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-freeze-source'>   <span class="ruby-comment"># File lib/roda/plugins/hash_branches.rb</span>
+<span class="line-num">92</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze</span>
+<span class="line-num">93</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_branches</span>].<span class="ruby-identifier">freeze</span>.<span class="ruby-identifier">each_value</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:freeze</span>)
+<span class="line-num">94</span>   <span class="ruby-keyword">super</span>
+<span class="line-num">95</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-hash_branch'>
+<a name='method-i-hash_branch'></a>
+<div class='synopsis'>
+<span class='name'>hash_branch</span><span class='arguments'>(namespace='', segment, &block)</span>
+
+</div>
+<div class='description'>
+
+<p>Add branch handler for the given namespace and segment. If called without a block, removes the existing branch handler if it exists.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-hash_branch-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-hash_branch-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_branches.rb</span>
+<span class="line-num">109</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">hash_branch</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-string">&#39;&#39;</span>, <span class="ruby-identifier">segment</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">110</span>   <span class="ruby-identifier">segment</span> = <span class="ruby-node">&quot;/#{segment}&quot;</span>
+<span class="line-num">111</span>   <span class="ruby-identifier">routes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_branches</span>][<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">112</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>
+<span class="line-num">113</span>     <span class="ruby-identifier">routes</span>[<span class="ruby-identifier">segment</span>] = <span class="ruby-identifier">define_roda_method</span>(<span class="ruby-identifier">routes</span>[<span class="ruby-identifier">segment</span>] <span class="ruby-operator">||</span> <span class="ruby-node">&quot;hash_branch_#{namespace}_#{segment}&quot;</span>, <span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">convert_route_block</span>(<span class="ruby-identifier">block</span>))
+<span class="line-num">114</span>   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">meth</span> = <span class="ruby-identifier">routes</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">segment</span>)
+<span class="line-num">115</span>     <span class="ruby-identifier">remove_method</span>(<span class="ruby-identifier">meth</span>)
+<span class="line-num">116</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">117</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-inherited'>
+<a name='method-i-inherited'></a>
+<div class='synopsis'>
+<span class='name'>inherited</span><span class='arguments'>(subclass)</span>
+
+</div>
+<div class='description'>
+
+<p>Duplicate hash_branches metadata in subclass.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-inherited-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-inherited-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_branches.rb</span>
+<span class="line-num"> 98</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inherited</span>(<span class="ruby-identifier">subclass</span>)
+<span class="line-num"> 99</span>   <span class="ruby-keyword">super</span>
+<span class="line-num">100</span> 
+<span class="line-num">101</span>   <span class="ruby-identifier">h</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_branches</span>]
+<span class="line-num">102</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_branches</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">routes</span><span class="ruby-operator">|</span>
+<span class="line-num">103</span>     <span class="ruby-identifier">h</span>[<span class="ruby-identifier">namespace</span>] = <span class="ruby-identifier">routes</span>.<span class="ruby-identifier">dup</span>
+<span class="line-num">104</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">105</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

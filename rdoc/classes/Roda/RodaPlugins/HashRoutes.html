@@ -35,51 +35,7 @@ Roda::RodaPlugins::HashRoutes
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The hash_routes plugin combines the O(1) dispatching speed of the static_routing plugin with the flexibility of the multi_route plugin.  For any point in the routing tree, it allows you dispatch to multiple routes where the next segment or the remaining path is a static string.</p>
-
-<p>For a basic replacement of the multi_route plugin, you can replace class level <code>route(&#39;segment&#39;)</code> calls with <code>hash_branch(&#39;segment&#39;)</code>:</p>
-
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
-  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
-
-  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># /a branch</span>
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># /b branch</span>
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_branches</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span>
-</pre>
-
-<p>With the above routing tree, the <code>r.hash_branches</code> call in the main routing tree, will dispatch requests for the <code>/a</code> and <code>/b</code> branches of the tree to the appropriate routing blocks.</p>
-
-<p>In addition to supporting routing via the next segment, you can also support similar routing for entire remaining path using the <code>hash_path</code> class method:</p>
-
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
-  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
-
-  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># /a path</span>
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># /a/b path</span>
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_paths</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span>
-</pre>
-
-<p>With the above routing tree, the <code>r.hash_paths</code> call will dispatch requests for the <code>/a</code> and <code>/a/b</code> request paths.</p>
-
-<p>You can combine the two approaches, and use <code>r.hash_routes</code> to first try routing the full path, and then try routing the next segment:</p>
+<p>The hash_routes plugin builds on top of the hash_branches and hash_paths plugins, and adds a <a href="HashRoutes/DSL.html"><code>DSL</code></a> for configuring hash branches and paths. It also adds an <code>r.hash_routes</code> method for first attempting dispatch to the configured hash_paths, then to the configured hash_branches:</p>
 
 <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
   <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
@@ -108,52 +64,9 @@ Roda::RodaPlugins::HashRoutes
 
 <p>With the above routing tree, requests for <code>/a</code> and <code>/a/b</code> will be routed to the appropriate <code>hash_path</code> block.  Other requests for the <code>/a</code> branch, and all requests for the <code>/b</code> branch will be routed to the appropriate <code>hash_branch</code> block.</p>
 
-<p>Both <code>hash_branch</code> and <code>hash_path</code> support namespaces, which allows them to be used at any level of the routing tree.  Here is an example that uses namespaces for sub-branches:</p>
+<p>It is best for performance to explicitly specify the namespace when calling <code>r.hash_routes</code>.</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
-  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
-
-  <span class="ruby-comment"># Only one argument used, so the namespace defaults to &#39;&#39;, and the argument</span>
-  <span class="ruby-comment"># specifies the route name</span>
-  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># uses &#39;/a&#39; as the namespace when looking up routes,</span>
-    <span class="ruby-comment"># as that part of the path has been routed now</span>
-    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-comment"># Two arguments used, so first specifies the namespace and the second specifies</span>
-  <span class="ruby-comment"># the route name</span>
-  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&#39;&#39;</span>, <span class="ruby-string">&quot;b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># uses :b as the namespace when looking up routes, as that was explicitly specified</span>
-    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:b</span>)
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>, <span class="ruby-string">&quot;/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># /a/b path</span>
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>, <span class="ruby-string">&quot;/c&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># /a/c path</span>
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-identifier">hash_path</span>(<span class="ruby-value">:b</span>, <span class="ruby-string">&quot;/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># /b/b path</span>
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-identifier">hash_path</span>(<span class="ruby-value">:b</span>, <span class="ruby-string">&quot;/c&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># /b/c path</span>
-  <span class="ruby-keyword">end</span>
-
-  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># uses &#39;&#39; as the namespace, as no part of the path has been routed yet</span>
-    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_branches</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span>
-</pre>
-
-<p>With the above routing tree, requests for the <code>/a</code> and <code>/b</code> branches will be dispatched to the appropriate <code>hash_branch</code> block.  Those blocks will the dispatch to the <code>hash_path</code> blocks, with the <code>/a</code> branch using the implicit namespace of <code>/a</code>, and the <code>/b</code> branch using the explicit namespace of <code>:b</code>.  In general, it is best for performance to explicitly specify the namespace when calling <code>r.hash_branches</code>, <code>r.hash_paths</code>, and <code>r.hash_routes</code>.</p>
-
-<p>Because specifying routes explicitly using the <code>hash_branch</code> and <code>hash_path</code> class methods can get repetitive, the hash_routes plugin offers a <a href="HashRoutes/DSL.html"><code>DSL</code></a> for DRYing the code up.  This <a href="HashRoutes/DSL.html"><code>DSL</code></a> is used by calling the <code>hash_routes</code> class method.  Below is a translation of the previous example to using the <code>hash_routes</code> DSL:</p>
+<p>Because specifying routes explicitly using the <code>hash_branch</code> and <code>hash_path</code> class methods can get repetitive, the hash_routes plugin offers a <a href="HashRoutes/DSL.html"><code>DSL</code></a> for DRYing the code up.  This <a href="HashRoutes/DSL.html"><code>DSL</code></a> is used by calling the <code>hash_routes</code> class method.  The <a href="HashRoutes/DSL.html"><code>DSL</code></a> used tries to mirror the standard <a href="../../Roda.html"><code>Roda</code></a> <a href="HashRoutes/DSL.html"><code>DSL</code></a>, but it is not a normal routing tree (it’s not possible to execute arbitrary code between branches during routing).</p>
 
 <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
   <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
@@ -277,6 +190,7 @@ Roda::RodaPlugins::HashRoutes
 <h3>Public Class</h3>
 <ol>
 <li><a href="#method-c-configure">configure</a></li>
+<li><a href="#method-c-load_dependencies">load_dependencies</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -306,11 +220,29 @@ Roda::RodaPlugins::HashRoutes
 [show source]
 </a>
 <pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>
-<span class="line-num">267</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)
-<span class="line-num">268</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_branches</span>] <span class="ruby-operator">||=</span> {}
-<span class="line-num">269</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_paths</span>] <span class="ruby-operator">||=</span> {}
-<span class="line-num">270</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_routes_methods</span>] <span class="ruby-operator">||=</span> {}
-<span class="line-num">271</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">177</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">178</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_routes_methods</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">179</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-class' id='method-method-c-load_dependencies'>
+<a name='method-c-load_dependencies'></a>
+<div class='synopsis'>
+<span class='name'>load_dependencies</span><span class='arguments'>(app)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-load_dependencies-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>
+<span class="line-num">172</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">173</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_branches</span>
+<span class="line-num">174</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_paths</span>
+<span class="line-num">175</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::HashPaths</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::HashPaths
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/hash_paths_rb.html">lib/roda/plugins/hash_paths.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The hash_paths plugin allows for O(1) dispatch to multiple routes at any point in the routing tree.  It is useful when you have a large number of specific routes to dispatch to at any point in the routing tree.</p>
+
+<p>You configure the hash paths to dispatch to using the <code>hash_path</code> class method, specifying the remaining path, with a block to handle that path.  Then you dispatch to the configured paths using <code>r.hash_paths</code>:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_paths</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /a path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /a/b path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_paths</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>With the above routing tree, the <code>r.hash_paths</code> call will dispatch requests for the <code>/a</code> and <code>/a/b</code> request paths.</p>
+
+<p>The <code>hash_path</code> class method supports namespaces, which allows <code>r.hash_paths</code> to be used at any level of the routing tree.  Here is an example that uses namespaces for sub-branches:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_paths</span>
+
+  <span class="ruby-comment"># Two arguments provided, so first argument is the namespace</span>
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>, <span class="ruby-string">&quot;/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /a/b path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>, <span class="ruby-string">&quot;/c&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /a/c path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-value">:b</span>, <span class="ruby-string">&quot;/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /b/b path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-value">:b</span>, <span class="ruby-string">&quot;/c&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /b/c path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-comment"># No argument given, so uses the already matched path as the namespace,</span>
+      <span class="ruby-comment"># which is &#39;/a&#39; in this case.</span>
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_paths</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;b&#39;</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-comment"># uses :b as the namespace when looking up routes, as that was explicitly specified</span>
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_paths</span>(<span class="ruby-value">:b</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>With the above routing tree, requests for the <code>/a</code> branch will be handled by the first <code>r.hash_paths</code> call, and requests for the <code>/b</code> branch will be handled by the second <code>r.hash_paths</code> call.  Those will dispatch to the configured hash paths for the <code>/a</code> and <code>:b</code> namespaces.</p>
+
+<p>It is best for performance to explicitly specify the namespace when calling <code>r.hash_paths</code>.</p>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-configure">configure</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="HashPaths/ClassMethods.html">Roda::RodaPlugins::HashPaths::ClassMethods</a></li>
+<li><a href="HashPaths/RequestMethods.html">Roda::RodaPlugins::HashPaths::RequestMethods</a></li>
+</ol>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-configure'>
+<a name='method-c-configure'></a>
+<div class='synopsis'>
+<span class='name'>configure</span><span class='arguments'>(app)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/hash_paths.rb</span>
+<span class="line-num">78</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">79</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_paths</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">80</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

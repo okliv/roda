@@ -1,6 +1,6 @@
-Fri, 13 May 2022 10:25:48 -0700
+Tue, 14 Jun 2022 08:40:19 -0700
 README.rdoc	Wed, 08 Dec 2021 12:24:00 -0800
-CHANGELOG	Fri, 13 May 2022 10:22:16 -0700
+CHANGELOG	Tue, 14 Jun 2022 08:36:04 -0700
 doc/CHANGELOG.old	Fri, 11 Mar 2022 10:33:07 -0800
 MIT-LICENSE	Fri, 07 Jan 2022 12:48:17 -0800
 lib/roda.rb	Tue, 27 Jul 2021 09:50:55 -0700
@@ -21,7 +21,7 @@ lib/roda/plugins/capture_erb.rb	Tue, 02 Nov 2021 13:25:06 -0700
 lib/roda/plugins/chunked.rb	Wed, 04 May 2022 08:46:11 -0700
 lib/roda/plugins/class_level_routing.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/plugins/class_matchers.rb	Fri, 08 Dec 2017 15:45:27 -0800
-lib/roda/plugins/common_logger.rb	Wed, 04 May 2022 08:46:11 -0700
+lib/roda/plugins/common_logger.rb	Mon, 13 Jun 2022 13:28:17 -0700
 lib/roda/plugins/content_for.rb	Tue, 02 Nov 2021 13:25:06 -0700
 lib/roda/plugins/content_security_policy.rb	Tue, 21 Sep 2021 14:23:42 -0700
 lib/roda/plugins/cookies.rb	Wed, 20 Apr 2022 11:42:37 -0700
@@ -45,8 +45,11 @@ lib/roda/plugins/exception_page.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/plugins/flash.rb	Fri, 08 Feb 2019 09:07:06 -0800
 lib/roda/plugins/h.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/halt.rb	Wed, 11 Dec 2019 10:39:49 -0800
+lib/roda/plugins/hash_branch_view_subdir.rb	Mon, 13 Jun 2022 13:28:17 -0700
+lib/roda/plugins/hash_branches.rb	Mon, 13 Jun 2022 14:42:04 -0700
 lib/roda/plugins/hash_matcher.rb	Fri, 24 Apr 2020 13:02:49 -0700
-lib/roda/plugins/hash_routes.rb	Thu, 14 Oct 2021 11:29:49 -0700
+lib/roda/plugins/hash_paths.rb	Mon, 13 Jun 2022 14:42:04 -0700
+lib/roda/plugins/hash_routes.rb	Mon, 13 Jun 2022 13:28:17 -0700
 lib/roda/plugins/head.rb	Fri, 08 Feb 2019 09:07:06 -0800
 lib/roda/plugins/header_matchers.rb	Sat, 15 Feb 2020 09:21:58 -0800
 lib/roda/plugins/heartbeat.rb	Tue, 01 Mar 2022 12:40:33 -0800
@@ -64,11 +67,11 @@ lib/roda/plugins/middleware.rb	Fri, 25 Mar 2022 08:00:11 -0700
 lib/roda/plugins/middleware_stack.rb	Fri, 12 Jan 2018 08:46:22 -0800
 lib/roda/plugins/module_include.rb	Tue, 21 Sep 2021 14:23:42 -0700
 lib/roda/plugins/multi_public.rb	Mon, 25 Apr 2022 13:28:05 -0700
-lib/roda/plugins/multi_route.rb	Thu, 13 Jan 2022 17:39:35 -0800
+lib/roda/plugins/multi_route.rb	Mon, 13 Jun 2022 14:42:04 -0700
 lib/roda/plugins/multi_run.rb	Wed, 17 Nov 2021 13:14:30 -0800
-lib/roda/plugins/multi_view.rb	Wed, 03 Apr 2019 11:02:20 -0700
+lib/roda/plugins/multi_view.rb	Mon, 13 Jun 2022 14:42:04 -0700
 lib/roda/plugins/multibyte_string_matcher.rb	Wed, 27 Nov 2019 13:38:26 -0800
-lib/roda/plugins/named_routes.rb	Wed, 17 Nov 2021 13:14:30 -0800
+lib/roda/plugins/named_routes.rb	Wed, 25 May 2022 14:52:33 -0700
 lib/roda/plugins/named_templates.rb	Mon, 04 Mar 2019 16:26:49 -0800
 lib/roda/plugins/not_allowed.rb	Tue, 26 Apr 2022 11:03:20 -0700
 lib/roda/plugins/not_found.rb	Sun, 31 Jan 2016 11:54:09 -0800
@@ -104,7 +107,7 @@ lib/roda/plugins/shared_vars.rb	Tue, 21 Sep 2021 14:23:42 -0700
 lib/roda/plugins/sinatra_helpers.rb	Mon, 25 Apr 2022 13:28:05 -0700
 lib/roda/plugins/slash_path_empty.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/static.rb	Wed, 20 Apr 2022 11:42:37 -0700
-lib/roda/plugins/static_routing.rb	Sat, 06 Apr 2019 23:21:10 -0700
+lib/roda/plugins/static_routing.rb	Mon, 13 Jun 2022 14:42:04 -0700
 lib/roda/plugins/status_303.rb	Wed, 04 May 2022 08:46:11 -0700
 lib/roda/plugins/status_handler.rb	Tue, 26 Apr 2022 14:46:57 -0700
 lib/roda/plugins/streaming.rb	Mon, 28 Oct 2019 11:30:40 -0700
@@ -120,8 +123,8 @@ lib/roda/plugins/view_options.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/request.rb	Wed, 04 May 2022 08:46:11 -0700
 lib/roda/response.rb	Wed, 20 Apr 2022 11:42:37 -0700
 lib/roda/session_middleware.rb	Sun, 04 Aug 2019 14:34:46 -0700
-lib/roda/version.rb	Fri, 13 May 2022 10:22:16 -0700
-doc/conventions.rdoc	Mon, 18 May 2020 13:38:21 -0700
+lib/roda/version.rb	Tue, 14 Jun 2022 08:36:04 -0700
+doc/conventions.rdoc	Mon, 13 Jun 2022 14:42:04 -0700
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
 doc/release_notes/1.2.0.txt	Fri, 18 Aug 2017 07:20:31 -0700
@@ -211,6 +214,7 @@ doc/release_notes/3.53.0.txt	Mon, 14 Feb 2022 08:26:19 -0800
 doc/release_notes/3.54.0.txt	Mon, 14 Mar 2022 08:32:37 -0700
 doc/release_notes/3.55.0.txt	Tue, 12 Apr 2022 08:20:49 -0700
 doc/release_notes/3.56.0.txt	Fri, 13 May 2022 10:22:16 -0700
+doc/release_notes/3.57.0.txt	Tue, 14 Jun 2022 08:36:04 -0700
 doc/release_notes/3.6.0.txt	Mon, 26 Mar 2018 10:51:43 -0700
 doc/release_notes/3.7.0.txt	Fri, 20 Apr 2018 11:49:04 -0700
 doc/release_notes/3.8.0.txt	Thu, 17 May 2018 13:49:47 -0700

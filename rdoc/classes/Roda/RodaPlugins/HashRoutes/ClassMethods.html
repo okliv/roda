@@ -40,10 +40,7 @@ Roda::RodaPlugins::HashRoutes::ClassMethods
 <h3>Public Instance</h3>
 <ol>
 <li><a href="#method-i-freeze">freeze</a></li>
-<li><a href="#method-i-hash_branch">hash_branch</a></li>
-<li><a href="#method-i-hash_path">hash_path</a></li>
 <li><a href="#method-i-hash_routes">hash_routes</a></li>
-<li><a href="#method-i-inherited">inherited</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -67,67 +64,10 @@ Roda::RodaPlugins::HashRoutes::ClassMethods
 [show source]
 </a>
 <pre id='method-i-freeze-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>
-<span class="line-num">361</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze</span>
-<span class="line-num">362</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_branches</span>].<span class="ruby-identifier">freeze</span>.<span class="ruby-identifier">each_value</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:freeze</span>)
-<span class="line-num">363</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_paths</span>].<span class="ruby-identifier">freeze</span>.<span class="ruby-identifier">each_value</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:freeze</span>)
-<span class="line-num">364</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_routes_methods</span>].<span class="ruby-identifier">freeze</span>
-<span class="line-num">365</span>   <span class="ruby-keyword">super</span>
-<span class="line-num">366</span> <span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-<div class='method public-instance' id='method-method-i-hash_branch'>
-<a name='method-i-hash_branch'></a>
-<div class='synopsis'>
-<span class='name'>hash_branch</span><span class='arguments'>(namespace='', segment, &block)</span>
-
-</div>
-<div class='description'>
-
-<p>Add branch handler for the given namespace and segment. If called without a block, removes the existing branch handler if it exists.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-hash_branch-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-hash_branch-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>
-<span class="line-num">399</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">hash_branch</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-string">&#39;&#39;</span>, <span class="ruby-identifier">segment</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">400</span>   <span class="ruby-identifier">segment</span> = <span class="ruby-node">&quot;/#{segment}&quot;</span>
-<span class="line-num">401</span>   <span class="ruby-identifier">routes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_branches</span>][<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> {}
-<span class="line-num">402</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>
-<span class="line-num">403</span>     <span class="ruby-identifier">routes</span>[<span class="ruby-identifier">segment</span>] = <span class="ruby-identifier">define_roda_method</span>(<span class="ruby-identifier">routes</span>[<span class="ruby-identifier">segment</span>] <span class="ruby-operator">||</span> <span class="ruby-node">&quot;hash_branch_#{namespace}_#{segment}&quot;</span>, <span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">convert_route_block</span>(<span class="ruby-identifier">block</span>))
-<span class="line-num">404</span>   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">meth</span> = <span class="ruby-identifier">routes</span>[<span class="ruby-identifier">segment</span>]
-<span class="line-num">405</span>     <span class="ruby-identifier">routes</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">segment</span>)
-<span class="line-num">406</span>     <span class="ruby-identifier">remove_method</span>(<span class="ruby-identifier">meth</span>)
-<span class="line-num">407</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">408</span> <span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-<div class='method public-instance' id='method-method-i-hash_path'>
-<a name='method-i-hash_path'></a>
-<div class='synopsis'>
-<span class='name'>hash_path</span><span class='arguments'>(namespace='', path, &block)</span>
-
-</div>
-<div class='description'>
-
-<p>Add path handler for the given namespace and path. When the r.hash_paths method is called, checks the matching namespace for the full remaining path, and dispatch to that block if there is one.  If called without a block, removes the existing path handler if it exists.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-hash_path-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-hash_path-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>
-<span class="line-num">415</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">hash_path</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-string">&#39;&#39;</span>, <span class="ruby-identifier">path</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">416</span>   <span class="ruby-identifier">routes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_paths</span>][<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> {}
-<span class="line-num">417</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>
-<span class="line-num">418</span>     <span class="ruby-identifier">routes</span>[<span class="ruby-identifier">path</span>] = <span class="ruby-identifier">define_roda_method</span>(<span class="ruby-identifier">routes</span>[<span class="ruby-identifier">path</span>] <span class="ruby-operator">||</span> <span class="ruby-node">&quot;hash_path_#{namespace}_#{path}&quot;</span>, <span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">convert_route_block</span>(<span class="ruby-identifier">block</span>))
-<span class="line-num">419</span>   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">meth</span> = <span class="ruby-identifier">routes</span>[<span class="ruby-identifier">path</span>]
-<span class="line-num">420</span>     <span class="ruby-identifier">routes</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">path</span>)
-<span class="line-num">421</span>     <span class="ruby-identifier">remove_method</span>(<span class="ruby-identifier">meth</span>)
-<span class="line-num">422</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">423</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">269</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze</span>
+<span class="line-num">270</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_routes_methods</span>].<span class="ruby-identifier">freeze</span>
+<span class="line-num">271</span>   <span class="ruby-keyword">super</span>
+<span class="line-num">272</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-hash_routes'>
@@ -146,46 +86,18 @@ Roda::RodaPlugins::HashRoutes::ClassMethods
 [show source]
 </a>
 <pre id='method-i-hash_routes-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>
-<span class="line-num">384</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">hash_routes</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-string">&#39;&#39;</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">385</span>   <span class="ruby-identifier">dsl</span> = <span class="ruby-constant">DSL</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">namespace</span>)
-<span class="line-num">386</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>
-<span class="line-num">387</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">arity</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
-<span class="line-num">388</span>       <span class="ruby-keyword">yield</span> <span class="ruby-identifier">dsl</span>
-<span class="line-num">389</span>     <span class="ruby-keyword">else</span>
-<span class="line-num">390</span>       <span class="ruby-identifier">dsl</span>.<span class="ruby-identifier">instance_exec</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">391</span>     <span class="ruby-keyword">end</span>
-<span class="line-num">392</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">393</span> 
-<span class="line-num">394</span>   <span class="ruby-identifier">dsl</span>
-<span class="line-num">395</span> <span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-<div class='method public-instance' id='method-method-i-inherited'>
-<a name='method-i-inherited'></a>
-<div class='synopsis'>
-<span class='name'>inherited</span><span class='arguments'>(subclass)</span>
-
-</div>
-<div class='description'>
-
-<p>Duplicate <a href="ClassMethods.html#method-i-hash_routes"><code>hash_routes</code></a> metadata in subclass.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-inherited-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-inherited-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>
-<span class="line-num">369</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inherited</span>(<span class="ruby-identifier">subclass</span>)
-<span class="line-num">370</span>   <span class="ruby-keyword">super</span>
-<span class="line-num">371</span> 
-<span class="line-num">372</span>   [<span class="ruby-value">:hash_branches</span>, <span class="ruby-value">:hash_paths</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span>
-<span class="line-num">373</span>     <span class="ruby-identifier">h</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>]
-<span class="line-num">374</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">routes</span><span class="ruby-operator">|</span>
-<span class="line-num">375</span>       <span class="ruby-identifier">h</span>[<span class="ruby-identifier">namespace</span>] = <span class="ruby-identifier">routes</span>.<span class="ruby-identifier">dup</span>
-<span class="line-num">376</span>     <span class="ruby-keyword">end</span>
-<span class="line-num">377</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">378</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">278</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">hash_routes</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-string">&#39;&#39;</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">279</span>   <span class="ruby-identifier">dsl</span> = <span class="ruby-constant">DSL</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">namespace</span>)
+<span class="line-num">280</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>
+<span class="line-num">281</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">arity</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+<span class="line-num">282</span>       <span class="ruby-keyword">yield</span> <span class="ruby-identifier">dsl</span>
+<span class="line-num">283</span>     <span class="ruby-keyword">else</span>
+<span class="line-num">284</span>       <span class="ruby-identifier">dsl</span>.<span class="ruby-identifier">instance_exec</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">285</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">286</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">287</span> 
+<span class="line-num">288</span>   <span class="ruby-identifier">dsl</span>
+<span class="line-num">289</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

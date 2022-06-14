@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.57.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.57.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.57.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2022-06-14 08:36:04 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>hash_branches and hash_paths plugins have been split off from the hash_routes plugin, allowing you to use only those parts instead of all of hash_routes.</p>
+
+<p>The hash_branches plugin supports the hash_branch class method and r.hash_branches routing method.</p>
+
+<p>The hash_paths plugin supports the hash_path class method and r.hash_paths routing method.</p>
+
+<p>The hash_routes plugin functions as it did previously by requiring the hash_branches and hash_paths plugins. It adds the hash_routes DSL and r.hash_routes routing method.</p>
+</li><li>
+<p>A hash_branch_view_subdir has been added.  It builds on the view_options plugin and new hash_branches plugin, automatically appending a view subdirectory for each successful hash branch. This can DRY up code that uses a separate view subdirectory for each branch.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Unprintable characters are now hex escaped in the output of the common_logger plugin.  This can protect users who use software that respects shell escape sequences to view the logs.</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The static_routing plugin now depends on the hash_paths plugin instead of the hash_routes plugin, so you will need to update your application to explicitly load the hash_routes plugin if you were relying on static_routing to implicitly load it.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

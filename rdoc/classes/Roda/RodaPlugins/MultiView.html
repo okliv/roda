@@ -39,8 +39,6 @@ Roda::RodaPlugins::MultiView
 
 <p>The advantage of using a regexp over an array of strings is that the regexp is generally faster and uses less memory.  However, constructing the regexps is more cumbersome.  To make it easier, the multi_view plugin also offers a <code>multi_view_compile</code> class method that will take an array of view template names and construct a regexp that can be passed to <code>r.multi_view</code>.</p>
 
-<p>The hash_routes plugin offers a views method that is similar to and performs better than the <code>r.multi_view</code> method, and it is recommended to consider using that instead of this plugin.</p>
-
 <p>Example:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_view</span>
@@ -114,9 +112,9 @@ Roda::RodaPlugins::MultiView
 [show source]
 </a>
 <pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_view.rb</span>
-<span class="line-num">62</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)
-<span class="line-num">63</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>
-<span class="line-num">64</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">58</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">59</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>
+<span class="line-num">60</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

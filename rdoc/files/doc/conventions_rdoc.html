@@ -30,7 +30,7 @@ doc/conventions.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2020-05-18 13:38:21 -0700</span>
+<span class='datetime'>2022-06-13 14:42:04 -0700</span>
 </div>
 </div>
 <div id='content'>
@@ -106,17 +106,17 @@ views/
 
 <p>For larger apps, the <code>Rakefile</code>, <code>assets/</code>, <code>migrate</code>, <code>models.rb</code>, <code>models/</code>, <code>public/</code>, remain the same.</p>
 
-<p><code>app_name.rb</code> should use the <code>hash_routes</code> and <code>view_options</code> plugin, or the <code>multi_run</code> plugin. The routes used by the <code>hash_routes</code> or <code>multi_run</code> should be stored in routing files in the <code>routes/</code> directory, with one file per prefix.</p>
+<p><code>app_name.rb</code> should use the <code>hash_branch_view_subdir</code> plugin (which builds on the <code>hash_branches</code> and <code>view_options</code> plugin), or the <code>multi_run</code> plugin. The routes used by the <code>hash_branches</code> or <code>multi_run</code> should be stored in routing files in the <code>routes/</code> directory, with one file per prefix.</p>
 
 <p>For specs/tests, you should have <code>spec/models/</code> and <code>spec/web/</code>, with one file per model in <code>spec/models/</code> and one file per prefix in <code>spec/web/</code>. Substitute <code>spec</code> with <code>test</code> if that is what you are using as the name of the directory.</p>
 
-<p>You should have a separate view subdirectory per prefix. If you are using <code>hash_routes</code> and <code>view_options</code> plugins, use <code>set_view_subdir</code> in your routing files to specify the subdirectory to use, so it doesn’t need to be specified on every call to view.</p>
+<p>You should have a separate view subdirectory per prefix. With the <code>hash_branch_view_subdir</code>, the application will automatically set a separate view subdirectory per routing tree branch.</p>
 
 <p><code>helpers/</code> should be used to store helper methods for your application, that you call in your routing files and views.  In a small application, these methods should just be specified in <code>app_name.rb</code></p>
 
 <h3 id="label-Really+Large+Applications">Really Large Applications<span><a href="#label-Really+Large+Applications">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>For very large applications, it’s expected that there will be deviations from these conventions. However, it is recommended to use the <code>hash_routes</code> or <code>multi_run</code> plugins to organize your application, and have subdirectories in the <code>routes/</code> directory, and nested subdirectories in the <code>views/</code> directory.</p>
+<p>For very large applications, it’s expected that there will be deviations from these conventions. However, it is recommended to use the <code>hash_branch_view_subdir</code> or <code>multi_run</code> plugins to organize your application, and have subdirectories in the <code>routes/</code> directory, and nested subdirectories in the <code>views/</code> directory.</p>
 
 <h2 id="label-Roda+Application+File+Layout"><a href="../../classes/Roda.html"><code>Roda</code></a> Application File Layout<span><a href="#label-Roda+Application+File+Layout">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
@@ -163,19 +163,22 @@ views/
 
   <span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-value">escape:</span> <span class="ruby-keyword">true</span>, <span class="ruby-value">layout:</span> <span class="ruby-string">&#39;./layout&#39;</span>
   <span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>
-  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:view_options</span>
-  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_branch_view_subdir</span>
   <span class="ruby-constant">Dir</span>[<span class="ruby-string">&#39;routes/*.rb&#39;</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">require_relative</span> <span class="ruby-identifier">f</span>}
 
   <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_branches</span>(<span class="ruby-string">&#39;&#39;</span>)
+
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-comment"># ...</span>
+    <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-constant">Dir</span>[<span class="ruby-string">&#39;helpers/*.rb&#39;</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">require_relative</span> <span class="ruby-identifier">f</span>}
 <span class="ruby-keyword">end</span>
 </pre>
 
-<p>After loading the <code>view_options</code> and <code>hash_routes</code> plugin, you require all of your routing files.  Inside your route block, instead of defining your routes, you just call <code>r.hash_routes</code>, which will dispatch to all of your routing files.  After your route block, you require all of your helper files containing the instance methods for your route block or views, instead of defining the methods directly.</p>
+<p>After loading the <code>hash_branch_view_subdir</code> plugin, you require all of your routing files.  Inside your route block, instead of defining your routes, you just call <code>r.hash_branches</code>, which will dispatch to all of your routing files.  After your route block, you require all of your helper files containing the instance methods for your route block or views, instead of defining the methods directly.</p>
 </div>
 <div id='context'>
 </div>
