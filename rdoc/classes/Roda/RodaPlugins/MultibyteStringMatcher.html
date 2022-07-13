@@ -40,6 +40,7 @@ Roda::RodaPlugins::MultibyteStringMatcher
 <p>As browsers send multibyte characters in request paths URL escaped, so this also loads the unescape_path plugin to unescape the paths.</p>
 
 <pre>plugin :multibyte_string_matcher
+
 path = &quot;\xD0\xB8&quot;.force_encoding(&#39;UTF-8&#39;)
 route do |r|
   r.get path do

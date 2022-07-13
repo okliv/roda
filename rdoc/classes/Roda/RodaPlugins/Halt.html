@@ -87,6 +87,7 @@ plugin :json
 route do |r|
   # symbol_views plugin, specifying template file to render as body
   r.halt(:template) if r.params[&#39;a&#39;]
+
   # symbol_views plugin, specifying status code, headers, and template file to render as body
   r.halt(500, &#39;header=&gt;&#39;value&#39;, :other_template) if r.params[&#39;c&#39;]
 

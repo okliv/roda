@@ -38,6 +38,7 @@ Roda::RodaPlugins::PlaceholderStringMatchers
 <p>The placeholder_string_matcher plugin exists for backwards compatibility with previous versions of <a href="../../Roda.html"><code>Roda</code></a> that allowed placeholders inside strings if they were prefixed by colons:</p>
 
 <pre>plugin :placeholder_string_matchers
+
 route do |r|
   r.is(&quot;foo/:bar&quot;) |v|
     # matches foo/baz, yielding &quot;baz&quot;

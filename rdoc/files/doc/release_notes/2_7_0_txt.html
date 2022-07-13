@@ -73,6 +73,7 @@ Last Update:
 
 <pre>rewrite_path(/\A\/a/(\w+)/){|match| match[1].capitalize}
 # PATH_INFO &#39;/a/moo&#39; =&gt; remaining_path &#39;/a/Moo&#39;
+
 rewrite_path(/\A\/a/(\w+)/, :path_info =&gt; true) do |match|
   match[1].capitalize
 end

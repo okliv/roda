@@ -52,7 +52,7 @@ Last Update:
 </td></tr><tr><td class='label'>Bugs </td><td>
 <p><a target="_top" href="http://github.com/jeremyevans/roda/issues">github.com/jeremyevans/roda/issues</a></p>
 </td></tr><tr><td class='label'>Discussion Forum (GitHub Discussions) </td><td>
-<p><a href="https://github.com/jeremyevans/roda/discussions">github.com/jeremyevans/roda/discussions</a></p>
+<p><a target="_top" href="https://github.com/jeremyevans/roda/discussions">github.com/jeremyevans/roda/discussions</a></p>
 </td></tr><tr><td class='label'>Alternate Discussion Forum (Google Group) </td><td>
 <p><a target="_top" href="http://groups.google.com/group/ruby-roda">groups.google.com/group/ruby-roda</a></p>
 </td></tr></tbody></table>
@@ -634,7 +634,7 @@ Last Update:
 
 <h2 id="label-Testing">Testing<span><a href="#label-Testing">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>It is very easy to test <a href="../classes/Roda.html"><code>Roda</code></a> with <a href="https://github.com/rack-test/rack-test">Rack::Test</a> or <a href="https://github.com/teamcapybara/capybara">Capybara</a>. Roda’s own tests use <a href="https://github.com/seattlerb/minitest">minitest/spec</a>. The default Rake task will run the specs for <a href="../classes/Roda.html"><code>Roda</code></a>.</p>
+<p>It is very easy to test <a href="../classes/Roda.html"><code>Roda</code></a> with <a target="_top" href="https://github.com/rack-test/rack-test">Rack::Test</a> or <a target="_top" href="https://github.com/teamcapybara/capybara">Capybara</a>. Roda’s own tests use <a target="_top" href="https://github.com/seattlerb/minitest">minitest/spec</a>. The default Rake task will run the specs for <a href="../classes/Roda.html"><code>Roda</code></a>.</p>
 
 <h2 id="label-Settings">Settings<span><a href="#label-Settings">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
@@ -680,7 +680,7 @@ Last Update:
 
 <h2 id="label-Rendering">Rendering<span><a href="#label-Rendering">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p><a href="../classes/Roda.html"><code>Roda</code></a> ships with a <code>render</code> plugin that provides helpers for rendering templates. It uses <a href="https://github.com/rtomayko/tilt">Tilt</a>, a gem that interfaces with many template engines. The <code>erb</code> engine is used by default.</p>
+<p><a href="../classes/Roda.html"><code>Roda</code></a> ships with a <code>render</code> plugin that provides helpers for rendering templates. It uses <a target="_top" href="https://github.com/rtomayko/tilt">Tilt</a>, a gem that interfaces with many template engines. The <code>erb</code> engine is used by default.</p>
 
 <p>Note that in order to use this plugin you need to have Tilt installed, along with the templating engines you want to use.</p>
 
@@ -780,7 +780,7 @@ Last Update:
 
 <pre>&lt;%== yield %&gt; # not &lt;%= yield %&gt;</pre>
 
-<p>This support requires <a href="https://github.com/jeremyevans/erubi">Erubi</a>.</p>
+<p>This support requires <a target="_top" href="https://github.com/jeremyevans/erubi">Erubi</a>.</p>
 
 <h3 id="label-Unexpected+Parameter+Types">Unexpected Parameter Types<span><a href="#label-Unexpected+Parameter+Types">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
@@ -855,15 +855,15 @@ Last Update:
 
 <p><a href="../classes/Roda.html"><code>Roda</code></a> does not ship with integrated support for code reloading, but there are rack-based reloaders that will work with <a href="../classes/Roda.html"><code>Roda</code></a> apps.</p>
 
-<p><a href="https://github.com/fxn/zeitwerk">Zeitwerk</a> (which Rails now uses for reloading) can be used with <a href="../classes/Roda.html"><code>Roda</code></a>.  It requires minimal setup and handles most cases. It overrides <code>require</code> when activated. If it can meet the needs of your application, it’s probably the best approach.</p>
+<p><a target="_top" href="https://github.com/fxn/zeitwerk">Zeitwerk</a> (which Rails now uses for reloading) can be used with <a href="../classes/Roda.html"><code>Roda</code></a>.  It requires minimal setup and handles most cases. It overrides <code>require</code> when activated. If it can meet the needs of your application, it’s probably the best approach.</p>
 
-<p><a href="https://github.com/jeremyevans/rack-unreloader">rack-unreloader</a> uses a fast approach to reloading while still being fairly safe, as it only reloads files that have been modified, and unloads constants defined in the files before reloading them. It can handle advanced cases that Zeitwerk does not support, such as classes defined in multiple files (common when using separate route files for different routing branches in the same application). However, rack-unreloader does not modify core classes and using it requires modifying your application code to use rack-unreloader specific APIs, which may not be simple.</p>
+<p><a target="_top" href="https://github.com/jeremyevans/rack-unreloader">rack-unreloader</a> uses a fast approach to reloading while still being fairly safe, as it only reloads files that have been modified, and unloads constants defined in the files before reloading them. It can handle advanced cases that Zeitwerk does not support, such as classes defined in multiple files (common when using separate route files for different routing branches in the same application). However, rack-unreloader does not modify core classes and using it requires modifying your application code to use rack-unreloader specific APIs, which may not be simple.</p>
 
-<p><a href="https://github.com/rosenfeld/auto_reloader">AutoReloader</a> provides transparent reloading for all files reached from one of the <code>reloadable_paths</code> option entries, by detecting new top-level constants and removing them when any of the reloadable loaded files changes. It overrides <code>require</code> and <code>require_relative</code> when activated (usually in the development environment). No configurations other than <code>reloadable_paths</code> are required.</p>
+<p><a target="_top" href="https://github.com/rosenfeld/auto_reloader">AutoReloader</a> provides transparent reloading for all files reached from one of the <code>reloadable_paths</code> option entries, by detecting new top-level constants and removing them when any of the reloadable loaded files changes. It overrides <code>require</code> and <code>require_relative</code> when activated (usually in the development environment). No configurations other than <code>reloadable_paths</code> are required.</p>
 
-<p>Both <a href="https://github.com/alexch/rerun">rerun</a> and <a href="https://github.com/rtomayko/shotgun">shotgun</a> use a fork/exec approach for loading new versions of your app.  rerun is faster as it only reloads the app on changes, whereas shotgun reloads the app on every request.  Both work without any changes to application code, but may be slower as they have to reload the entire application on every change. However, for small apps that load quickly, either may be a good approach.</p>
+<p>Both <a target="_top" href="https://github.com/alexch/rerun">rerun</a> and <a target="_top" href="https://github.com/rtomayko/shotgun">shotgun</a> use a fork/exec approach for loading new versions of your app.  rerun is faster as it only reloads the app on changes, whereas shotgun reloads the app on every request.  Both work without any changes to application code, but may be slower as they have to reload the entire application on every change. However, for small apps that load quickly, either may be a good approach.</p>
 
-<p><a href="https://github.com/rack/rack/blob/master/lib/rack/reloader.rb">Rack::Reloader</a> ships with rack and just reloads monitored files when they change, without unloading constants. It’s fast but may cause issues in cases where you remove classes, constants, or methods, or when you are not clearing out cached data manually when files are reloaded.</p>
+<p><a target="_top" href="https://github.com/rack/rack/blob/master/lib/rack/reloader.rb">Rack::Reloader</a> ships with rack and just reloads monitored files when they change, without unloading constants. It’s fast but may cause issues in cases where you remove classes, constants, or methods, or when you are not clearing out cached data manually when files are reloaded.</p>
 
 <p>There is no one reloading solution that is the best for all applications and development approaches.  Consider your needs and the tradeoffs of each of the reloading approaches, and pick the one you think will work best.</p>
 
@@ -940,11 +940,11 @@ Last Update:
 
 <p>Because a routing tree does not store the routes in a data structure, but directly executes the routing tree block, you cannot introspect the routes when using a routing tree.</p>
 
-<p>If you would like to introspect your routes when using <a href="../classes/Roda.html"><code>Roda</code></a>, there is an external plugin named <a href="https://github.com/jeremyevans/roda-route_list">roda-route_list</a>, which allows you to add appropriate comments to your routing files, and has a parser that will parse those comments into routing metadata that you can then introspect.</p>
+<p>If you would like to introspect your routes when using <a href="../classes/Roda.html"><code>Roda</code></a>, there is an external plugin named <a target="_top" href="https://github.com/jeremyevans/roda-route_list">roda-route_list</a>, which allows you to add appropriate comments to your routing files, and has a parser that will parse those comments into routing metadata that you can then introspect.</p>
 
 <h2 id="label-Inspiration">Inspiration<span><a href="#label-Inspiration">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p><a href="../classes/Roda.html"><code>Roda</code></a> was inspired by <a target="_top" href="http://www.sinatrarb.com">Sinatra</a> and <a target="_top" href="http://cuba.is">Cuba</a>. It started out as a fork of Cuba, from which it borrows the idea of using a routing tree (which Cuba in turn took from <a href="https://github.com/chneukirchen/rum">Rum</a>). From Sinatra, it takes the ideas that route blocks should return the request bodies and that routes should be canonical. Roda’s plugin system is based on the plugin system used by <a target="_top" href="http://sequel.jeremyevans.net">Sequel</a>.</p>
+<p><a href="../classes/Roda.html"><code>Roda</code></a> was inspired by <a target="_top" href="http://www.sinatrarb.com">Sinatra</a> and <a target="_top" href="http://cuba.is">Cuba</a>. It started out as a fork of Cuba, from which it borrows the idea of using a routing tree (which Cuba in turn took from <a target="_top" href="https://github.com/chneukirchen/rum">Rum</a>). From Sinatra, it takes the ideas that route blocks should return the request bodies and that routes should be canonical. Roda’s plugin system is based on the plugin system used by <a target="_top" href="http://sequel.jeremyevans.net">Sequel</a>.</p>
 
 <h2 id="label-Ruby+Support+Policy">Ruby Support Policy<span><a href="#label-Ruby+Support+Policy">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
