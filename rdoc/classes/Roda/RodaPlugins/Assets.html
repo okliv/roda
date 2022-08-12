@@ -153,7 +153,7 @@ Roda::RodaPlugins::Assets
 
 <h3 id="module-Roda::RodaPlugins::Assets-label-Asset+Compression">Asset Compression<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Compression">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>If you have the yuicompressor gem installed and working, it will be used automatically to compress your javascript and css assets.  For javascript assets, if yuicompressor is not available, the plugin will check for closure_compiler, uglifier, and minjs and use the first one that works. If no compressors are available, the assets will just be concatenated together and not compressed during compilation.  You can use the :css_compressor and :js_compressor options to specify the compressor to use.</p>
+<p>If you have the yuicompressor gem installed and working, it will be used automatically to compress your javascript and css assets.  For javascript assets, if yuicompressor is not available, the plugin will check for closure-compiler, uglifier, and minjs and use the first one that works. If no compressors are available, the assets will just be concatenated together and not compressed during compilation.  You can use the :css_compressor and :js_compressor options to specify the compressor to use.</p>
 
 <p>It is also possible to use the built-in compression options in the CSS or JS compiler, assuming the compiler supports such options.  For example, with sass/sassc, you can use:</p>
 
