@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.60.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.60.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.60.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2022-09-13 07:49:26 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A link_to plugin has been added with a link_to method for creating HTML links.</p>
+
+<p>The simplest usage of link_to is passing the body and the location to link to as strings:</p>
+
+<pre class="ruby"><span class="ruby-comment"># Instance level</span>
+<span class="ruby-identifier">link_to</span>(<span class="ruby-string">&quot;body&quot;</span>, <span class="ruby-string">&quot;/path&quot;</span>)
+<span class="ruby-comment"># =&gt; &quot;&lt;a href=\&quot;/path\&quot;&gt;body&lt;/a&gt;&quot;</span>
+</pre>
+
+<p>The link_to plugin depends on the path plugin, and allows you to pass symbols for named paths:</p>
+
+<pre class="ruby"><span class="ruby-comment"># Class level</span>
+<span class="ruby-identifier">path</span> <span class="ruby-value">:foo</span>, <span class="ruby-string">&quot;/path/to/too&quot;</span>
+
+<span class="ruby-comment"># Instance level</span>
+<span class="ruby-identifier">link_to</span>(<span class="ruby-string">&quot;body&quot;</span>, <span class="ruby-value">:foo</span>)
+<span class="ruby-comment"># =&gt; &quot;&lt;a href=\&quot;/path/to/foo\&quot;&gt;body&lt;/a&gt;&quot;</span>
+</pre>
+
+<p>It also allows you to pass instances of classes that you have registered with the path plugin:</p>
+
+<pre class="ruby"><span class="ruby-comment"># Class level</span>
+<span class="ruby-constant">A</span> = <span class="ruby-constant">Struct</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:id</span>)
+<span class="ruby-identifier">path</span> <span class="ruby-constant">A</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-node">&quot;/path/to/a/#{id}&quot;</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-comment"># Instance level</span>
+<span class="ruby-identifier">link_to</span>(<span class="ruby-string">&quot;body&quot;</span>, <span class="ruby-constant">A</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">1</span>))
+<span class="ruby-comment"># =&gt; &quot;&lt;a href=\&quot;/path/to/a/1\&quot;&gt;body&lt;/a&gt;&quot;</span>
+</pre>
+
+<p>To set additional HTML attributes on the tag, you can pass them as an options hash:</p>
+
+<pre class="ruby"><span class="ruby-identifier">link_to</span>(<span class="ruby-string">&quot;body&quot;</span>, <span class="ruby-string">&quot;/path&quot;</span>, <span class="ruby-value">foo:</span> <span class="ruby-string">&quot;bar&quot;</span>)
+<span class="ruby-comment"># =&gt; &quot;&lt;a href=\&quot;/path\&quot; foo=\&quot;bar\&quot;&gt;body&lt;/a&gt;&quot;</span>
+</pre>
+
+<p>If the body is nil, it will be set to the same as the path:</p>
+
+<pre class="ruby"><span class="ruby-identifier">link_to</span>(<span class="ruby-keyword">nil</span>, <span class="ruby-string">&quot;/path&quot;</span>)
+<span class="ruby-comment"># =&gt; &quot;&lt;a href=\&quot;/path\&quot;&gt;/path&lt;/a&gt;&quot;</span>
+</pre>
+
+<p>The plugin will automatically HTML escape the path and any HTML attribute values, using the h plugin:</p>
+
+<pre class="ruby"><span class="ruby-identifier">link_to</span>(<span class="ruby-string">&quot;body&quot;</span>, <span class="ruby-string">&quot;/path?a=1&amp;b=2&quot;</span>, <span class="ruby-value">foo:</span> <span class="ruby-string">&#39;&quot;bar&quot;&#39;</span>)
+<span class="ruby-comment"># =&gt; &quot;&lt;a href=\&quot;/path?a=1&amp;amp;b=2\&quot; foo=\&quot;&amp;quot;bar&amp;quot;\&quot;&gt;body&lt;/a&gt;&quot;</span>
+</pre>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Coverage testing has been expanded to multiple rack versions, instead of just the current rack release.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

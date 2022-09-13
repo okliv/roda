@@ -104,9 +104,9 @@ Superclass:
 [show source]
 </a>
 <pre id='method-i-compiled_method-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>
-<span class="line-num">393</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">compiled_method</span>(<span class="ruby-identifier">locals_keys</span>=<span class="ruby-constant">EMPTY_ARRAY</span>, <span class="ruby-identifier">roda_class</span>=<span class="ruby-keyword">nil</span>)
-<span class="line-num">394</span>   <span class="ruby-constant">Render</span>.<span class="ruby-identifier">tilt_template_compiled_method</span>(<span class="ruby-ivar">@template</span>, <span class="ruby-identifier">locals_keys</span>, <span class="ruby-identifier">roda_class</span>)
-<span class="line-num">395</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">391</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">compiled_method</span>(<span class="ruby-identifier">locals_keys</span>=<span class="ruby-constant">EMPTY_ARRAY</span>, <span class="ruby-identifier">roda_class</span>=<span class="ruby-keyword">nil</span>)
+<span class="line-num">392</span>   <span class="ruby-constant">Render</span>.<span class="ruby-identifier">tilt_template_compiled_method</span>(<span class="ruby-ivar">@template</span>, <span class="ruby-identifier">locals_keys</span>, <span class="ruby-identifier">roda_class</span>)
+<span class="line-num">393</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-compiled_method_lambda'>
@@ -125,17 +125,17 @@ Superclass:
 [show source]
 </a>
 <pre id='method-i-compiled_method_lambda-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>
-<span class="line-num">400</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">compiled_method_lambda</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">roda_class</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">locals_keys</span>=<span class="ruby-constant">EMPTY_ARRAY</span>)
-<span class="line-num">401</span>   <span class="ruby-identifier">mod</span> = <span class="ruby-identifier">roda_class</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaCompiledTemplates</span>
-<span class="line-num">402</span>   <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">locals</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span>
-<span class="line-num">403</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">template</span>.<span class="ruby-identifier">modified?</span>
-<span class="line-num">404</span>       <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-constant">Render</span>.<span class="ruby-identifier">tilt_template_compiled_method</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">locals_keys</span>, <span class="ruby-identifier">roda_class</span>))
-<span class="line-num">405</span>       <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-identifier">method_name</span>)
-<span class="line-num">406</span>     <span class="ruby-keyword">end</span>
-<span class="line-num">407</span> 
-<span class="line-num">408</span>     <span class="ruby-identifier">send</span>(<span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">locals</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">409</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">410</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">398</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">compiled_method_lambda</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">roda_class</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">locals_keys</span>=<span class="ruby-constant">EMPTY_ARRAY</span>)
+<span class="line-num">399</span>   <span class="ruby-identifier">mod</span> = <span class="ruby-identifier">roda_class</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaCompiledTemplates</span>
+<span class="line-num">400</span>   <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">locals</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span>
+<span class="line-num">401</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">template</span>.<span class="ruby-identifier">modified?</span>
+<span class="line-num">402</span>       <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-constant">Render</span>.<span class="ruby-identifier">tilt_template_compiled_method</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">locals_keys</span>, <span class="ruby-identifier">roda_class</span>))
+<span class="line-num">403</span>       <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-identifier">method_name</span>)
+<span class="line-num">404</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">405</span> 
+<span class="line-num">406</span>     <span class="ruby-identifier">send</span>(<span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">locals</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">407</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">408</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-define_compiled_method'>
@@ -146,7 +146,7 @@ Superclass:
 </div>
 <div class='description'>
 
-<p>:nocov:  Compile a method in the given module with the given name that will call the compiled template method, updating the compiled template method</p>
+<p>Compile a method in the given module with the given name that will call the compiled template method, updating the compiled template method</p>
 
 </div>
 <div class='source'>
@@ -154,21 +154,21 @@ Superclass:
 [show source]
 </a>
 <pre id='method-i-define_compiled_method-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>
-<span class="line-num">374</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">define_compiled_method</span>(<span class="ruby-identifier">roda_class</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">locals_keys</span>=<span class="ruby-constant">EMPTY_ARRAY</span>)
-<span class="line-num">375</span>   <span class="ruby-identifier">mod</span> = <span class="ruby-identifier">roda_class</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaCompiledTemplates</span>
-<span class="line-num">376</span>   <span class="ruby-identifier">internal_method_name</span> = <span class="ruby-value">:&quot;_#{method_name}&quot;</span>
-<span class="line-num">377</span>   <span class="ruby-keyword">begin</span>
-<span class="line-num">378</span>     <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">internal_method_name</span>, <span class="ruby-identifier">send</span>(<span class="ruby-value">:compiled_method</span>, <span class="ruby-identifier">locals_keys</span>, <span class="ruby-identifier">roda_class</span>))
-<span class="line-num">379</span>   <span class="ruby-keyword">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">NotImplementedError</span>
-<span class="line-num">380</span>     <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>
-<span class="line-num">381</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">382</span> 
-<span class="line-num">383</span>   <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-identifier">internal_method_name</span>)
-<span class="line-num">384</span>   <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">compiled_method_lambda</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">roda_class</span>, <span class="ruby-identifier">internal_method_name</span>, <span class="ruby-identifier">locals_keys</span>))
-<span class="line-num">385</span>   <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-identifier">method_name</span>)
-<span class="line-num">386</span> 
-<span class="line-num">387</span>   <span class="ruby-identifier">method_name</span>
-<span class="line-num">388</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">372</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">define_compiled_method</span>(<span class="ruby-identifier">roda_class</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">locals_keys</span>=<span class="ruby-constant">EMPTY_ARRAY</span>)
+<span class="line-num">373</span>   <span class="ruby-identifier">mod</span> = <span class="ruby-identifier">roda_class</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaCompiledTemplates</span>
+<span class="line-num">374</span>   <span class="ruby-identifier">internal_method_name</span> = <span class="ruby-value">:&quot;_#{method_name}&quot;</span>
+<span class="line-num">375</span>   <span class="ruby-keyword">begin</span>
+<span class="line-num">376</span>     <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">internal_method_name</span>, <span class="ruby-identifier">send</span>(<span class="ruby-value">:compiled_method</span>, <span class="ruby-identifier">locals_keys</span>, <span class="ruby-identifier">roda_class</span>))
+<span class="line-num">377</span>   <span class="ruby-keyword">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">NotImplementedError</span>
+<span class="line-num">378</span>     <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>
+<span class="line-num">379</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">380</span> 
+<span class="line-num">381</span>   <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-identifier">internal_method_name</span>)
+<span class="line-num">382</span>   <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">compiled_method_lambda</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">roda_class</span>, <span class="ruby-identifier">internal_method_name</span>, <span class="ruby-identifier">locals_keys</span>))
+<span class="line-num">383</span>   <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-identifier">method_name</span>)
+<span class="line-num">384</span> 
+<span class="line-num">385</span>   <span class="ruby-identifier">method_name</span>
+<span class="line-num">386</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-modified-3F'>

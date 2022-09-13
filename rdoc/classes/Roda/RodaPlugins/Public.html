@@ -92,9 +92,7 @@ Roda::RodaPlugins::Public
 <td>=</td>
 <td class='context-item-value'>defined?(Rack::Files) ? Rack::Files : Rack::File</td>
 <td>&nbsp;</td>
-<td class='context-item-desc'>
-<p>:nocov:</p>
-</td>
+<td class='context-item-desc'></td>
 </tr>
 <tr class='top-aligned-row context-row'>
 <td class='context-item-name'>SPLIT</td>
@@ -135,16 +133,16 @@ Roda::RodaPlugins::Public
 [show source]
 </a>
 <pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/public.rb</span>
-<span class="line-num">60</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})
-<span class="line-num">61</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>]
-<span class="line-num">62</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>])
-<span class="line-num">63</span>   <span class="ruby-keyword">elsif</span> <span class="ruby-operator">!</span><span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>]
-<span class="line-num">64</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-string">&quot;public&quot;</span>)
-<span class="line-num">65</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">66</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_server</span>] = <span class="ruby-constant">RACK_FILES</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>], <span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]<span class="ruby-operator">||</span>{}, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_mime</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;text/plain&#39;</span>)
-<span class="line-num">67</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_gzip</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:gzip</span>]
-<span class="line-num">68</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_brotli</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:brotli</span>]
-<span class="line-num">69</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">56</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})
+<span class="line-num">57</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>]
+<span class="line-num">58</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>])
+<span class="line-num">59</span>   <span class="ruby-keyword">elsif</span> <span class="ruby-operator">!</span><span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>]
+<span class="line-num">60</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-string">&quot;public&quot;</span>)
+<span class="line-num">61</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">62</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_server</span>] = <span class="ruby-constant">RACK_FILES</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>], <span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]<span class="ruby-operator">||</span>{}, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_mime</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;text/plain&#39;</span>)
+<span class="line-num">63</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_gzip</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:gzip</span>]
+<span class="line-num">64</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_brotli</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:brotli</span>]
+<span class="line-num">65</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

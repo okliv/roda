@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::LinkTo::InstanceMethods</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::LinkTo::InstanceMethods
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../../files/lib/roda/plugins/link_to_rb.html">lib/roda/plugins/link_to.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-link_to">link_to</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-link_to'>
+<a name='method-i-link_to'></a>
+<div class='synopsis'>
+<span class='name'>link_to</span><span class='arguments'>(body, href, attributes=OPTS)</span>
+
+</div>
+<div class='description'>
+
+<p>Return a string with an HTML <code>a</code> tag with an <code>href</code> attribute. See <a href="../LinkTo.html"><code>LinkTo</code></a> module documentation for details.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-link_to-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-link_to-source'>   <span class="ruby-comment"># File lib/roda/plugins/link_to.rb</span>
+<span class="line-num">58</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">link_to</span>(<span class="ruby-identifier">body</span>, <span class="ruby-identifier">href</span>, <span class="ruby-identifier">attributes</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">59</span>   <span class="ruby-keyword">case</span> <span class="ruby-identifier">href</span>
+<span class="line-num">60</span>   <span class="ruby-keyword">when</span> <span class="ruby-constant">Symbol</span>
+<span class="line-num">61</span>     <span class="ruby-identifier">href</span> = <span class="ruby-identifier">public_send</span>(<span class="ruby-value">:&quot;#{href}_path&quot;</span>)
+<span class="line-num">62</span>   <span class="ruby-keyword">when</span> <span class="ruby-constant">String</span>
+<span class="line-num">63</span>     <span class="ruby-comment"># nothing</span>
+<span class="line-num">64</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">65</span>     <span class="ruby-identifier">href</span> = <span class="ruby-identifier">path</span>(<span class="ruby-identifier">href</span>)
+<span class="line-num">66</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">67</span> 
+<span class="line-num">68</span>   <span class="ruby-identifier">href</span> = <span class="ruby-identifier">h</span>(<span class="ruby-identifier">href</span>)
+<span class="line-num">69</span> 
+<span class="line-num">70</span>   <span class="ruby-identifier">body</span> = <span class="ruby-identifier">href</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">body</span>.<span class="ruby-identifier">nil?</span>
+<span class="line-num">71</span> 
+<span class="line-num">72</span>   <span class="ruby-identifier">buf</span> = <span class="ruby-constant">String</span>.<span class="ruby-identifier">new</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&lt;a href=\&quot;#{href}\&quot;&quot;</span>
+<span class="line-num">73</span>   <span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+<span class="line-num">74</span>     <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot; &quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;=\&quot;&quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">h</span>(<span class="ruby-identifier">v</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;\&quot;&quot;</span>
+<span class="line-num">75</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">76</span>   <span class="ruby-identifier">buf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;&gt;&quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">body</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;&lt;/a&gt;&quot;</span>
+<span class="line-num">77</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

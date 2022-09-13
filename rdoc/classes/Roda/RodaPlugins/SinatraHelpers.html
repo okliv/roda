@@ -255,9 +255,7 @@ Roda::RodaPlugins::SinatraHelpers
 <td>=</td>
 <td class='context-item-value'>defined?(Rack::Files) ? Rack::Files : Rack::File</td>
 <td>&nbsp;</td>
-<td class='context-item-desc'>
-<p>:nocov:</p>
-</td>
+<td class='context-item-desc'></td>
 </tr>
 <tr class='top-aligned-row context-row'>
 <td class='context-item-name'>UTF8_ENCODING</td>
@@ -287,9 +285,9 @@ Roda::RodaPlugins::SinatraHelpers
 [show source]
 </a>
 <pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>
-<span class="line-num">240</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
-<span class="line-num">241</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">DelegateMethods</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:delegate</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>
-<span class="line-num">242</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">236</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">237</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">DelegateMethods</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:delegate</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>
+<span class="line-num">238</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -308,9 +306,9 @@ Roda::RodaPlugins::SinatraHelpers
 [show source]
 </a>
 <pre id='method-c-load_dependencies-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>
-<span class="line-num">233</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_opts</span> = <span class="ruby-keyword">nil</span>)
-<span class="line-num">234</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:status_303</span>
-<span class="line-num">235</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">229</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_opts</span> = <span class="ruby-keyword">nil</span>)
+<span class="line-num">230</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:status_303</span>
+<span class="line-num">231</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
