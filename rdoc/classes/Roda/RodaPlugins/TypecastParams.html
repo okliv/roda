@@ -35,67 +35,67 @@ Roda::RodaPlugins::TypecastParams
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The typecast_params plugin allows for the simple type conversion for submitted parameters.  Submitted parameters should be considered untrusted input, and in standard use with browsers, parameters are submitted as strings (or a hash/array containing strings).  In most cases it makes sense to explicitly convert the parameter to the desired type.  While this can be done via manual conversion:</p>
+<p>The typecast_params plugin allows for type conversion of submitted parameters. Submitted parameters should be considered untrusted input, and in standard use with browsers, parameters are # submitted as strings (or a hash/array containing strings).  In most # cases it makes sense to explicitly convert the parameter to the desired type.  While this can be done via manual conversion:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;key&#39;</span>].<span class="ruby-identifier">to_i</span>
-<span class="ruby-identifier">key</span> = <span class="ruby-keyword">nil</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">key</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+<pre class="ruby"><span class="ruby-identifier">val</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;key&#39;</span>].<span class="ruby-identifier">to_i</span>
+<span class="ruby-identifier">val</span> = <span class="ruby-keyword">nil</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">val</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
 </pre>
 
 <p>the typecast_params plugin adds a friendlier interface:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key&#39;</span>)
+<pre class="ruby"><span class="ruby-identifier">val</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key&#39;</span>)
 </pre>
 
-<p>As <code>typecast_params</code> is a fairly long method name, you may want to consider aliasing it to something more terse in your application, such as <code>tp</code>.</p>
-
-<p>One advantage of using typecast_params is that access or conversion errors are raised as a specific exception class (<code>Roda::RodaPlugins::TypecastParams::Error</code>).  This allows you to handle this specific exception class globally and return an appropriate 4xx response to the client.  You can use the <a href="TypecastParams/Error.html#method-i-param_name"><code>Error#param_name</code></a> and <a href="TypecastParams/Error.html#attribute-i-reason"><code>Error#reason</code></a>  methods to get more information about the error.</p>
+<p>As <code>typecast_params</code> is a fairly long method name, and may be a method you call frequently, you may want to consider aliasing it to something more terse in your application, such as <code>tp</code>.</p>
 
 <p>typecast_params offers support for default values:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">1</span>)
+<pre class="ruby"><span class="ruby-identifier">val</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">1</span>)
 </pre>
 
 <p>The default value is only used if no value has been submitted for the parameter, or if the conversion of the value results in <code>nil</code>.  Handling defaults for parameter conversion manually is more difficult, since the parameter may not be present at all, or it may be present but an empty string because the user did not enter a value on the related form.  Use of typecast_params for the conversion handles both cases.</p>
 
 <p>In many cases, parameters should be required, and if they aren’t submitted, that should be considered an error.  typecast_params handles this with ! methods:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;key&#39;</span>)
+<pre class="ruby"><span class="ruby-identifier">val</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;key&#39;</span>)
 </pre>
 
 <p>These ! methods raise an error instead of returning <code>nil</code>, and do not allow defaults.</p>
 
+<p>The errors raised by this plugin use a specific exception class, <code>Roda::RodaPlugins::TypecastParams::Error</code>.  This allows you to handle this specific exception class globally and return an appropriate 4xx response to the client.  You can use the <a href="TypecastParams/Error.html#method-i-param_name"><code>Error#param_name</code></a> and <a href="TypecastParams/Error.html#attribute-i-reason"><code>Error#reason</code></a>  methods to get more information about the error.</p>
+
 <p>To make it easy to handle cases where many parameters need the same conversion done, you can pass an array of keys to a conversion method, and it will return an array of converted values:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key1</span>, <span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>([<span class="ruby-string">&#39;key1&#39;</span>, <span class="ruby-string">&#39;key2&#39;</span>])
+<pre class="ruby"><span class="ruby-identifier">val1</span>, <span class="ruby-identifier">val2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>([<span class="ruby-string">&#39;key1&#39;</span>, <span class="ruby-string">&#39;key2&#39;</span>])
 </pre>
 
 <p>This is equivalent to:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key1</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key1&#39;</span>)
-<span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key2&#39;</span>)
+<pre class="ruby"><span class="ruby-identifier">val1</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key1&#39;</span>)
+<span class="ruby-identifier">val2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key2&#39;</span>)
 </pre>
 
 <p>The ! methods also support arrays, ensuring that all parameters have a value:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key1</span>, <span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;key1&#39;</span>, <span class="ruby-string">&#39;key2&#39;</span>])
+<pre class="ruby"><span class="ruby-identifier">val1</span>, <span class="ruby-identifier">val2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;key1&#39;</span>, <span class="ruby-string">&#39;key2&#39;</span>])
 </pre>
 
 <p>For handling of array parameters, where all entries in the array use the same conversion, there is an <code>array</code> method which takes the type as the first argument and the keys to convert as the second argument:</p>
 
-<pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>)
+<pre class="ruby"><span class="ruby-identifier">vals</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>)
 </pre>
 
 <p>If you want to ensure that all entries in the array are converted successfully and that there is a value for the array itself, you can use <code>array!</code>:</p>
 
-<pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>)
+<pre class="ruby"><span class="ruby-identifier">vals</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>)
 </pre>
 
 <p>This will raise an exception if any of the values in the array for parameter <code>keys</code> cannot be converted to integer.</p>
 
 <p>Both <code>array</code> and <code>array!</code> support default values which are used if no value is present for the parameter:</p>
 
-<pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>, [])
-<span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>, [])
+<pre class="ruby"><span class="ruby-identifier">vals1</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys1&#39;</span>, [])
+<span class="ruby-identifier">vals2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys2&#39;</span>, [])
 </pre>
 
 <p>You can also pass an array of keys to <code>array</code> or <code>array!</code>, if you would like to perform the same conversion on multiple arrays:</p>
@@ -103,7 +103,7 @@ Roda::RodaPlugins::TypecastParams
 <pre class="ruby"><span class="ruby-identifier">foo_ids</span>, <span class="ruby-identifier">bar_ids</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, [<span class="ruby-string">&#39;foo_ids&#39;</span>, <span class="ruby-string">&#39;bar_ids&#39;</span>])
 </pre>
 
-<p>The previous examples have shown use of the <code>pos_int</code> method, which uses <code>to_i</code> to convert the value to an integer, but returns nil if the resulting integer is not positive.  Unless you need to handle negative numbers, it is recommended to use <code>pos_int</code> instead of <code>int</code> as <code>int</code> will convert invalid values to 0 (since that is how <code>String#to_i</code> works).</p>
+<p>The previous examples have shown use of the <code>pos_int</code> method, which uses <code>to_i</code> to convert the value to an integer, but returns <code>nil</code> if the resulting integer is not positive.  Unless you need to handle negative numbers, it is recommended to use <code>pos_int</code> instead of <code>int</code> as <code>int</code> will convert invalid values to 0 (since that is how <code>String#to_i</code> works).</p>
 
 <p>There are many built in methods for type conversion:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>any </td><td>
@@ -246,28 +246,31 @@ Roda::RodaPlugins::TypecastParams
 <span class="ruby-comment"># }</span>
 </pre>
 
-<p>Using the <code>:symbolize</code> option makes it simpler to transition from untrusted external data (string keys), to trusted data that can be used internally (trusted in the sense that the expected types are used).</p>
+<p>Using the <code>:symbolize</code> option makes it simpler to transition from untrusted external data (string keys), to semitrusted data that can be used internally (trusted in the sense that the expected types are used, not that you trust the values).</p>
 
-<p>Note that if there are multiple conversion <a href="TypecastParams/Error.html"><code>Error</code></a> raised inside a <code>convert!</code> or <code>convert_each!</code>  block, they are recorded and a single <a href="TypecastParams/Error.html"><code>TypecastParams::Error</code></a> instance is raised after processing the block.  <a href="TypecastParams/Error.html#method-i-param_names"><code>TypecastParams::Error#param_names</code></a> can be called on the exception to get an array of all parameter names with conversion issues, and <a href="TypecastParams/Error.html#method-i-all_errors"><code>TypecastParams::Error#all_errors</code></a> can be used to get an array of all <a href="TypecastParams/Error.html"><code>Error</code></a> instances.</p>
+<p>Note that if there are multiple conversion errors raised inside a <code>convert!</code> or <code>convert_each!</code>  block, they are recorded and a single <a href="TypecastParams/Error.html"><code>TypecastParams::Error</code></a> instance is raised after processing the block.  <a href="TypecastParams/Error.html#method-i-param_names"><code>TypecastParams::Error#param_names</code></a> can be called on the exception to get an array of all parameter names with conversion issues, and <a href="TypecastParams/Error.html#method-i-all_errors"><code>TypecastParams::Error#all_errors</code></a> can be used to get an array of all <a href="TypecastParams/Error.html"><code>Error</code></a> instances.</p>
 
 <p>Because of how <code>convert!</code> and <code>convert_each!</code> work, you should avoid calling <a href="TypecastParams/Params.html#method-i-5B-5D"><code>TypecastParams::Params#[]</code></a> inside the block you pass to these methods, because if the [] call fails, it will skip the reminder of the block.</p>
 
 <p>Be aware that when you use <code>convert!</code> and <code>convert_each!</code>, the conversion methods called inside the block may return nil if there is a error raised, and nested calls to <code>convert!</code> and <code>convert_each!</code> may not return values.</p>
 
-<p>When loading the typecast_params plugin, a subclass of <code>TypecastParams::Params</code> is created specific to the <a href="../../Roda.html"><code>Roda</code></a> application.  You can add support for custom types by passing a block when loading the typecast_params plugin.  This block is executed in the context of the subclass, and calling <code>handle_type</code> in the block can be used to add conversion methods. <code>handle_type</code> accepts a type name and the block used to convert the type:</p>
+<p>When loading the typecast_params plugin, a subclass of <code>TypecastParams::Params</code> is created specific to the <a href="../../Roda.html"><code>Roda</code></a> application.  You can add support for custom types by passing a block when loading the typecast_params plugin.  This block is executed in the context of the subclass, and calling <code>handle_type</code> in the block can be used to add conversion methods. <code>handle_type</code> accepts a type name, an options hash, and the block used to convert the type. The only currently supported option is <code>:max_input_bytesize</code>, specifying the maximum bytesize of string input.  You can also override the max input bytesize of an existing type using the <code>max_input_bytesize</code> method.</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:typecast_params</span> <span class="ruby-keyword">do</span>
-  <span class="ruby-identifier">handle_type</span>(<span class="ruby-value">:album</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">handle_type</span>(<span class="ruby-value">:album</span>, <span class="ruby-value">max_input_bytesize:</span> <span class="ruby-value">100</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">id</span> = <span class="ruby-identifier">convert_pos_int</span>(<span class="ruby-identifier">val</span>)
       <span class="ruby-constant">Album</span>[<span class="ruby-identifier">id</span>]
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">max_input_bytesize</span>(<span class="ruby-value">:date</span>, <span class="ruby-value">256</span>)
 <span class="ruby-keyword">end</span>
 </pre>
 
 <p>By default, the typecast_params conversion procs are passed the parameter value directly from <code>request.params</code> without modification.  In some cases, it may be beneficial to strip leading and trailing whitespace from parameter string values before processing, which you can do by passing the <code>strip: :all</code> option when loading the plugin.</p>
 
-<p>By default, the typecast_params conversion procs check that null bytes are not allowed in param string values. This check for null bytes occurs prior to any type conversion. If you would like to skip this check and allow null bytes in param string values, you can do by passing the <code>:allow_null_bytes</code> option when loading the plugin.</p>
+<p>By default, the typecasting methods for some types check whether the bytesize of input strings is over the maximum expected values, and raise an error in such cases. The input bytesize is checked prior to any type conversion.  If you would like to skip this check and allow any bytesize when doing type conversion for param string values, you can do so by passing the # <code>:skip_bytesize_checking</code> option when loading the plugin. By default, there is an 100 byte limit on integer input, an 1000 byte input on float input, and a 128 byte limit on date/time input.</p>
+
+<p>By default, the typecasting methods check whether input strings have null bytes, and raise an error in such cases.  This check for null bytes occurs prior to any type conversion. If you would like to skip this check and allow null bytes in param string values, you can do so by passing the <code>:allow_null_bytes</code> option when loading the plugin.</p>
 
 <p>You can use the :date_parse_input_handler option to specify custom handling of date parsing input.  Modern versions of Ruby and the date gem internally raise if the input to date parsing methods is too large to prevent denial of service.  If you are using an older version of Ruby, you can use this option to enforce the same check:</p>
 
@@ -283,6 +286,8 @@ Roda::RodaPlugins::TypecastParams
     <span class="ruby-identifier">string</span>.<span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>, <span class="ruby-value">128</span>]
   }
 </pre>
+
+<p>The <code>date_parse_input_handler</code> is only called if the value is under the max input bytesize, so you may need to call <code>max_input_bytesize</code> for the <code>:date</code>, <code>:time</code>, and <code>:datetime</code> methods to override the max input bytesize if you want to use this option for input strings over 128 bytes.</p>
 
 <p>By design, typecast_params only deals with string keys, it is not possible to use symbol keys as arguments to the conversion methods and have them converted.</p>
 </div>
@@ -308,6 +313,7 @@ Roda::RodaPlugins::TypecastParams
 <li><a href="TypecastParams/ClassMethods.html">Roda::RodaPlugins::TypecastParams::ClassMethods</a></li>
 <li><a href="TypecastParams/DateParseInputHandler.html">Roda::RodaPlugins::TypecastParams::DateParseInputHandler</a></li>
 <li><a href="TypecastParams/InstanceMethods.html">Roda::RodaPlugins::TypecastParams::InstanceMethods</a></li>
+<li><a href="TypecastParams/SkipBytesizeChecking.html">Roda::RodaPlugins::TypecastParams::SkipBytesizeChecking</a></li>
 <li><a href="TypecastParams/StringStripper.html">Roda::RodaPlugins::TypecastParams::StringStripper</a></li>
 <li><a href="TypecastParams/Error.html">Roda::RodaPlugins::TypecastParams::Error</a></li>
 <li><a href="TypecastParams/Params.html">Roda::RodaPlugins::TypecastParams::Params</a></li>
@@ -349,24 +355,27 @@ Roda::RodaPlugins::TypecastParams
 [show source]
 </a>
 <pre id='method-c-configure-source'>     <span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb</span>
-<span class="line-num">1043</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">1044</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-value">:TypecastParams</span>, <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span><span class="ruby-operator">::</span><span class="ruby-constant">Params</span>)) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-value">:TypecastParams</span>)
-<span class="line-num">1045</span>   <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">class_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>
-<span class="line-num">1046</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:strip</span>] <span class="ruby-operator">==</span> <span class="ruby-value">:all</span>
-<span class="line-num">1047</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">StringStripper</span>)
-<span class="line-num">1048</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">1049</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:allow_null_bytes</span>]
-<span class="line-num">1050</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">AllowNullByte</span>)
-<span class="line-num">1051</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">1052</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:date_parse_input_handler</span>]
-<span class="line-num">1053</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword">do</span>
-<span class="line-num">1054</span>       <span class="ruby-identifier">include</span> <span class="ruby-constant">DateParseInputHandler</span>
-<span class="line-num">1055</span>       <span class="ruby-identifier">define_method</span>(<span class="ruby-value">:handle_date_parse_input</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">opts</span>[<span class="ruby-value">:date_parse_input_handler</span>])
-<span class="line-num">1056</span>       <span class="ruby-identifier">private</span> <span class="ruby-value">:handle_date_parse_input</span>
-<span class="line-num">1057</span>       <span class="ruby-keyword">alias</span> <span class="ruby-identifier">handle_date_parse_input</span> <span class="ruby-identifier">handle_date_parse_input</span>
-<span class="line-num">1058</span>     <span class="ruby-keyword">end</span>
-<span class="line-num">1059</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">1060</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">1089</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">1090</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-value">:TypecastParams</span>, <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span><span class="ruby-operator">::</span><span class="ruby-constant">Params</span>)) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-value">:TypecastParams</span>)
+<span class="line-num">1091</span>   <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">class_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>
+<span class="line-num">1092</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:strip</span>] <span class="ruby-operator">==</span> <span class="ruby-value">:all</span>
+<span class="line-num">1093</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">StringStripper</span>)
+<span class="line-num">1094</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">1095</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:allow_null_bytes</span>]
+<span class="line-num">1096</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">AllowNullByte</span>)
+<span class="line-num">1097</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">1098</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:skip_bytesize_checking</span>]
+<span class="line-num">1099</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">SkipBytesizeChecking</span>)
+<span class="line-num">1100</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">1101</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:date_parse_input_handler</span>]
+<span class="line-num">1102</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword">do</span>
+<span class="line-num">1103</span>       <span class="ruby-identifier">include</span> <span class="ruby-constant">DateParseInputHandler</span>
+<span class="line-num">1104</span>       <span class="ruby-identifier">define_method</span>(<span class="ruby-value">:handle_date_parse_input</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">opts</span>[<span class="ruby-value">:date_parse_input_handler</span>])
+<span class="line-num">1105</span>       <span class="ruby-identifier">private</span> <span class="ruby-value">:handle_date_parse_input</span>
+<span class="line-num">1106</span>       <span class="ruby-keyword">alias</span> <span class="ruby-identifier">handle_date_parse_input</span> <span class="ruby-identifier">handle_date_parse_input</span>
+<span class="line-num">1107</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">1108</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">1109</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

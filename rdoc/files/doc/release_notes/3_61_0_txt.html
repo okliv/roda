@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.61.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.61.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.61.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2022-10-12 08:21:47 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-Improvements">Improvements<span><a href="#label-Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The typecast_params plugin now limits input bytesize for integer, float, and date/time typecasts.  If the input is over the allowed bytesize, typecasting will fail.  This prevents issues with trying to typecast arbitrarily large input.</p>
+</li><li>
+<p>The default Integer class matcher now limits integer segments to 100 characters by default, also to prevent issues with typecasting arbitrarily large input.  Segments larger than 100 characters will no longer be matched by the Integer class matcher.</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>If the input bytesize limits in the typecast_params plugin cause issues in your application, you can use the :skip_bytesize_checking option when loading the plugin to disable the checks.</p>
+</li><li>
+<p>If the default Integer class matcher limit causes problems in your application, you can use the class_matchers plugin to override the matcher to not use a limit:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:class_matchers</span>
+<span class="ruby-identifier">class_matcher</span>(<span class="ruby-constant">Integer</span>, <span class="ruby-regexp">/(\d+)/</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">a</span>.<span class="ruby-identifier">to_i</span>]}
+</pre>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

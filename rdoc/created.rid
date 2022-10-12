@@ -1,6 +1,6 @@
-Tue, 13 Sep 2022 08:10:51 -0700
-README.rdoc	Wed, 08 Dec 2021 12:24:00 -0800
-CHANGELOG	Tue, 13 Sep 2022 07:49:26 -0700
+Wed, 12 Oct 2022 08:30:30 -0700
+README.rdoc	Sat, 08 Oct 2022 12:13:45 -0700
+CHANGELOG	Wed, 12 Oct 2022 08:21:47 -0700
 doc/CHANGELOG.old	Fri, 11 Mar 2022 10:33:07 -0800
 MIT-LICENSE	Fri, 07 Jan 2022 12:48:17 -0800
 lib/roda.rb	Tue, 27 Jul 2021 09:50:55 -0700
@@ -8,7 +8,7 @@ lib/roda/cache.rb	Tue, 12 Jan 2021 15:49:31 -0800
 lib/roda/plugins.rb	Wed, 27 Nov 2019 12:12:01 -0800
 lib/roda/plugins/_after_hook.rb	Mon, 04 Mar 2019 16:26:49 -0800
 lib/roda/plugins/_before_hook.rb	Mon, 04 Mar 2019 16:26:49 -0800
-lib/roda/plugins/_optimized_matching.rb	Fri, 17 Sep 2021 11:50:44 -0700
+lib/roda/plugins/_optimized_matching.rb	Sat, 08 Oct 2022 12:13:45 -0700
 lib/roda/plugins/_symbol_regexp_matchers.rb	Thu, 16 Apr 2020 13:01:43 -0700
 lib/roda/plugins/additional_render_engines.rb	Thu, 28 Jul 2022 11:20:46 -0700
 lib/roda/plugins/additional_view_directories.rb	Wed, 16 Feb 2022 13:32:47 -0800
@@ -22,7 +22,7 @@ lib/roda/plugins/capture_erb.rb	Tue, 02 Nov 2021 13:25:06 -0700
 lib/roda/plugins/chunked.rb	Wed, 04 May 2022 08:46:11 -0700
 lib/roda/plugins/class_level_routing.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/plugins/class_matchers.rb	Fri, 08 Dec 2017 15:45:27 -0800
-lib/roda/plugins/common_logger.rb	Mon, 13 Jun 2022 13:28:17 -0700
+lib/roda/plugins/common_logger.rb	Sun, 09 Oct 2022 09:04:19 -0700
 lib/roda/plugins/content_for.rb	Tue, 02 Nov 2021 13:25:06 -0700
 lib/roda/plugins/content_security_policy.rb	Tue, 21 Sep 2021 14:23:42 -0700
 lib/roda/plugins/cookies.rb	Wed, 20 Apr 2022 11:42:37 -0700
@@ -120,13 +120,13 @@ lib/roda/plugins/symbol_status.rb	Wed, 20 Apr 2022 11:42:37 -0700
 lib/roda/plugins/symbol_views.rb	Sun, 31 Jan 2016 11:55:10 -0800
 lib/roda/plugins/timestamp_public.rb	Mon, 30 Oct 2017 11:03:30 -0700
 lib/roda/plugins/type_routing.rb	Thu, 12 Aug 2021 13:16:12 -0700
-lib/roda/plugins/typecast_params.rb	Fri, 17 Dec 2021 17:06:24 -0800
+lib/roda/plugins/typecast_params.rb	Mon, 03 Oct 2022 09:43:37 -0700
 lib/roda/plugins/unescape_path.rb	Wed, 20 Apr 2022 11:42:37 -0700
 lib/roda/plugins/view_options.rb	Mon, 12 Sep 2022 13:47:50 -0700
-lib/roda/request.rb	Mon, 12 Sep 2022 13:47:50 -0700
+lib/roda/request.rb	Mon, 03 Oct 2022 16:43:18 -0700
 lib/roda/response.rb	Mon, 12 Sep 2022 13:47:50 -0700
 lib/roda/session_middleware.rb	Sun, 04 Aug 2019 14:34:46 -0700
-lib/roda/version.rb	Tue, 13 Sep 2022 07:49:26 -0700
+lib/roda/version.rb	Wed, 12 Oct 2022 08:21:47 -0700
 doc/conventions.rdoc	Mon, 13 Jun 2022 14:42:04 -0700
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
@@ -222,6 +222,7 @@ doc/release_notes/3.58.0.txt	Wed, 13 Jul 2022 08:43:16 -0700
 doc/release_notes/3.59.0.txt	Fri, 12 Aug 2022 09:26:07 -0700
 doc/release_notes/3.6.0.txt	Mon, 26 Mar 2018 10:51:43 -0700
 doc/release_notes/3.60.0.txt	Tue, 13 Sep 2022 07:49:26 -0700
+doc/release_notes/3.61.0.txt	Wed, 12 Oct 2022 08:21:47 -0700
 doc/release_notes/3.7.0.txt	Fri, 20 Apr 2018 11:49:04 -0700
 doc/release_notes/3.8.0.txt	Thu, 17 May 2018 13:49:47 -0700
 doc/release_notes/3.9.0.txt	Mon, 11 Jun 2018 12:33:07 -0700

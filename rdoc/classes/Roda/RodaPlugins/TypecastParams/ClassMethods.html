@@ -64,10 +64,10 @@ Roda::RodaPlugins::TypecastParams::ClassMethods
 [show source]
 </a>
 <pre id='method-i-freeze-source'>     <span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb</span>
-<span class="line-num">1064</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze</span>
-<span class="line-num">1065</span>   <span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">freeze</span>
-<span class="line-num">1066</span>   <span class="ruby-keyword">super</span>
-<span class="line-num">1067</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">1113</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze</span>
+<span class="line-num">1114</span>   <span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">freeze</span>
+<span class="line-num">1115</span>   <span class="ruby-keyword">super</span>
+<span class="line-num">1116</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-inherited'>
@@ -86,10 +86,10 @@ Roda::RodaPlugins::TypecastParams::ClassMethods
 [show source]
 </a>
 <pre id='method-i-inherited-source'>     <span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb</span>
-<span class="line-num">1070</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inherited</span>(<span class="ruby-identifier">subclass</span>)
-<span class="line-num">1071</span>   <span class="ruby-keyword">super</span>
-<span class="line-num">1072</span>   <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-value">:TypecastParams</span>, <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>))
-<span class="line-num">1073</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">1119</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inherited</span>(<span class="ruby-identifier">subclass</span>)
+<span class="line-num">1120</span>   <span class="ruby-keyword">super</span>
+<span class="line-num">1121</span>   <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-value">:TypecastParams</span>, <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>))
+<span class="line-num">1122</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

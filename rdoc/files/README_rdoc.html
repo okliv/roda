@@ -30,17 +30,68 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2021-12-08 12:24:00 -0800</span>
+<span class='datetime'>2022-10-08 12:13:45 -0700</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<h1 id="label-Roda"><a href="../classes/Roda.html"><code>Roda</code></a><span><a href="#label-Roda">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<p><img src="https://roda.jeremyevans.net/images/roda-logo.svg"></p>
 
-<p><a href="../classes/Roda.html"><code>Roda</code></a> is a routing tree web toolkit, designed for building fast and maintainable web applications in ruby.</p>
+<p>A routing tree web toolkit, designed for building fast and maintainable web applications in Ruby.</p>
 
-<h1 id="label-Installation">Installation<span><a href="#label-Installation">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h2 id="label-Table+of+contents">Table of contents<span><a href="#label-Table+of+contents">&para;</a> <a href="#top">&uarr;</a></span></h2>
+<ul><li>
+<p><a href="#label-Installation">Installation</a></p>
+</li><li>
+<p><a href="#label-Resources">Resources</a></p>
+</li><li>
+<p><a href="#label-Goals">Goals</a></p>
+</li><li>
+<p><a href="#label-Usage">Usage</a></p>
+</li><li>
+<p><a href="#label-Running+the+Application">Running the application</a></p>
+</li><li>
+<p><a href="#label-The+Routing+Tree">The routing tree</a></p>
+</li><li>
+<p><a href="#label-Matchers">Matchers</a></p>
+</li><li>
+<p><a href="#label-Optional+segments">Optional segments</a></p>
+</li><li>
+<p><a href="#label-Match-2FRoute+Block+Return+Values">Match/Route Block Return Values</a></p>
+</li><li>
+<p><a href="#label-Status+Codes">Status codes</a></p>
+</li><li>
+<p><a href="#label-Verb+Methods">Verb methods</a></p>
+</li><li>
+<p><a href="#label-Root+Method">Root method</a></p>
+</li><li>
+<p><a href="#label-Request+and+Response">Request and Response</a></p>
+</li><li>
+<p><a href="#label-Pollution">Pollution</a></p>
+</li><li>
+<p><a href="#label-Composition">Composition</a></p>
+</li><li>
+<p><a href="#label-Testing">Testing</a></p>
+</li><li>
+<p><a href="#label-Settings">Settings</a></p>
+</li><li>
+<p><a href="#label-Rendering">Rendering</a></p>
+</li><li>
+<p><a href="#label-Security">Security</a></p>
+</li><li>
+<p><a href="#label-Code+Reloading">Code Reloading</a></p>
+</li><li>
+<p><a href="#label-Plugins">Plugins</a></p>
+</li><li>
+<p><a href="#label-No+Introspection">No introspection</a></p>
+</li><li>
+<p><a href="#label-Inspiration">Inspiration</a></p>
+</li><li>
+<p><a href="#label-Ruby+Support+Policy">Ruby Support Policy</a></p>
+</li></ul>
+
+<h2 id="label-Installation">Installation<span><a href="#label-Installation">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <pre>$ gem install roda</pre>
 
@@ -157,11 +208,9 @@ Last Update:
 
 <h2 id="label-Running+the+Application">Running the Application<span><a href="#label-Running+the+Application">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>Running a <a href="../classes/Roda.html"><code>Roda</code></a> application is similar to running any other rack-based application that uses a <code>config.ru</code> file.  You can start a basic server using <code>rackup</code>:</p>
+<p>Running a <a href="../classes/Roda.html"><code>Roda</code></a> application is similar to running any other rack-based application that uses a <code>config.ru</code> file.  You can start a basic server using <code>rackup</code>, <code>puma</code>, <code>unicorn</code>, <code>passenger</code>, or any other webserver that can handle <code>config.ru</code> files:</p>
 
 <pre>$ rackup</pre>
-
-<p>Ruby web servers such as Unicorn and Puma also ship with their own programs that you can use to run a <a href="../classes/Roda.html"><code>Roda</code></a> application.</p>
 
 <h2 id="label-The+Routing+Tree">The Routing Tree<span><a href="#label-The+Routing+Tree">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
@@ -451,7 +500,7 @@ Last Update:
 <span class="ruby-keyword">end</span>
 </pre>
 
-<p>This works well for many cases, but there are also cases where you really want to treat it as one route with an optional segment.  One simple way to do that is to use a parameter instead of an optional segment (e.g. +/items/123?opt=456+).</p>
+<p>This works well for many cases, but there are also cases where you really want to treat it as one route with an optional segment.  One simple way to do that is to use a parameter instead of an optional segment (e.g. <code>/items/123?opt=456</code>).</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;items&quot;</span>, <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item_id</span><span class="ruby-operator">|</span>
   <span class="ruby-identifier">optional_data</span> = <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;opt&#39;</span>].<span class="ruby-identifier">to_s</span>
@@ -609,12 +658,12 @@ Last Update:
 
 <p>If you have a lot of rack applications that you want to dispatch to, and which one to dispatch to is based on the request path prefix, look into the <code>multi_run</code> plugin.</p>
 
-<h3 id="label-hash_routes+plugin">hash_routes plugin<span><a href="#label-hash_routes+plugin">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<h3 id="label-hash_branches+plugin">hash_branches plugin<span><a href="#label-hash_branches+plugin">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>If you are just looking to split up the main route block up by branches, you should use the <code>hash_routes</code> plugin, which keeps the current scope of the <code>route</code> block:</p>
+<p>If you are just looking to split up the main route block up by branches, you should use the <code>hash_branches</code> plugin, which keeps the current scope of the <code>route</code> block:</p>
 
 <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
-  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_branches</span>
 
   <span class="ruby-identifier">hash_branch</span> <span class="ruby-string">&quot;api&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>
@@ -623,7 +672,7 @@ Last Update:
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_branches</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span>
 
