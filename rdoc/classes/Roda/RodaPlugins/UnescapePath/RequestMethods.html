@@ -35,9 +35,41 @@ Roda::RodaPlugins::UnescapePath::RequestMethods
 <div id='content'>
 <div id='text'>
 <div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-matched_path">matched_path</a></li>
+</ol>
+</div>
 <div id='context'>
 </div>
 <div id='section'>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-matched_path'>
+<a name='method-i-matched_path'></a>
+<div class='synopsis'>
+<span class='name'>matched_path</span><span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Make sure the matched path calculation handles the unescaping of the remaining path.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-matched_path-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-matched_path-source'>   <span class="ruby-comment"># File lib/roda/plugins/unescape_path.rb</span>
+<span class="line-num">25</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">matched_path</span>
+<span class="line-num">26</span>   <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@env</span>
+<span class="line-num">27</span>   <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">unescape</span>(<span class="ruby-identifier">e</span>[<span class="ruby-string">&quot;SCRIPT_NAME&quot;</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">e</span>[<span class="ruby-string">&quot;PATH_INFO&quot;</span>]).<span class="ruby-identifier">chomp</span>(<span class="ruby-ivar">@remaining_path</span>)
+<span class="line-num">28</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
 </div>
 
 </div>

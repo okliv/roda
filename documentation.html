@@ -21,7 +21,7 @@
       </nav>
     
     <div class="content"><div class="contain">    
-  <h1>Documentation for Roda (v3.61.0)</h1>
+  <h1>Documentation for Roda (v3.62.0)</h1>
 
   <h2><a href="rdoc/files/README_rdoc.html">README</a> <small>(Introduction to Roda, start here if new)</small></h2>
 
@@ -129,6 +129,7 @@
       <li><a href="rdoc/classes/Roda/RodaPlugins/Status303.html">status_303</a>: Uses 303 as the default redirect status for non-GET requests by HTTP 1.1 clients.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/SymbolStatus.html">symbol_status</a>: Allows the use of symbols as status codes, converting them to the appropriate integer.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/TypecastParams.html">typecast_params</a>: Allows for easily converting parameter values to explicit types.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/TypecastParamsSizedIntegers.html">typecast_params_sized_integers</a>: Allows for easily converting parameter values to integers for specific integer sizes (8-bit, 16-bit, 32-bit, and 64-bit).</li>
     </ul></li>
     <li>Matchers: <ul>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ClassMatchers.html">class_matchers</a>: Adds support for handling matchers for arbitrary classes, with support for type conversion.</li>
@@ -136,6 +137,7 @@
       <li><a href="rdoc/classes/Roda/RodaPlugins/EmptyRoot.html">empty_root</a>: Makes root matcher match empty string in addition to single slash.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/HashMatcher.html">hash_matcher</a>: Adds hash_matcher class method for easily defining hash matchers.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/HeaderMatchers.html">header_matchers</a>: Adds matchers using information from the request headers.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/IntegerMatcherMax.html">Integer_matcher_max</a>: Sets a maximum integer value that will be matched by the default Integer matcher.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/MatchAffix.html">match_affix</a>: Adds support for overriding default prefix/suffix used in match patterns.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/MultibyteStringMatcher.html">multibyte_string_matcher</a>: Makes string matcher handle multibyte characters.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ParamMatchers.html">param_matchers</a>: Adds matchers using information from the request params.</li>
@@ -166,6 +168,7 @@
       <li><a href="rdoc/classes/Roda/RodaPlugins/FilterCommonLogger.html">filter_common_logger</a>: Adds support for skipping the logging of certain requests when using the common_logger plugin.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Flash.html">flash</a>: Adds flash handling.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Heartbeat.html">heartbeat</a>: Adds support for heartbeats.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/HostAuthorization.html"></a>: Allows configuring an authorized host or an array of authorized hosts.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/IndifferentParams.html">indifferent_params</a>: Adds params method for indifferent parameters.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/JsonParser.html">json_parser</a>: Parses request bodies in JSON format.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Path.html">path</a>: Adds support for named paths.</li>
@@ -236,7 +239,7 @@
     
         
           <li>
-            <a href='rdoc/files/doc/release_notes/3_61_0_txt.html'>3.61</a> | <a href='rdoc/files/doc/release_notes/3_60_0_txt.html'>3.60</a>
+            <a href='rdoc/files/doc/release_notes/3_62_0_txt.html'>3.62</a> | <a href='rdoc/files/doc/release_notes/3_61_0_txt.html'>3.61</a> | <a href='rdoc/files/doc/release_notes/3_60_0_txt.html'>3.60</a>
           </li>
         
           <li>

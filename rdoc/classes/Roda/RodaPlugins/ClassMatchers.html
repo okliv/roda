@@ -59,6 +59,16 @@ Roda::RodaPlugins::ClassMatchers
 
 <p>This is useful to DRY up code if you are using the same type of pattern and type conversion in multiple places in your application.</p>
 
+<p>If you have a segment match the passed regexp, but decide during block processing that you do not want to treat it as a match, you can have the block return nil or false.  This is useful if you want to make sure you are using valid data:</p>
+
+<pre class="ruby"><span class="ruby-identifier">class_matcher</span>(<span class="ruby-constant">Date</span>, <span class="ruby-regexp">/(\dd\d)-(\d\d)-(\d\d)/</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">y</span>, <span class="ruby-identifier">m</span>, <span class="ruby-identifier">d</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">y</span> = <span class="ruby-identifier">y</span>.<span class="ruby-identifier">to_i</span>
+  <span class="ruby-identifier">m</span> = <span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_i</span>
+  <span class="ruby-identifier">d</span> = <span class="ruby-identifier">d</span>.<span class="ruby-identifier">to_i</span>
+  [<span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">y</span>, <span class="ruby-identifier">m</span>, <span class="ruby-identifier">d</span>)] <span class="ruby-keyword">if</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">valid_date?</span>(<span class="ruby-identifier">y</span>, <span class="ruby-identifier">m</span>, <span class="ruby-identifier">d</span>)
+<span class="ruby-keyword">end</span>
+</pre>
+
 <p>This plugin does not work with the params_capturing plugin, as it does not offer the ability to associate block arguments with named keys.</p>
 </div>
 <div id='context'>
