@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.63.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.63.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.63.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2022-12-16 10:46:01 -0800</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>An autoload_hash_branches plugin has been added for autoloading route files for each hash branch, instead of requiring the route files be loaded up front.  For example, to automatically load a route file for a hash branch on the first request to that branch:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:autoload_hash_branches</span>
+<span class="ruby-identifier">autoload_hash_branch</span>(<span class="ruby-string">&#39;branch_name&#39;</span>, <span class="ruby-string">&#39;/path/to/file&#39;</span>)
+<span class="ruby-identifier">autoload_hash_branch</span>(<span class="ruby-string">&#39;namespace&#39;</span>, <span class="ruby-string">&#39;branch_name&#39;</span>, <span class="ruby-string">&#39;/path/to/file&#39;</span>)
+</pre>
+
+<p>The route file loaded should define the expected hash branch.</p>
+
+<p>It is common to have route files stored in a directory, with the file name matching the branch name.  In that case, you can set autoloading for all route files in a given directory:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:autoload_hash_branches</span>
+<span class="ruby-identifier">autoload_hash_branch_dir</span>(<span class="ruby-string">&#39;/path/to/dir&#39;</span>)
+<span class="ruby-identifier">autoload_hash_branch_dir</span>(<span class="ruby-string">&#39;namespace&#39;</span>, <span class="ruby-string">&#39;/path/to/dir&#39;</span>)
+</pre>
+
+<p>Note that autoloading hash branches does not work if the application is frozen.  This plugin should only be used in development mode for faster startup, or when running tests on a subset of the application in order to avoid loading parts of the application unrelated to what is being tested.</p>
+</li><li>
+<p>The mailer plugin now supports a :terminal plugin option to make the r.mail method force a terminal match, similar to how r.get and other HTTP verb methods work in standard <a href="../../../classes/Roda.html"><code>Roda</code></a>.  This behavior will become the default in <a href="../../../classes/Roda.html"><code>Roda</code></a> 4.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The mailer plugin now correctly sets the content_type of the body for emails with attachments when using mail <a href="2_8_0_txt.html">2.8.0</a>+.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

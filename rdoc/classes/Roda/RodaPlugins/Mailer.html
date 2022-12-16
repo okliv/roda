@@ -142,6 +142,8 @@ Roda::RodaPlugins::Mailer
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:mailer</span>, <span class="ruby-value">content_type:</span> <span class="ruby-string">&#39;text/html&#39;</span>
 </pre>
 
+<p>For backwards compatibility reasons, the <code>r.mail</code> method does not do a terminal match by default if provided arguments (unlike <code>r.get</code> and <code>r.post</code>).  You can pass the :terminal option to make <code>r.mail</code> enforce a terminal match if provided arguments.</p>
+
 <p>The mailer plugin does support being used inside a <a href="../../Roda.html"><code>Roda</code></a> application that is handling web requests, where the routing block for mails and web requests is shared.  However, it’s recommended that you create a separate <a href="../../Roda.html"><code>Roda</code></a> application for emails. This can be a subclass of your main <a href="../../Roda.html"><code>Roda</code></a> application if you want your helper methods to automatically be available in your email views.</p>
 </div>
 <div id='method-list'>
@@ -185,9 +187,9 @@ Roda::RodaPlugins::Mailer
 [show source]
 </a>
 <pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/mailer.rb</span>
-<span class="line-num">131</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
-<span class="line-num">132</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:mailer</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:mailer</span>]<span class="ruby-operator">||</span><span class="ruby-constant">OPTS</span>).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>).<span class="ruby-identifier">freeze</span>
-<span class="line-num">133</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">136</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">137</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:mailer</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:mailer</span>]<span class="ruby-operator">||</span><span class="ruby-constant">OPTS</span>).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>).<span class="ruby-identifier">freeze</span>
+<span class="line-num">138</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
