@@ -2,6 +2,7 @@
 <html lang='en'>
 <head>
 <title>1.3.0.txt</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -40,7 +41,7 @@ Last Update:
 <ul><li>
 <p>In <a href="../../../classes/Roda.html"><code>Roda</code></a> 2 (the next version), the PATH_INFO and SCRIPT_NAME env variables will not be modified during routing. Instead, <a href="../../../classes/Roda.html"><code>Roda</code></a> will use the static_path_info plugin behavior by default. Users are strongly encouraged to use the static_path_info plugin to make sure their apps will work with <a href="../../../classes/Roda.html"><code>Roda</code></a> 2.</p>
 </li><li>
-<p>In <a href="../../../classes/Roda.html"><code>Roda</code></a> 2, Roda#initialize will take the env hash, and call will take the route block.  The private #_route method will be eliminated.  This should not affect applications, but it will affect plugins that override these methods.</p>
+<p>In <a href="../../../classes/Roda.html"><code>Roda</code></a> 2, Roda#initialize will take the env hash, and call will take the route block.  The private _route method will be eliminated.  This should not affect applications, but it will affect plugins that override these methods.</p>
 </li><li>
 <p>The issues mentioned below should all have deprecation warnings, except where noted.</p>
 </li></ul>

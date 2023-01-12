@@ -2,6 +2,7 @@
 <html lang='en'>
 <head>
 <title>Roda::RodaPlugins::AutoloadHashBranches</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -40,8 +41,8 @@ Roda::RodaPlugins::AutoloadHashBranches
 <p>You can specify a single hash branch for autoloading:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:autoload_hash_branches</span>
-<span class="ruby-identifier">autoload_hash_branch</span>(<span class="ruby-string">&#39;branch_name&#39;</span>, <span class="ruby-string">&#39;/path/to/file&#39;</span>)
-<span class="ruby-identifier">autoload_hash_branch</span>(<span class="ruby-string">&#39;namespace&#39;</span>, <span class="ruby-string">&#39;branch_name&#39;</span>, <span class="ruby-string">&#39;/path/to/file&#39;</span>)
+<span class="ruby-identifier">autoload_hash_branch</span>(<span class="ruby-string">&#39;branch_name&#39;</span>, <span class="ruby-string">&#39;/absolute/path/to/file&#39;</span>)
+<span class="ruby-identifier">autoload_hash_branch</span>(<span class="ruby-string">&#39;namespace&#39;</span>, <span class="ruby-string">&#39;branch_name&#39;</span>, <span class="ruby-string">&#39;relative/path/to/file&#39;</span>)
 </pre>
 
 <p>You can also set the plugin to autoload load all hash branch files in a given directory. This will look at each .rb file in the directory, and add an autoload for it, using the filename without the .rb as the branch name:</p>
@@ -52,12 +53,13 @@ Roda::RodaPlugins::AutoloadHashBranches
 
 <p>In both cases, when the autoloaded file is required, it should redefine the same hash branch.  If it does not, requests to the hash branch will result in a 404 error.</p>
 
-<p>This plugin will not work correctly when freezing applications, because it requires modifying the class at runtime as hash branches are autoloaded.</p>
+<p>When freezing an application, all hash branches are automatically loaded, because autoloading hash branches does not work for frozen applications.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
 <h3>Public Class</h3>
 <ol>
+<li><a href="#method-c-configure">configure</a></li>
 <li><a href="#method-c-load_dependencies">load_dependencies</a></li>
 </ol>
 </div>
@@ -72,6 +74,25 @@ Roda::RodaPlugins::AutoloadHashBranches
 <div id='section'>
 <div id='methods'>
 <h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-configure'>
+<a name='method-c-configure'></a>
+<div class='synopsis'>
+<span class='name'>configure</span><span class='arguments'>(app)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/autoload_hash_branches.rb</span>
+<span class="line-num">36</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">37</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:autoload_hash_branch_files</span>] <span class="ruby-operator">||=</span> []
+<span class="line-num">38</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
 <a name='method-c-load_dependencies'></a>
 <div class='synopsis'>

@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.64.0.txt</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.64.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.64.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2023-01-12 07:50:45 -0800</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>An erb_h plugin has been added for faster HTML escaping using erb/escape.  erb 4 added erb/escape and it is included in Ruby 3.2.</p>
+
+<p>The erb_h plugin is added as a separate plugin because it changes the behavior of the h method. The h method added by the h plugin will always return a new string, but the h method added by the erb_h plugin will return the argument if the argument is a string that does not need escaping.  By avoiding unnecessary string allocations, use of the erb_h plugin can speed up HTML escaping.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The autoload_hash_branches plugin added in <a href="../../../classes/Roda.html"><code>Roda</code></a> <a href="3_63_0_txt.html">3.63.0</a> will now eagerly load the hash branches when freezing the application, allowing the application to continue to work after being frozen. Additionally, file paths for the hash branches will now be automatically expanded, allowing the use of relative file paths.</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The expanding of file paths in the autoload_hash_branches plugin can break applications that were providing relative paths and expecting them to be looked up using the Ruby load path.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
