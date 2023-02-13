@@ -21,7 +21,7 @@
       </nav>
     
     <div class="content"><div class="contain">    
-  <h1>Documentation for Roda (v3.64.0)</h1>
+  <h1>Documentation for Roda (v3.65.0)</h1>
 
   <h2><a href="rdoc/files/README_rdoc.html">README</a> <small>(Introduction to Roda, start here if new)</small></h2>
 
@@ -52,6 +52,7 @@
   <ul>
     <li>Routing: <ul>
       <li><a href="rdoc/classes/Roda/RodaPlugins/AutoloadHashBranches.html">autoload_hash_branches</a>: Allows autoloading file for a hash branch when there is a request for that branch.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/AutoloadNamedRoutes.html">autoload_named_routes</a>: Allows autoloading file for a named route when there is a request for that route.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/AllVerbs.html">all_verbs</a>: Adds request routing methods for all http verbs.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/BacktrackingArray.html">backtracking_array</a>: Allows array matchers to backtrack if later matchers do not match.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ClassLevelRouting.html">class_level_routing</a>: Adds class level routing methods, for a DSL similar to <a href="https://github.com/sinatra/sinatra">sinatra</a>.</li>
@@ -241,7 +242,7 @@
     
         
           <li>
-            <a href='rdoc/files/doc/release_notes/3_64_0_txt.html'>3.64</a> | <a href='rdoc/files/doc/release_notes/3_63_0_txt.html'>3.63</a> | <a href='rdoc/files/doc/release_notes/3_62_0_txt.html'>3.62</a> | <a href='rdoc/files/doc/release_notes/3_61_0_txt.html'>3.61</a> | <a href='rdoc/files/doc/release_notes/3_60_0_txt.html'>3.60</a>
+            <a href='rdoc/files/doc/release_notes/3_65_0_txt.html'>3.65</a> | <a href='rdoc/files/doc/release_notes/3_64_0_txt.html'>3.64</a> | <a href='rdoc/files/doc/release_notes/3_63_0_txt.html'>3.63</a> | <a href='rdoc/files/doc/release_notes/3_62_0_txt.html'>3.62</a> | <a href='rdoc/files/doc/release_notes/3_61_0_txt.html'>3.61</a> | <a href='rdoc/files/doc/release_notes/3_60_0_txt.html'>3.60</a>
           </li>
         
           <li>
@@ -313,7 +314,8 @@
   <h2 id="presentations">Presentations</h2>
 
   <ul>
-<li><a href="http://code.jeremyevans.net/presentations/rubyconfpk2022/index.html">&quot;Roda: Simplicity, Reliability, Extensibility, Performance&quot; Presentation at RubyConf Pakistan March 2022</a> (<a href="https://www.youtube.com/watch?v=6lEAKMBs_tY">Video</a>)</li>
+    <li><a href="http://code.jeremyevans.net/presentations/rubyconfth2022/index.html">&quot;Roda: Simplicity, Reliability, Extensibility, Performance&quot; Presentation at RubyConf Thailand 2022</a> (<a href="https://www.youtube.com/watch?v=9fukis_VHl4">Video</a>)</li>
+    <li><a href="http://code.jeremyevans.net/presentations/rubyconfpk2022/index.html">&quot;Roda: Simplicity, Reliability, Extensibility, Performance&quot; Presentation at RubyConf Pakistan March 2022</a> (<a href="https://www.youtube.com/watch?v=6lEAKMBs_tY">Video</a>)</li>
     <li><a href="https://speakerdeck.com/janko_m/dynamic-routing-in-ruby">&quot;Dynamic routing in Ruby&quot;</a></li>
     <li><a href="http://code.jeremyevans.net/presentations/railsconf2015/index.html">&quot;Roda&quot; Lightning Talk at RailsConf 2015</a> (<a href="http://code.jeremyevans.net/presentations/railsconf2015b/index.html">4x3 version</a>)  (<a href="http://confreaks.tv/videos/railsconf2015-lightning-talks">Video</a>, starts about 33:16)</li>
     <li><a href="http://code.jeremyevans.net/presentations/mwrc2015/index.html">&quot;Better Routing Through Trees&quot; Presentation at MountainWest RubyConf 2015</a> (<a href="http://code.jeremyevans.net/presentations/mwrc2015b/index.html">4x3 version</a> (<a href="http://confreaks.tv/videos/mwrc2015-better-routing-through-trees">Video</a>)</li>
@@ -325,6 +327,8 @@
   <p>Here are some open source applications that use Roda:</p>
 
   <ul>
+    <li><a href="https://github.com/bridgetownrb/bridgetown">Bridgetown</a> (Progressive Site Generator and Fullstack Framework)</li>
+    <li><a href="https://github.com/karafka/karafka-web">Karafka Web</a> (User Inferface for Karafka Framework)</li>
     <li><a href="https://github.com/kontena/kontena/tree/master/server">Kontena</a> (Docker Container Management)</li>
     <li><a href="https://github.com/enebo/alienist_viewer">Alienist Viewer</a> (JRuby Memory Dump Viewer)</li>
     <li><a href="https://github.com/mmmries/golf-score-roda">golf-score-roda</a> (Backend for golf-score-frontend)</li>
