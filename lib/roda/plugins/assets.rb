@@ -623,6 +623,7 @@ class Roda
           Uglifier.compile(content)
         end
 
+        # Compress the JS using Terser, requires javascript runtime
         def compress_js_terser(content)
           begin
             require 'terser'
