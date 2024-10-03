@@ -570,7 +570,7 @@ class Roda
           end
 
           compressors = if type == :js
-            [:yui, :closure, :uglifier, :minjs]
+            [:yui, :closure, :uglifier, :minjs, :terser]
           else
             [:yui]
           end
@@ -621,6 +621,18 @@ class Roda
           end
 
           Uglifier.compile(content)
+        end
+
+        def compress_js_terser(content)
+          begin
+            require 'terser'
+          rescue => e
+            # :nocov:
+            raise CompressorNotFound, "#{e.class}: #{e.message}", e.backtrace
+            # :nocov:
+          end
+          
+          Terser.compile(content)
         end
 
         # Compress the CSS using YUI Compressor, requires java runtime
