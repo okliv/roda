@@ -45,7 +45,7 @@ class Roda
         # Match if the given mimetype is one of the accepted mimetypes.
         def match_accept(mimetype)
           if @env["HTTP_ACCEPT"].to_s.split(',').any?{|s| s.strip == mimetype}
-            response["Content-Type"] = mimetype
+            response[RodaResponseHeaders::CONTENT_TYPE] = mimetype
           end
         end
 

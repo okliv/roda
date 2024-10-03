@@ -327,7 +327,7 @@ class Roda
         def send_file(path, opts = OPTS)
           res = response
           headers = res.headers
-          if opts[:type] || !headers["Content-Type"]
+          if opts[:type] || !headers[RodaResponseHeaders::CONTENT_TYPE]
             res.content_type(opts[:type] || ::File.extname(path), :default => 'application/octet-stream')
           end
 
@@ -352,7 +352,7 @@ class Roda
           end
 
           res.status = opts[:status] || s
-          headers.delete("Content-Length")
+          headers.delete(RodaResponseHeaders::CONTENT_LENGTH)
           headers.replace(h.merge!(headers))
           res.body = b
 
@@ -407,7 +407,7 @@ class Roda
 
         # If the body is a DelayedBody, set the appropriate length for it.
         def finish
-          @length = @body.length if @body.is_a?(DelayedBody) && !@headers["Content-Length"]
+          @length = @body.length if @body.is_a?(DelayedBody) && !@headers[RodaResponseHeaders::CONTENT_LENGTH]
           super
         end
 
@@ -424,7 +424,7 @@ class Roda
 
         # Set the Content-Type of the response body given a media type or file
         # extension.  See plugin documentation for options.
-        def content_type(type = nil || (return @headers["Content-Type"]), opts = OPTS)
+        def content_type(type = nil || (return @headers[RodaResponseHeaders::CONTENT_TYPE]), opts = OPTS)
           unless (mime_type = mime_type(type) || opts[:default])
             raise RodaError, "Unknown media type: #{type}"
           end
@@ -437,7 +437,7 @@ class Roda
             end
           end
 
-          @headers["Content-Type"] = mime_type
+          @headers[RodaResponseHeaders::CONTENT_TYPE] = mime_type
         end
 
         # Set the Content-Disposition to "attachment" with the specified filename,
@@ -463,14 +463,14 @@ class Roda
               encoded_params = "; filename*=#{encoding.to_s}''#{encoded_filename}"
             end
 
-            unless @headers["Content-Type"]
+            unless @headers[RodaResponseHeaders::CONTENT_TYPE]
               ext = File.extname(filename)
               unless ext.empty?
                 content_type(ext)
               end
             end
           end
-          @headers["Content-Disposition"] = "#{disposition}#{params}#{encoded_params}"
+          @headers[RodaResponseHeaders::CONTENT_DISPOSITION] = "#{disposition}#{params}#{encoded_params}"
         end
 
         # Whether or not the status is set to 1xx. Returns nil if status not yet set.

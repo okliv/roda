@@ -379,7 +379,7 @@ class Roda
         end
 
         # Perform the processing of mail for this request, first considering
-        # routes defined via the the class-level +rcpt+ method, and then the
+        # routes defined via the class-level +rcpt+ method, and then the
         # normal routing tree passed in as the block.
         def process_mail(&block)
           if string_routes = opts[:mail_processor_string_routes]

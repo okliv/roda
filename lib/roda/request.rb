@@ -443,16 +443,7 @@ class Roda
         # Match integer segment of up to 100 decimal characters, and yield resulting value as an
         # integer.
         def _match_class_Integer
-          consume(/\A\/(\d{1,100})(?=\/|\z)/) do |i|
-            if i = _match_class_convert_Integer(i)
-              [i]
-            end
-          end
-        end
-
-        # Convert the segment matched by the Integer matcher to an integer.
-        def _match_class_convert_Integer(value)
-          value.to_i
+          consume(/\A\/(\d{1,100})(?=\/|\z)/, :_convert_class_Integer)
         end
 
         # Match only if all of the arguments in the given array match.
@@ -547,7 +538,7 @@ class Roda
           when nil, false
             # nothing
           else
-            raise RodaError, "unsupported block result: #{result.inspect}"
+            unsupported_block_result(result)
           end
         end
 
@@ -555,14 +546,26 @@ class Roda
         # match, returns false without changes.  Otherwise, modifies
         # SCRIPT_NAME to include the matched path, removes the matched
         # path from PATH_INFO, and updates captures with any regex captures.
-        def consume(pattern)
+        def consume(pattern, meth=nil)
           if matchdata = pattern.match(@remaining_path)
             captures = matchdata.captures
-            if defined?(yield)
+
+            if meth
+              return unless captures = scope.send(meth, *captures)
+            # :nocov:
+            elsif defined?(yield)
+              # RODA4: Remove
               return unless captures = yield(*captures)
+            # :nocov:
             end
+
             @remaining_path = matchdata.post_match
-            @captures.concat(captures)
+
+            if captures.is_a?(Array)
+              @captures.concat(captures)
+            else
+              @captures << captures
+            end
           end
         end
 
@@ -650,6 +653,12 @@ class Roda
           else
             type.to_s.upcase == @env["REQUEST_METHOD"]
           end
+        end
+
+        # How to handle block results that are not nil, false, or a String.
+        # By default raises an exception.
+        def unsupported_block_result(result)
+          raise RodaError, "unsupported block result: #{result.inspect}"
         end
 
         # Handle an unsupported matcher.

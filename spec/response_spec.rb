@@ -22,6 +22,32 @@ describe "response #headers and #body" do
     header('foo').must_equal "bar"
     body.must_equal 'true'
   end
+
+  it "uses plain hash for response headers" do
+    app do |r|
+      response.headers['UP'] = 'U'
+      response.headers['down'] = 'd'
+    end
+
+    req[1].must_be_instance_of Hash
+    header('up').must_be_nil
+    header('UP').must_equal 'U'
+    header('down').must_equal 'd'
+    header('DOWN').must_be_nil
+  end if Rack.release < '3'
+
+  it "uses Rack::Headers for response headers" do
+    app do |r|
+      response.headers['UP'] = 'U'
+      response.headers['down'] = 'd'
+    end
+
+    req[1].must_be_instance_of Rack::Headers
+    header('up').must_equal 'U'
+    header('UP').must_equal 'U'
+    header('down').must_equal 'd'
+    header('DOWN').must_equal 'd'
+  end if Rack.release >= '3' && !ENV['PLAIN_HASH_RESPONSE_HEADERS']
 end
 
 describe "response #write" do
@@ -45,7 +71,7 @@ describe "response #finish" do
 
     body.must_equal ''
     s.must_equal 404
-    h['Content-Type'].must_equal 'text/html'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/html'
     b.join.length.must_equal 0
   end
 
@@ -59,18 +85,18 @@ describe "response #finish" do
 
     body.must_equal 'a'
     s.must_equal 200
-    h['Content-Type'].must_equal 'text/html'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/html'
     b.join.length.must_equal 1
   end
 
   it "should set Content-Length header" do
     app do |r|
       response.write 'a'
-      response['Content-Length'].must_be_nil
+      response[RodaResponseHeaders::CONTENT_LENGTH].must_be_nil
       throw :halt, response.finish
     end
 
-    header('Content-Length').must_equal '1'
+    header(RodaResponseHeaders::CONTENT_LENGTH).must_equal '1'
   end
 
   [204, 304, 100].each do |status|
@@ -80,8 +106,8 @@ describe "response #finish" do
         throw :halt, response.finish
       end
 
-      header('Content-Type').must_be_nil
-      header('Content-Length').must_be_nil
+      header(RodaResponseHeaders::CONTENT_TYPE).must_be_nil
+      header(RodaResponseHeaders::CONTENT_LENGTH).must_be_nil
     end
   end
 
@@ -91,11 +117,11 @@ describe "response #finish" do
       throw :halt, response.finish
     end
 
-    header('Content-Type').must_be_nil
+    header(RodaResponseHeaders::CONTENT_TYPE).must_be_nil
     if Rack.release < '2.0.2'
-      header('Content-Length').must_be_nil
+      header(RodaResponseHeaders::CONTENT_LENGTH).must_be_nil
     else
-      header('Content-Length').must_equal '0'
+      header(RodaResponseHeaders::CONTENT_LENGTH).must_equal '0'
     end
   end
 
@@ -109,7 +135,7 @@ describe "response #finish" do
 
     body.must_equal ''
     s.must_equal 500
-    h['Content-Type'].must_equal 'text/html'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/html'
     b.join.length.must_equal 0
   end
 end
@@ -134,11 +160,11 @@ describe "response #finish_with_body" do
   it "should not set Content-Length header" do
     app do |r|
       response.write 'a'
-      response['Content-Length'].must_be_nil
+      response[RodaResponseHeaders::CONTENT_LENGTH].must_be_nil
       throw :halt, response.finish_with_body(['123'])
     end
 
-    header('Content-Length').must_be_nil
+    header(RodaResponseHeaders::CONTENT_LENGTH).must_be_nil
   end
 
   it "should not overwrite existing status" do
@@ -164,8 +190,8 @@ describe "response #redirect" do
 
     status('/a').must_equal 303
     status.must_equal 302
-    header('Location', '/a').must_equal '/foo'
-    header('Location').must_equal '/bar'
+    header(RodaResponseHeaders::LOCATION, '/a').must_equal '/foo'
+    header(RodaResponseHeaders::LOCATION).must_equal '/bar'
   end
 end
 

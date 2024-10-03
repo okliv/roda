@@ -3,7 +3,7 @@ require_relative "../spec_helper"
 describe "content_security_policy plugin" do 
   it "does not add header if no options are set" do
     app(:content_security_policy){'a'}
-    header('Content-Security-Policy', "/a").must_be_nil
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, "/a").must_be_nil
   end
 
   it "sets Content-Security-Policy header" do
@@ -76,29 +76,29 @@ describe "content_security_policy plugin" do
 
     v = "default-src 'self'; img-src 'self' example.com; style-src 'sha256-abc'; "
 
-    header('Content-Security-Policy', "/a").must_equal v
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, "/a").must_equal v
 
-    header('Content-Security-Policy', "/nro").must_equal v
-    header('Content-Security-Policy-Report-Only', "/nro").must_be_nil
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, "/nro").must_equal v
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY_REPORT_ONLY, "/nro").must_be_nil
     body("/nro").must_equal 'false'
 
-    header('Content-Security-Policy-Report-Only', "/ro").must_equal v
-    header('Content-Security-Policy', "/ro").must_be_nil
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY_REPORT_ONLY, "/ro").must_equal v
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, "/ro").must_be_nil
 
     body('/get').must_equal '[:self]'
 
-    header('Content-Security-Policy', "/add").must_equal "default-src 'self' foo.com bar.com; img-src 'self' example.com; style-src 'sha256-abc'; "
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, "/add").must_equal "default-src 'self' foo.com bar.com; img-src 'self' example.com; style-src 'sha256-abc'; "
 
-    header('Content-Security-Policy', "/empty").must_equal "default-src 'self'; img-src 'self' example.com; style-src 'sha256-abc'; "
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, "/empty").must_equal "default-src 'self'; img-src 'self' example.com; style-src 'sha256-abc'; "
 
-    header('Content-Security-Policy', "/set").must_equal "default-src foo.com bar.com; img-src 'self' example.com; style-src 'sha256-abc'; "
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, "/set").must_equal "default-src foo.com bar.com; img-src 'self' example.com; style-src 'sha256-abc'; "
 
     body('/bool').must_equal 'true'
-    header('Content-Security-Policy', "/bool").must_equal "default-src 'self'; img-src 'self' example.com; style-src 'sha256-abc'; block-all-mixed-content; "
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, "/bool").must_equal "default-src 'self'; img-src 'self' example.com; style-src 'sha256-abc'; block-all-mixed-content; "
 
-    header('Content-Security-Policy-Report-Only', "/block").must_equal "default-src 'self' foo.com bar.com; img-src 'none'; block-all-mixed-content; "
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY_REPORT_ONLY, "/block").must_equal "default-src 'self' foo.com bar.com; img-src 'none'; block-all-mixed-content; "
 
-    header('Content-Security-Policy', "/clear").must_equal "default-src foo.com bar.com; "
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, "/clear").must_equal "default-src foo.com bar.com; "
   end
 
   it "raises error for unsupported CSP values" do
@@ -136,17 +136,17 @@ describe "content_security_policy plugin" do
     style_src
     worker_src
     '.split.each do |setting|
-      header('Content-Security-Policy', "/#{setting}").must_equal "#{setting.gsub('_', '-')} 'self'; "
+      header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, "/#{setting}").must_equal "#{setting.gsub('_', '-')} 'self'; "
     end
   end
 
   it "does not override existing heading" do
     app(:content_security_policy) do |r|
       content_security_policy.default_src :self
-      response['Content-Security-Policy'] = "default_src 'none';"
+      response[RodaResponseHeaders::CONTENT_SECURITY_POLICY] = "default_src 'none';"
       ''
     end
-    header('Content-Security-Policy').must_equal "default_src 'none';"
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY).must_equal "default_src 'none';"
   end
 
   it "works with error_handler" do
@@ -168,9 +168,9 @@ describe "content_security_policy plugin" do
       end
     end
 
-    header('Content-Security-Policy').must_equal "default-src 'self'; img-src 'self' example.com; style-src 'sha256-abc'; "
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY).must_equal "default-src 'self'; img-src 'self' example.com; style-src 'sha256-abc'; "
 
     # Don't include updates before the error
-    header('Content-Security-Policy', '/a').must_equal "default-src 'self'; img-src 'self' example.com; style-src 'sha256-abc'; "
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, '/a').must_equal "default-src 'self'; img-src 'self' example.com; style-src 'sha256-abc'; "
   end
 end

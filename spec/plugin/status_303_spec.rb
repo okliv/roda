@@ -8,7 +8,7 @@ describe "status_303 plugin" do
     end
     status.must_equal 302
     body.must_equal ''
-    header('Location').must_equal '/foo'
+    header(RodaResponseHeaders::LOCATION).must_equal '/foo'
   end
 
   it 'uses the code given when specified' do

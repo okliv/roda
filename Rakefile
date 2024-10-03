@@ -21,7 +21,7 @@ end
 RDOC_OPTS = ["--line-numbers", "--inline-source", '--title', 'Roda: Routing tree web toolkit']
 
 begin
-  gem 'hanna-nouveau'
+  gem 'hanna'
   RDOC_OPTS.concat(['-f', 'hanna'])
 rescue Gem::LoadError
 end
@@ -84,6 +84,7 @@ end
 desc "Run specs with coverage"
 task "spec_cov" do
   spec.call('COVERAGE'=>'< 4')
+  spec.call('COVERAGE'=>'< 3.1')
   spec.call('COVERAGE'=>'< 3')
   spec.call('COVERAGE'=>'< 1.6', 'RODA_RENDER_COMPILED_METHOD_SUPPORT'=>'no')
 end

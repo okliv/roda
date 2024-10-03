@@ -71,6 +71,9 @@ describe "Roda.define_roda_method" do
 
     m1 = app.define_roda_method("x", 1){2}
     proc{@scope.send(m1, 1)}.must_raise ArgumentError
+
+    m1 = app.define_roda_method("x", 1){|x, y| [x, y]}
+    proc{@scope.send(m1, 4)}.must_raise ArgumentError
   end
 
   deprecated "should warn if :check_arity :warn app option is used and a block with invalid arity is passed" do
@@ -80,6 +83,9 @@ describe "Roda.define_roda_method" do
 
     m1 = app.define_roda_method("x", 1){2}
     @scope.send(m1, 3).must_equal 2
+
+    m1 = app.define_roda_method("x", 1){|x, y| [x, y]}
+    @scope.send(m1, 4).must_equal [4, nil]
   end
 
   [false, true].each do |warn_dynamic_arity| 

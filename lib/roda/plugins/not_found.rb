@@ -31,7 +31,7 @@ class Roda
     # still exists mainly for backward compatibility.
     module NotFound
       # Require the status_handler plugin
-      def self.load_dependencies(app)
+      def self.load_dependencies(app, &_)
         app.plugin :status_handler
       end
 

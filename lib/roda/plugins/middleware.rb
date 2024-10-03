@@ -33,6 +33,43 @@ class Roda
     #
     #   run App
     #
+    # By default, when the app is used as middleware and handles the request at
+    # all, it does not forward the request to the next middleware.  For the
+    # following setup:
+    #
+    #   class Mid < Roda
+    #     plugin :middleware
+    #
+    #     route do |r|
+    #       r.on "foo" do
+    #         r.is "mid" do
+    #           "Mid"
+    #         end
+    #       end
+    #     end
+    #   end
+    #
+    #   class App < Roda
+    #     use Mid
+    #
+    #     route do |r|
+    #       r.on "foo" do
+    #         r.is "app" do
+    #           "App"
+    #         end
+    #       end
+    #     end
+    #   end
+    #
+    #   run App
+    #
+    # Requests for +/foo/mid will+ return +Mid+, but requests for +/foo/app+
+    # will return an empty 404 response, because the middleware handles the
+    # +/foo/app+ request in the <tt>r.on "foo" do</tt> block, but does not
+    # have the block return a result, which Roda treats as an empty 404 response.
+    # If you would like the middleware to forward +/foo/app+ request to the
+    # application, you should use the +:next_if_not_found+ plugin option.
+    #
     # It is possible to use the Roda app as a regular app even when using
     # the middleware plugin.  Using an app as middleware automatically creates
     # a subclass of the app for the middleware.  Because a subclass is automatically
@@ -64,6 +101,9 @@ class Roda
     #   # Request to App for /mid returns
     #   # "foo bar baz"
     module Middleware
+      NEXT_PROC = lambda{throw :next, true}
+      private_constant :NEXT_PROC
+
       # Configure the middleware plugin.  Options:
       # :env_var :: Set the environment variable to use to indicate to the roda
       #             application that the current request is a middleware request.
@@ -77,12 +117,15 @@ class Roda
       #                              the middleware's route block should be applied to the
       #                              final response when the request is forwarded to the app.
       #                              Defaults to false.
+      # :next_if_not_found :: If the middleware handles the request but returns a not found
+      #                       result (404 with no body), forward the result to the next middleware.
       def self.configure(app, opts={}, &block)
         app.opts[:middleware_env_var] = opts[:env_var] if opts.has_key?(:env_var)
         app.opts[:middleware_env_var] ||= 'roda.forward_next'
         app.opts[:middleware_configure] = block if block
         app.opts[:middleware_handle_result] = opts[:handle_result]
         app.opts[:middleware_forward_response_headers] = opts[:forward_response_headers]
+        app.opts[:middleware_next_if_not_found] = opts[:next_if_not_found]
       end
 
       # Forwarder instances are what is actually used as middleware.
@@ -91,6 +134,12 @@ class Roda
         # and store +app+ as the next middleware to call.
         def initialize(mid, app, *args, &block)
           @mid = Class.new(mid)
+          # :nocov:
+          @mid.set_temporary_name("#{mid.name}(middleware)") if mid.name && RUBY_VERSION >= "3.3"
+          # :nocov:
+          if @mid.opts[:middleware_next_if_not_found]
+            @mid.plugin(:not_found, &NEXT_PROC)
+          end
           if configure = @mid.opts[:middleware_configure]
             configure.call(@mid, *args, &block)
           elsif block || !args.empty?

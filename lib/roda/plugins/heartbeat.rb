@@ -27,7 +27,7 @@ class Roda
           if env['PATH_INFO'] == opts[:heartbeat_path]
             response = @_response
             response.status = 200
-            response['Content-Type'] = 'text/plain'
+            response[RodaResponseHeaders::CONTENT_TYPE] = 'text/plain'
             response.write 'OK'
             throw :halt, response.finish
           end

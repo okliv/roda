@@ -1,3 +1,117 @@
+= master
+
+* Evaluate class_matcher and symbol_matcher blocks in route-block context (jeremyevans)
+
+* Allow class_matcher and symbol_matcher blocks to return non-arrays (jeremyevans)
+
+* Make class_matcher and symbol_matcher plugin be able to build on top of existing registered matchers (jeremyevans)
+
+* Make capture_erb plugin not break if String#capture is defined (jeremyevans)
+
+= 3.84.0 (2024-09-12)
+
+* Add hsts plugin for setting Strict-Transport-Security header (jeremyevans)
+
+* Remove documentation from the gem to reduce gem size by 25% (jeremyevans)
+
+= 3.83.0 (2024-08-12)
+
+* Add assume_ssl plugin for making request ssl? method always return true (jeremyevans)
+
+= 3.82.0 (2024-07-12)
+
+* Add :encodings option to public plugin to support configurable encoding order (jeremyevans)
+
+* Add :zstd option to public plugin to supplement it to serve zstd-compressed files with .zst extension (jeremyevans)
+
+* Make capture_erb plugin call integrate better with erubi/capture_block (jeremyevans)
+
+= 3.81.0 (2024-06-12)
+
+* Make assets plugin :early_hints option follow Rack 3 SPEC if using Rack 3 (jeremyevans)
+
+* Correctly parse Ruby 3.4 backtraces in exception_page plugin (jeremyevans)
+
+* Support :until and :seconds option in hmac_paths plugin, for paths valid only until a specific time (jeremyevans)
+
+= 3.80.0 (2024-05-10)
+
+* Support :namespace option in hmac_paths plugin, allowing for easy per-user/per-group HMAC paths (jeremyevans)
+
+= 3.79.0 (2024-04-12)
+
+* Do not update template mtime when there is an error reloading templates in the render plugin (jeremyevans)
+
+* Add hmac_paths plugin for preventing path enumeration and supporting access control (jeremyevans)
+
+= 3.78.0 (2024-03-13)
+
+* Add permissions_policy plugin for setting Permissions-Policy header (jeremyevans)
+
+= 3.77.0 (2024-02-12)
+
+* Support formaction/formmethod attributes in forms in route_csrf plugin (jeremyevans)
+
+= 3.76.0 (2024-01-12)
+
+* Support :filter plugin option in error_mail and error_email for filtering parameters, environment variables, and session values (jeremyevans) (#346)
+
+* Set temporary name on Ruby 3.3 in middleware plugin for middleware class created (janko) (#344)
+
+* Add break plugin, for using break inside a routing block to return from the block and keep routing (jeremyevans)
+
+= 3.75.0 (2023-12-14)
+
+* Add cookie_flags plugin, for overriding, warning, or raising for incorrect cookie flags (jeremyevans)
+
+= 3.74.0 (2023-11-13)
+
+* Add redirect_http_to_https plugin, helping to ensure future requests from the browser are submitted via HTTPS (jeremyevans)
+
+= 3.73.0 (2023-10-13)
+
+* Support :next_if_not_found option for middleware plugin (jeremyevans) (#334)
+
+* Remove dependency on base64 library from sessions and route_csrf plugin, as it will not be part of the standard library in Ruby 3.4+ (jeremyevans)
+
+= 3.72.0 (2023-09-12)
+
+* Add invalid_request_body plugin for custom handling of invalid request bodies (jeremyevans)
+
+* Warn when defining method that expects 1 argument when block requires multiple arguments when :check_arity option is set to :warn (jeremyevans)
+
+* Implement the match_hooks plugin using the match_hook_args plugin (jeremyevans)
+
+= 3.71.0 (2023-08-14)
+
+* Add match_hook_args plugin, similar to match_hooks but support matchers and block args as hook arguments (jeremyevans)
+
+= 3.70.0 (2023-07-12)
+
+* Add plain_hash_response_headers plugin, using a plain hash for response headers on Rack 3 for much better performance (jeremyevans)
+
+* Use lower case response header keys by default on Rack 3, instead of relying on Rack::Headers conversion (jeremyevans)
+
+= 3.69.0 (2023-06-13)
+
+* Allow symbol_matcher in symbol_matchers plugin to take a block to allow type conversion (jeremyevans)
+
+= 3.68.0 (2023-05-11)
+
+* Make Roda.run in multi_run plugin accept blocks to allow autoloading the apps to dispatch to (jeremyevans)
+
+= 3.67.0 (2023-04-12)
+
+* Add custom_block_results plugin for registering custom block result handlers (jeremyevans)
+
+= 3.66.0 (2023-03-13)
+
+* Support overriding exception page assets via exception_page_{css,js} instance methods (jeremyevans) (#306)
+
+* Avoid keeping reference to Roda instance that caches an inline template (jeremyevans)
+
+* Add render_coverage plugin, using tilt 2.1 features to allow for compiled templates in Ruby <3.2 (jeremyevans)
+
 = 3.65.0 (2023-02-13)
 
 * Make indifferent_params plugin work with changes in rack main branch (jeremyevans)

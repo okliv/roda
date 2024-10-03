@@ -21,7 +21,7 @@ class Roda
     #     font: 'assets/fonts',
     #     form: 'static/forms/pdfs'
     #
-    #   r.route do
+    #   route do
     #     r.on "images" do
     #       r.multi_public(:img)
     #     end
@@ -43,7 +43,7 @@ class Roda
     #     'fonts'  => 'assets/fonts',
     #     'forms'  => 'static/forms/pdfs'
     #
-    #   r.route do
+    #   route do
     #     r.on %w"images fonts forms" do |dir|
     #       r.multi_public(dir)
     #     end
@@ -58,7 +58,7 @@ class Roda
     #     'fonts'  => ['assets/fonts', {'Cache-Control'=>'max-age=31536000'}, 'font/ttf'],
     #     'forms'  => ['static/forms/pdfs', nil, 'application/pdf']
     #
-    #   r.route do
+    #   route do
     #     r.on %w"images fonts forms" do |dir|
     #       r.multi_public(dir)
     #     end

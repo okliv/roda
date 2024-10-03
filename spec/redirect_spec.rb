@@ -25,15 +25,15 @@ describe "redirects" do
     end
 
     status.must_equal 302
-    header('Location').must_equal '/hello'
+    header(RodaResponseHeaders::LOCATION).must_equal '/hello'
     body.must_equal ''
 
     status("/about").must_equal 301
-    header('Location', "/about").must_equal '/hello'
+    header(RodaResponseHeaders::LOCATION, "/about").must_equal '/hello'
     body("/about").must_equal ''
 
     status("/foo", 'REQUEST_METHOD'=>'POST').must_equal 302
-    header('Location', "/foo", 'REQUEST_METHOD'=>'POST').must_equal '/foo'
+    header(RodaResponseHeaders::LOCATION, "/foo", 'REQUEST_METHOD'=>'POST').must_equal '/foo'
     body("/foo", 'REQUEST_METHOD'=>'POST').must_equal ''
 
     proc{req('/foo')}.must_raise(Roda::RodaError)

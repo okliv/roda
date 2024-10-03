@@ -89,7 +89,7 @@ class Roda
     #   content_security_policy.add_script_src 'example.com', [:nonce, 'foobarbaz']
     #   # script-src 'self' 'unsafe-eval' example.com 'nonce-foobarbaz'; 
     #
-    #   content_security_policy.get_script_src 'example.com', [:nonce, 'foobarbaz']
+    #   content_security_policy.get_script_src
     #   # => [:self, :unsafe_eval, 'example.com', [:nonce, 'foobarbaz']]
     #
     # The clear method can be used to remove all settings from the policy.
@@ -200,7 +200,7 @@ class Roda
 
         # The header name to use, depends on whether report only mode has been enabled.
         def header_key
-          @report_only ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
+          @report_only ? RodaResponseHeaders::CONTENT_SECURITY_POLICY_REPORT_ONLY : RodaResponseHeaders::CONTENT_SECURITY_POLICY
         end
 
         # The header value to use.
@@ -309,7 +309,7 @@ class Roda
         # Set the appropriate content security policy header.
         def set_default_headers
           super
-          (@content_security_policy || roda_class.opts[:content_security_policy]).set_header(@headers)
+          (@content_security_policy || roda_class.opts[:content_security_policy]).set_header(headers)
         end
       end
     end

@@ -47,7 +47,7 @@ describe "not_found plugin" do
       route{}
     end
 
-    header('Content-Length').must_equal "1"
+    header(RodaResponseHeaders::CONTENT_LENGTH).must_equal "1"
   end
 
   it "clears existing headers" do
@@ -57,14 +57,14 @@ describe "not_found plugin" do
       end
 
       route do |r|
-        response['Content-Type'] = 'text/pdf'
-        response['Foo'] = 'bar'
+        response[RodaResponseHeaders::CONTENT_TYPE] = 'text/pdf'
+        response['foo'] = 'bar'
         nil
       end
     end
 
-    header('Content-Type').must_equal 'text/html'
-    header('Foo').must_be_nil
+    header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'text/html'
+    header('foo').must_be_nil
   end
 
   it "does not modify behavior if not_found is not called" do

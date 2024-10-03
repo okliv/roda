@@ -55,7 +55,7 @@ via <tt>irb -r ./models</tt>, without loading the Roda application.
 migrations.
 
 +spec/+ (or +test/+ should contain your specifications/tests.  For a small application, it's recommended
-to a have a single file for your model tests, and a single file for your web/integration tests.
+to have a single file for your model tests, and a single file for your web/integration tests.
 
 +Rakefile+ should contain the rake tasks for the application.  The convention is that the
 default rake task will run all specs/tests related to the application.  If you are using

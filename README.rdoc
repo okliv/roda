@@ -723,7 +723,7 @@ Note that when subclassing, Roda only does a shallow clone of the settings.
 
 If you store nested structures and plan to mutate them in subclasses,
 it is your responsibility to dup the nested structures inside +Roda.inherited+
-(making sure to call +super+).  This should be is done so that that modifications
+(making sure to call +super+).  This should be is done so that modifications
 to the parent class made after subclassing do _not_ affect the subclass, and
 vice-versa.
 
@@ -851,9 +851,8 @@ should use an appropriate external middleware.
 It is possible to use other session cookie middleware such as
 <tt>Rack::Session::Cookie</tt>, but other middleware may not have the same security
 features that Roda's session support does.  For example, the session cookies used by
-the <tt>Rack::Session::Cookie</tt> middleware are not encrypted, just signed to
-prevent tampering.  This means you should not store any secret data in the session
-when using <tt>Rack::Session::Cookie</tt>.
+the <tt>Rack::Session::Cookie</tt> middleware provided by Rack before Rack 3 are not
+encrypted, just signed to prevent tampering.
 
 For any cookie-based sessions, make sure that the necessary secrets (+:secret+ option)
 are not disclosed to an attacker.  Knowledge of the
@@ -960,17 +959,17 @@ application level using using the +default_headers+ plugin:
 Strict-Transport-Security :: Enforces SSL/TLS Connections to the application.
 X-Content-Type-Options :: Forces some browsers to respect a declared Content-Type header.
 X-Frame-Options :: Provides click-jacking protection by not allowing usage inside a frame.
-X-XSS-Protection :: Enables an XSS mitigation filter in some browsers.
+                   Only include this if you want to support and protect old browsers that
+                   do not support Content-Security-Policy.
 
 Example:
 
   class App < Roda
     plugin :default_headers,
       'Content-Type'=>'text/html',
-      'Strict-Transport-Security'=>'max-age=16070400;',
+      'Strict-Transport-Security'=>'max-age=63072000; includeSubDomains',
       'X-Content-Type-Options'=>'nosniff',
-      'X-Frame-Options'=>'deny',
-      'X-XSS-Protection'=>'1; mode=block'
+      'X-Frame-Options'=>'deny'
   end
 
 === Rendering Templates Derived From User Input
@@ -1007,25 +1006,16 @@ constants and removing them when any of the reloadable loaded files changes. It 
 +require+ and +require_relative+ when activated (usually in the development environment). No
 configurations other than +reloadable_paths+ are required.
 
-Both {rerun}[https://github.com/alexch/rerun] and
-{shotgun}[https://github.com/rtomayko/shotgun] use a fork/exec approach for loading new
-versions of your app.  rerun is faster as it only reloads the app on changes, whereas
-shotgun reloads the app on every request.  Both work without any changes to application
+{rerun}[https://github.com/alexch/rerun] uses a fork/exec approach for loading new
+versions of your app.  It work without any changes to application
 code, but may be slower as they have to reload the entire application on every change.
-However, for small apps that load quickly, either may be a good approach.
-
-{Rack::Reloader}[https://github.com/rack/rack/blob/master/lib/rack/reloader.rb] ships
-with rack and just reloads monitored files when they change, without unloading constants.
-It's fast but may cause issues in cases where you remove classes, constants, or methods,
-or when you are not clearing out cached data manually when files are reloaded.
+However, for small apps that load quickly, it may be a good approach.
 
 There is no one reloading solution that is the best for all applications and development
 approaches.  Consider your needs and the tradeoffs of each of the reloading approaches,
-and pick the one you think will work best.
-
-If you are unsure where to start, it may be best to start with rerun or shotgun
-(unless you're running on JRuby or Windows), and only consider other options if rerun or
-shotgun are not fast enough.
+and pick the one you think will work best.  If you are unsure where to start,
+it may be best to start with Zeitwerk, and only consider other options if it does not
+work well for you.
 
 == Plugins
 
@@ -1144,4 +1134,3 @@ MIT
 == Maintainer
 
 Jeremy Evans <code@jeremyevans.net>
-

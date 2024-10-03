@@ -3,16 +3,10 @@ require_relative "../spec_helper"
 run_tests = true
 begin
   begin
-    require 'tilt/sass'
+    require 'tilt'
   rescue LoadError
-    begin
-      for lib in %w'tilt sass'
-        require lib
-      end
-    rescue LoadError
-      warn "#{lib} not installed, skipping assets_preloading plugin test"
-      run_tests = false
-    end
+    warn "tilt not installed, skipping assets_preloading plugin test"
+    run_tests = false
   end
 end
 
@@ -20,7 +14,7 @@ describe "assets_preloading plugin" do
   before do
     app(:bare) do
       plugin :assets, {
-        :css => ['app.scss'],
+        :css => ['app.str'],
         :js => { :head => ['app.js'] },
         :path => 'spec/assets',
         :public => 'spec',

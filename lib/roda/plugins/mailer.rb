@@ -186,7 +186,7 @@ class Roda
         # that the routing tree did not handle the request.
         def finish
           if m = mail
-            header_content_type = @headers.delete('Content-Type')
+            header_content_type = @headers.delete(RodaResponseHeaders::CONTENT_TYPE)
             m.headers(@headers)
             m.body(@body.join) unless @body.empty?
             mail_attachments.each do |a, block|
@@ -241,7 +241,7 @@ class Roda
           if mail = env['roda.mail']
             res = @_response
             res.mail = mail
-            res.headers.delete('Content-Type')
+            res.headers.delete(RodaResponseHeaders::CONTENT_TYPE)
           end
         end
 

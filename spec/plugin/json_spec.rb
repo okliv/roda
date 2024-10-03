@@ -1,13 +1,13 @@
 require_relative "../spec_helper"
 
 describe "json plugin" do
-  before do
-    c = Class.new do
-      def to_json
-        '[1]'
-      end
+  c = Class.new do
+    def to_json
+      '[1]'
     end
+  end
 
+  before do
     app(:bare) do
       plugin :json, :classes=>[Array, Hash, c]
 
@@ -25,7 +25,7 @@ describe "json plugin" do
         end
 
         r.is 'd' do
-          response['Content-Type'] = 'foo'
+          response[RodaResponseHeaders::CONTENT_TYPE] = 'foo'
           c.new
         end
       end
@@ -33,14 +33,14 @@ describe "json plugin" do
   end
 
   it "should use a json content type for a json response" do
-    header('Content-Type', "/array").must_equal 'application/json'
-    header('Content-Type', "/hash").must_equal 'application/json'
-    header('Content-Type', "/c").must_equal 'application/json'
-    header('Content-Type').must_equal 'text/html'
+    header(RodaResponseHeaders::CONTENT_TYPE, "/array").must_equal 'application/json'
+    header(RodaResponseHeaders::CONTENT_TYPE, "/hash").must_equal 'application/json'
+    header(RodaResponseHeaders::CONTENT_TYPE, "/c").must_equal 'application/json'
+    header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'text/html'
   end
 
   it "should not override existing content type for a json response" do
-    header('Content-Type', "/d").must_equal 'foo'
+    header(RodaResponseHeaders::CONTENT_TYPE, "/d").must_equal 'foo'
   end
 
   it "should convert objects to json" do
@@ -54,6 +54,10 @@ describe "json plugin" do
     @app = Class.new(app)
     app.route{[1]}
     body.must_equal '[1]'
+  end
+
+  it "should return classes that will be converted to JSON" do
+    @app.json_result_classes.must_equal [Array, Hash, c]
   end
 
   it "should accept custom serializers" do
@@ -78,6 +82,6 @@ describe "json plugin" do
 
   it "should allow custom content type for a response" do
     app.plugin :json, :content_type => "application/xml"
-    header('Content-Type', "/array").must_equal 'application/xml'
+    header(RodaResponseHeaders::CONTENT_TYPE, "/array").must_equal 'application/xml'
   end
 end

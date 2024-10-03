@@ -18,12 +18,12 @@ describe "head plugin" do
 
     s, h, b = req
     s.must_equal 200
-    h['Content-Length'].must_equal '4'
+    h[RodaResponseHeaders::CONTENT_LENGTH].must_equal '4'
     b.must_equal ['root']
 
     s, h, b = req('REQUEST_METHOD' => 'HEAD')
     s.must_equal 200
-    h['Content-Length'].must_equal '4'
+    h[RodaResponseHeaders::CONTENT_LENGTH].must_equal '4'
     b.must_equal []
 
     body('/a').must_equal 'a'

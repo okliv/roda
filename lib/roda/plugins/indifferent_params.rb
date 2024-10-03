@@ -53,13 +53,10 @@ class Roda
           
           class Params < Rack::QueryParser::Params
             if Rack.release >= '3'
-              # rack main branch compatibility
-              # :nocov:
               if Params < Hash
                 def initialize
                   super(&INDIFFERENT_PROC)
                 end
-              # :nocov:
               else
                 def initialize
                   @size   = 0

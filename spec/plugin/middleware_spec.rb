@@ -64,8 +64,8 @@ describe "middleware plugin" do
         def call; super end if def_call
 
         route do |r|
-          response.headers['A'] = 'A1'
-          response.headers['B'] = 'B1'
+          response['a'] = 'A1'
+          response['b'] = 'B1'
         end
       end
 
@@ -74,8 +74,8 @@ describe "middleware plugin" do
         def call; super end if def_call
 
         route do |r|
-          response.headers['C'] = 'C1'
-          response.headers['D'] = 'D1'
+          response['c'] = 'C1'
+          response['d'] = 'D1'
         end
       end
 
@@ -85,8 +85,8 @@ describe "middleware plugin" do
         def call; super end if def_call
 
         route do |r|
-          response.headers['A'] = 'A2'
-          response.headers['C'] = 'C2'
+          response['a'] = 'A2'
+          response['c'] = 'C2'
 
           r.root do
             'body'
@@ -94,10 +94,10 @@ describe "middleware plugin" do
         end
       end
 
-      header('A').must_equal 'A2'
-      header('B').must_equal 'B1'
-      header('C').must_equal 'C2'
-      header('D').must_be_nil
+      header('a').must_equal 'A2'
+      header('b').must_equal 'B1'
+      header('c').must_equal 'C2'
+      header('d').must_be_nil
     end
   end
 
@@ -137,6 +137,29 @@ describe "middleware plugin" do
     a.opts[:a] = 'b'
     body.must_equal 'a'
   end
+
+  it "sets temporary name of the subclass" do
+    app(:middleware) do |r|
+      r.get{self.class.name || "anonymous"}
+    end
+    a = app
+    app(:bare) do
+      use a
+      route {}
+    end
+    body.must_equal 'anonymous'
+
+    begin
+      Object.const_set(:MyApp, a)
+      app(:bare) do
+        use a
+        route {}
+      end
+      body.must_equal 'MyApp(middleware)'
+    ensure
+      Object.send(:remove_const, :MyApp)
+    end
+  end if RUBY_VERSION >= "3.3"
 
   it "should raise error if attempting to use options for Roda application that does not support configurable middleware" do
     a1 = app(:bare){plugin :middleware}
@@ -217,7 +240,7 @@ describe "middleware plugin" do
   it "calls :handle_result option with env and response" do
     app(:bare) do
       plugin :middleware, :handle_result=>(proc do |env, res|
-        res[1].delete('Content-Length')
+        res[1].delete(RodaResponseHeaders::CONTENT_LENGTH)
         res[2] << env['foo']
       end)
       route{}
@@ -325,5 +348,34 @@ describe "middleware plugin" do
     body('/b', 'REQUEST_METHOD'=>'POST').must_equal 'b2'
     body('/a', 'REQUEST_METHOD'=>'PATCH').must_equal 'a2'
     body('/b', 'REQUEST_METHOD'=>'PATCH').must_equal 'b1'
+  end
+
+  it "supports :next_if_not_found plugin option" do
+    a2 = app(:bare) do
+      plugin :middleware, :next_if_not_found=>true
+
+      route do |r|
+        r.on "a" do
+          r.is "b" do
+            'a-b'
+          end
+        end
+      end
+    end
+
+    app(:bare) do
+      use a2
+
+      route do |r|
+        r.on 'a' do
+          'a'
+        end
+        'c'
+      end
+    end
+
+    body('/a').must_equal 'a'
+    body('/a/b').must_equal 'a-b'
+    body('/d').must_equal 'c'
   end
 end

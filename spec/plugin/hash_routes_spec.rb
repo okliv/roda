@@ -200,8 +200,10 @@ describe "hash_routes plugin - hash_routes DSL" do
       end
     end
 
-    body('').must_equal 'dg'
-    body('', 'REQUEST_METHOD'=>'POST').must_equal ''
+    unless_lint do
+      body('').must_equal 'dg'
+      body('', 'REQUEST_METHOD'=>'POST').must_equal ''
+    end
     body('/').must_equal 'n'
   end
 end

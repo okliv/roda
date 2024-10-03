@@ -16,40 +16,40 @@ describe "type_routing plugin" do
 
   it "uses the file extension in the path" do
     body('/a').must_equal 'HTML: html'
-    header('Content-Type', '/a').must_equal 'text/html'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a').must_equal 'text/html'
 
     body('/a.html').must_equal 'HTML: html'
-    header('Content-Type', '/a.html').must_equal 'text/html'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a.html').must_equal 'text/html'
 
     body('/a.json').must_equal 'JSON: json'
-    header('Content-Type', '/a.json').must_equal 'application/json'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a.json').must_equal 'application/json'
 
     body('/a.xml').must_equal 'XML: xml'
-    header('Content-Type', '/a.xml').must_equal 'application/xml'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a.xml').must_equal 'application/xml'
 
     status('/a.yadda').must_equal 404
   end
 
   it "uses the Accept header value" do
     body('/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'HTML: html'
-    header('Content-Type', '/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'text/html'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'text/html'
 
     body('/a', 'HTTP_ACCEPT' => 'application/json').must_equal 'JSON: json'
-    header('Content-Type', '/a', 'HTTP_ACCEPT' => 'application/json').must_equal 'application/json'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a', 'HTTP_ACCEPT' => 'application/json').must_equal 'application/json'
 
     body('/a', 'HTTP_ACCEPT' => 'application/xml').must_equal 'XML: xml'
-    header('Content-Type', '/a', 'HTTP_ACCEPT' => 'application/xml').must_equal 'application/xml'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a', 'HTTP_ACCEPT' => 'application/xml').must_equal 'application/xml'
 
     body('/a', 'HTTP_ACCEPT' => 'some/thing').must_equal 'HTML: html'
-    header('Content-Type', '/a', 'HTTP_ACCEPT' => 'some/thing').must_equal 'text/html'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a', 'HTTP_ACCEPT' => 'some/thing').must_equal 'text/html'
   end
 
   it "sets Vary header when using Accept header value" do
     body('/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'HTML: html'
-    header('Vary', '/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'Accept'
+    header(RodaResponseHeaders::VARY, '/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'Accept'
 
     app(:type_routing) do |r|
-      response['Vary'] = 'User-Agent'
+      response[RodaResponseHeaders::VARY] = 'User-Agent'
       r.is 'a' do
         r.html{ "HTML: #{r.requested_type}" }
         r.json{ "JSON: #{r.requested_type}" }
@@ -57,7 +57,7 @@ describe "type_routing plugin" do
       end
     end
     body('/a', 'HTTP_ACCEPT' => 'application/json').must_equal 'JSON: json'
-    header('Vary', '/a', 'HTTP_ACCEPT' => 'application/json').must_equal 'User-Agent, Accept'
+    header(RodaResponseHeaders::VARY, '/a', 'HTTP_ACCEPT' => 'application/json').must_equal 'User-Agent, Accept'
   end
 
   it "favors the file extension over the Accept header" do
@@ -103,8 +103,8 @@ describe "type_routing plugin" do
       end
     end
 
-    body('/subpath').must_equal 'a'
     unless_lint do
+      body('/subpath').must_equal 'a'
       body('/subpath.html').must_equal 'a'
       body('/subpath.json').must_equal '{b:1}'
     end
@@ -115,7 +115,7 @@ describe "type_routing plugin" do
 
   it "uses the default if neither file extension nor Accept header are given" do
     body('/a').must_equal 'HTML: html'
-    header('Content-Type', '/a').must_equal 'text/html'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a').must_equal 'text/html'
   end
 end
 
@@ -195,7 +195,7 @@ describe "type_routing plugin" do
 
     body('/a.html').must_equal 'HTML'
     body('/a.yaml').must_equal 'YAML'
-    header('Content-Type', '/a.yaml').must_equal 'application/x-yaml'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a.yaml').must_equal 'application/x-yaml'
   end
 
   it "handles response-specific type information when using custom types" do
@@ -213,8 +213,8 @@ describe "type_routing plugin" do
 
     body('/a').must_equal 'JSON'
     body('/a.html').must_equal 'HTML'
-    header('Content-Type', '/a.html').must_equal 'text/html; charset=utf-8'
-    header('Content-Type', '/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'text/html; charset=utf-8'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a.html').must_equal 'text/html; charset=utf-8'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'text/html; charset=utf-8'
   end
 
   it "Handle nil content type when using custom types" do
@@ -232,8 +232,8 @@ describe "type_routing plugin" do
 
     body('/a').must_equal 'JSON'
     body('/a.html').must_equal 'HTML'
-    header('Content-Type', '/a.html').must_equal 'text/html'
-    header('Content-Type', '/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'application/json'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a.html').must_equal 'text/html'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'application/json'
   end
 
   it "uses custom default type" do

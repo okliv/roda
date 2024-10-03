@@ -13,7 +13,7 @@ describe "streaming plugin" do
 
     s, h, b = req
     s.must_equal 200
-    h.must_equal('Content-Type'=>'text/html')
+    h.must_equal(RodaResponseHeaders::CONTENT_TYPE=>'text/html')
     b.to_a.must_equal %w'a a b b c c'
   end
 
@@ -27,7 +27,7 @@ describe "streaming plugin" do
 
     s, h, b = req
     s.must_equal 200
-    h.must_equal('Content-Type'=>'text/html')
+    h.must_equal(RodaResponseHeaders::CONTENT_TYPE=>'text/html')
     # dup as copy_stream reuses the buffer
     b.map(&:dup).must_equal %w'a b c'
   end
@@ -44,7 +44,7 @@ describe "streaming plugin" do
 
     s, h, b = req
     s.must_equal 200
-    h.must_equal('Content-Type'=>'text/html')
+    h.must_equal(RodaResponseHeaders::CONTENT_TYPE=>'text/html')
     proc{b.each{|v| a << v}}.must_raise(Roda::RodaError)
     a.must_equal %w'a b e'
   end
@@ -61,7 +61,7 @@ describe "streaming plugin" do
 
     s, h, b = req
     s.must_equal 200
-    h.must_equal('Content-Type'=>'text/html')
+    h.must_equal(RodaResponseHeaders::CONTENT_TYPE=>'text/html')
     proc{b.each{|v| a << v}}.must_raise(Roda::RodaError)
     a.must_equal %w'a b e'
   end
@@ -83,7 +83,7 @@ describe "streaming plugin" do
 
     s, h, b = req
     s.must_equal 200
-    h.must_equal('Content-Type'=>'text/html')
+    h.must_equal(RodaResponseHeaders::CONTENT_TYPE=>'text/html')
     proc{b.each{|v| a << v}}.must_raise(Roda::RodaError)
     a.must_equal %w'a b 1 e'
   end
@@ -104,7 +104,7 @@ describe "streaming plugin" do
 
     s, h, b = req
     s.must_equal 200
-    h.must_equal('Content-Type'=>'text/html')
+    h.must_equal(RodaResponseHeaders::CONTENT_TYPE=>'text/html')
     b.each{|v| a << v}
     a.must_equal %w'a b e'
   end
@@ -127,7 +127,7 @@ describe "streaming plugin" do
 
     s, h, b = req
     s.must_equal 200
-    h.must_equal('Content-Type'=>'text/html')
+    h.must_equal(RodaResponseHeaders::CONTENT_TYPE=>'text/html')
     b.each{|v| a << v}
     a.must_equal %w'a 1 b 1 c 1 e'
   end
@@ -147,7 +147,7 @@ describe "streaming plugin" do
 
       s, h, b = req
       s.must_equal 200
-      h.must_equal('Content-Type'=>'text/html')
+      h.must_equal(RodaResponseHeaders::CONTENT_TYPE=>'text/html')
       b.to_a.must_equal %w'a b c'
     end
 
@@ -163,7 +163,7 @@ describe "streaming plugin" do
 
       s, h, b = req
       s.must_equal 200
-      h.must_equal('Content-Type'=>'text/html')
+      h.must_equal(RodaResponseHeaders::CONTENT_TYPE=>'text/html')
       a = []
       proc{b.each{|v| a << v}}.must_raise(Roda::RodaError)
       a.must_equal %w'a b'

@@ -4,27 +4,21 @@ require 'fileutils'
 run_tests = true
 begin
   begin
-    require 'tilt/sass'
+    require 'tilt'
   rescue LoadError
-    begin
-      for lib in %w'tilt sass'
-        require lib
-      end
-    rescue LoadError
-      warn "#{lib} not installed, skipping assets plugin test"
-      run_tests = false
-    end
+    warn "tilt not installed, skipping assets plugin test"
+    run_tests = false
   end
 end
 
 if run_tests
-  pid_dir = "spec/assets/#{$$}"
+  pid_dir = "spec/pid-#{$$}"
   assets_dir = File.join(pid_dir, "tmp")
   metadata_file = File.expand_path(File.join(assets_dir, 'precompiled.json'))
   describe 'recheck_precompiled_assets plugin' do
     define_method(:compile_assets) do |opts={}|
       Class.new(Roda) do
-        plugin :assets, {:css => 'app.scss', :path => assets_dir, :css_dir=>nil, :precompiled=>metadata_file, :public=>assets_dir, :prefix=>nil}.merge!(opts)
+        plugin :assets, {:css => 'app.str', :path => assets_dir, :css_dir=>nil, :precompiled=>metadata_file, :public=>assets_dir, :prefix=>nil}.merge!(opts)
         compile_assets
       end
     end
@@ -32,7 +26,7 @@ if run_tests
     before do
       Dir.mkdir(pid_dir) unless File.directory?(pid_dir)
       Dir.mkdir(assets_dir) unless File.directory?(assets_dir)
-      FileUtils.cp('spec/assets/css/app.scss', assets_dir)
+      FileUtils.cp('spec/assets/css/app.str', assets_dir)
       FileUtils.cp('spec/assets/js/head/app.js', assets_dir)
       compile_assets
       File.utime(Time.now, Time.now - 20, metadata_file)
@@ -57,8 +51,8 @@ if run_tests
       body.scan("href=\"/app.#{css_hash}.css\"").length.must_equal 1
       body("/app.#{css_hash}.css").must_match(/color:\s*red/)
 
-      scss_file = File.join(assets_dir, 'app.scss')
-      File.write(scss_file, File.read(scss_file).sub('red', 'blue'))
+      css_file = File.join(assets_dir, 'app.str')
+      File.write(css_file, File.read(css_file).sub('red', 'blue'))
       compile_assets
       File.utime(Time.now, Time.now - 10, metadata_file)
 
@@ -85,7 +79,7 @@ if run_tests
       app.assets_opts[:compiled].replace({})
       app.compile_assets
       body.strip.must_be_empty
-      app.plugin :assets, :css => 'app.scss', :path => assets_dir, :css_dir=>nil, :css_opts => {:cache=>false}
+      app.plugin :assets, :css => 'app.str', :path => assets_dir, :css_dir=>nil, :css_opts => {:cache=>false}
       app.compile_assets
       body.scan("href=\"/app.#{css2_hash}.css\"").length.must_equal 1
       body("/app.#{css2_hash}.css").must_match(/color:\s*blue/)

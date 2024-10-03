@@ -21,6 +21,9 @@ class Roda
     #
     # Options:
     #
+    # :filter :: Callable called with the key and value for each parameter, environment
+    #            variable, and session value.  If it returns true, the value of the
+    #            parameter is filtered in the email.
     # :from :: The From address to use in the email (required)
     # :headers :: A hash of additional headers to use in the email (default: empty hash)
     # :host :: The SMTP server to use to send the email (default: localhost)
@@ -38,6 +41,7 @@ class Roda
     # use an error reporting service instead of this plugin.
     module ErrorEmail
       DEFAULTS = {
+        :filter=>lambda{|k,v| false},
         :headers=>OPTS,
         :host=>'localhost',
         # :nocov:
@@ -52,7 +56,12 @@ class Roda
           {'From'=>h[:from], 'To'=>h[:to], 'Subject'=>"#{h[:prefix]}#{subject}"}
         end,
         :body=>lambda do |s, e|
-          format = lambda{|h| h.map{|k, v| "#{k.inspect} => #{v.inspect}"}.sort.join("\n")}
+          filter = s.opts[:error_email][:filter]
+          format = lambda do |h|
+            h = h.map{|k, v| "#{k.inspect} => #{filter.call(k, v) ? 'FILTERED' : v.inspect}"}
+            h.sort!
+            h.join("\n")
+          end 
 
           begin
             params = s.request.params

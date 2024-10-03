@@ -257,7 +257,7 @@ class Roda
             headers.merge!(chunk_headers)
           end
           if self.opts[:force_chunked_encoding]
-            headers['Transfer-Encoding'] = 'chunked'
+            res[RodaResponseHeaders::TRANSFER_ENCODING] = 'chunked'
             body = Body.new(self)
           else
             body = StreamBody.new(self)

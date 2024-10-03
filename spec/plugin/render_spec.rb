@@ -138,6 +138,30 @@ describe "render plugin" do
     end
   end
 
+  it "does not update mtime if there was an error rebuilding the template" do
+    app(:bare) do
+      plugin :render, :views=>"./spec", :cache=>false
+
+      route do |r|
+        @a = 'a'
+        render(iv)
+      end
+    end
+
+    t = Time.now
+    body.strip.must_equal "a"
+
+    content = File.binread(file)
+    File.binwrite(file, content + "<% end %>")
+    File.utime(t, t+1, file)
+    proc{body}.must_raise SyntaxError
+    proc{body}.must_raise SyntaxError
+
+    File.binwrite(file, content + "b")
+    File.utime(t, t+1, file)
+    body.gsub("\n", '').must_equal "ab"
+  end
+
   it "does not check mtime if :cache render option is used" do
     app(:bare) do
       plugin :render, :views=>"./spec", :cache=>false
@@ -181,9 +205,9 @@ describe "render plugin" do
       end
     end
 
-    body.gsub(/\n+/, "\n").must_equal "Header\n1\nFooter\n"
+    body.gsub(/\n+/, "\n").sub("\nFooter", 'Footer').must_equal "Header\n1Footer\n"
     app.plugin :render, :layout=>'layout-yield2'
-    body.gsub(/\n+/, "\n").must_equal "Header2\n1\nFooter2\n"
+    body.gsub(/\n+/, "\n").sub("\nFooter", 'Footer').must_equal "Header2\n1Footer2\n"
   end
 
   it "should have :layout_opts=>:views plugin option respect :root app option" do

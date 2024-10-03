@@ -20,11 +20,11 @@ describe "csrf plugin" do
 
       route do |r|
         r.get do
-          response['TAG'] = csrf_tag
-          response['METATAG'] = csrf_metatag
-          response['TOKEN'] = csrf_token
-          response['FIELD'] = csrf_field
-          response['HEADER'] = csrf_header
+          response['tag'] = csrf_tag
+          response['metatag'] = csrf_metatag
+          response['token'] = csrf_token
+          response['field'] = csrf_field
+          response['header'] = csrf_header
           'g'
         end
         r.post 'foo' do
@@ -42,12 +42,12 @@ describe "csrf plugin" do
 
     s, h, b = req
     s.must_equal 200
-    field = h['FIELD']
-    token = Regexp.escape(h['TOKEN'])
-    h['TAG'].must_match(/\A<input type="hidden" name="#{field}" value="#{token}" \/>\z/)
-    h['METATAG'].must_match(/\A<meta name="#{field}" content="#{token}" \/>\z/)
+    field = h['field']
+    token = Regexp.escape(h['token'])
+    h['tag'].must_match(/\A<input type="hidden" name="#{field}" value="#{token}" \/>\z/)
+    h['metatag'].must_match(/\A<meta name="#{field}" content="#{token}" \/>\z/)
     b.must_equal ['g']
-    s, _, b = req('REQUEST_METHOD'=>'POST', 'rack.input'=>io, "HTTP_#{h['HEADER']}"=>h['TOKEN'])
+    s, _, b = req('REQUEST_METHOD'=>'POST', 'rack.input'=>io, "HTTP_#{h['header']}"=>h['token'])
     s.must_equal 200
     b.must_equal ['p']
 
@@ -62,11 +62,11 @@ describe "csrf plugin" do
 
       route do |r|
         r.get do
-          response['TAG'] = csrf_tag
-          response['METATAG'] = csrf_metatag
-          response['TOKEN'] = csrf_token
-          response['FIELD'] = csrf_field
-          response['HEADER'] = csrf_header
+          response['tag'] = csrf_tag
+          response['metatag'] = csrf_metatag
+          response['token'] = csrf_token
+          response['field'] = csrf_field
+          response['header'] = csrf_header
           'g'
         end
         r.post 'bar' do
@@ -95,12 +95,12 @@ describe "csrf plugin" do
 
     s, h, b = req('/foo')
     s.must_equal 200
-    field = h['FIELD']
-    token = Regexp.escape(h['TOKEN'])
-    h['TAG'].must_match(/\A<input type="hidden" name="#{field}" value="#{token}" \/>\z/)
-    h['METATAG'].must_match(/\A<meta name="#{field}" content="#{token}" \/>\z/)
+    field = h['field']
+    token = Regexp.escape(h['token'])
+    h['tag'].must_match(/\A<input type="hidden" name="#{field}" value="#{token}" \/>\z/)
+    h['metatag'].must_match(/\A<meta name="#{field}" content="#{token}" \/>\z/)
     b.must_equal ['g']
-    s, _, b = req('/foo', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io, "HTTP_#{h['HEADER']}"=>h['TOKEN'])
+    s, _, b = req('/foo', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io, "HTTP_#{h['header']}"=>h['token'])
     s.must_equal 200
     b.must_equal ['p']
 

@@ -23,27 +23,28 @@ class Roda
     module IntegerMatcherMax
       def self.configure(app, max=nil)
         if max
-          app::RodaRequest.class_eval do
-            define_method(:_match_class_max_Integer){max}
-            alias_method :_match_class_max_Integer, :_match_class_max_Integer
-            private :_match_class_max_Integer
+          app.class_eval do
+            meth = :_max_value_convert_class_Integer
+            define_method(meth){max}
+            alias_method meth, meth
+            private meth
           end
         end
       end
 
-      module RequestMethods
+      module InstanceMethods
         private
 
         # Do not have the Integer matcher max when over the maximum
         # configured Integer value.
-        def _match_class_convert_Integer(value)
+        def _convert_class_Integer(value)
           value = super
-          value if value <= _match_class_max_Integer
+          value if value <= _max_value_convert_class_Integer
         end
 
         # Use 2**63-1 as the default maximum value for the Integer
         # matcher.
-        def _match_class_max_Integer
+        def _max_value_convert_class_Integer
           9223372036854775807
         end
       end

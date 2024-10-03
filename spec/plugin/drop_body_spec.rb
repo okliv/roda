@@ -10,20 +10,20 @@ describe "drop_body plugin" do
     [100 + rand(100), 204, 304].each do  |i|
       path = "/#{i.to_s}"
       body(path).must_equal ''
-      header('Content-Type', path).must_be_nil
-      header('Content-Length', path).must_be_nil
+      header(RodaResponseHeaders::CONTENT_TYPE, path).must_be_nil
+      header(RodaResponseHeaders::CONTENT_LENGTH, path).must_be_nil
     end
 
     body('/205').must_equal ''
-    header('Content-Type', '/205').must_be_nil
+    header(RodaResponseHeaders::CONTENT_TYPE, '/205').must_be_nil
     if Rack.release < '2.0.2'
-      header('Content-Length', '/205').must_be_nil
+      header(RodaResponseHeaders::CONTENT_LENGTH, '/205').must_be_nil
     else
-      header('Content-Length', '/205').must_equal '0'
+      header(RodaResponseHeaders::CONTENT_LENGTH, '/205').must_equal '0'
     end
 
     body('/200').must_equal 'a'
-    header('Content-Type', '/200').must_equal 'text/html'
-    header('Content-Length', '/200').must_equal '1'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/200').must_equal 'text/html'
+    header(RodaResponseHeaders::CONTENT_LENGTH, '/200').must_equal '1'
   end
 end

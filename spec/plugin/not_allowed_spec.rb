@@ -41,7 +41,7 @@ describe "not_allowed plugin" do
     body.must_equal 'a'
     s, h, b = req('REQUEST_METHOD'=>'POST')
     s.must_equal 405
-    h['Allow'].must_equal 'GET'
+    h[RodaResponseHeaders::ALLOW].must_equal 'GET'
     b.must_be_empty
 
     body('/b').must_equal 'b'
@@ -62,24 +62,24 @@ describe "not_allowed plugin" do
     body('/c', 'REQUEST_METHOD'=>'POST').must_equal 'cp'
     s, h, b = req('/c', 'REQUEST_METHOD'=>'PATCH')
     s.must_equal 405
-    h['Allow'].must_equal 'GET, POST'
+    h[RodaResponseHeaders::ALLOW].must_equal 'GET, POST'
     b.must_be_empty
 
     @app.plugin :head
-    header('Allow', 'REQUEST_METHOD'=>'POST').must_equal 'HEAD, GET'
-    header('Allow', '/c', 'REQUEST_METHOD'=>'PATCH').must_equal 'HEAD, GET, POST'
+    header(RodaResponseHeaders::ALLOW, 'REQUEST_METHOD'=>'POST').must_equal 'HEAD, GET'
+    header(RodaResponseHeaders::ALLOW, '/c', 'REQUEST_METHOD'=>'PATCH').must_equal 'HEAD, GET, POST'
     
     @app.plugin :status_handler
-    @app.status_handler(405, :keep_headers=>['Allow']){'a'}
+    @app.status_handler(405, :keep_headers=>[RodaResponseHeaders::ALLOW]){'a'}
 
     s, h, b = req('REQUEST_METHOD'=>'POST')
     s.must_equal 405
-    h['Allow'].must_equal 'HEAD, GET'
+    h[RodaResponseHeaders::ALLOW].must_equal 'HEAD, GET'
     b.must_equal ['a']
 
     s, h, b = req('/c', 'REQUEST_METHOD'=>'PATCH')
     s.must_equal 405
-    h['Allow'].must_equal 'HEAD, GET, POST'
+    h[RodaResponseHeaders::ALLOW].must_equal 'HEAD, GET, POST'
     b.must_equal ['a']
   end
 end

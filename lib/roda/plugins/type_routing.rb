@@ -152,7 +152,7 @@ class Roda
         # the request afterwards, returning the result of the block.
         def on_type(type, &block)
           return unless type == requested_type
-          response['Content-Type'] ||= @scope.opts[:type_routing][:types][type]
+          response[RodaResponseHeaders::CONTENT_TYPE] ||= @scope.opts[:type_routing][:types][type]
           always(&block)
         end
 
@@ -200,7 +200,7 @@ class Roda
           @env['HTTP_ACCEPT'].to_s.split(/\s*,\s*/).map do |part|
             mime, _= part.split(/\s*;\s*/, 2)
             if sym = mimes[mime]
-              response['Vary'] = (vary = response['Vary']) ? "#{vary}, Accept" : 'Accept'
+              response[RodaResponseHeaders::VARY] = (vary = response[RodaResponseHeaders::VARY]) ? "#{vary}, Accept" : 'Accept'
               return sym
             end
           end

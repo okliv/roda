@@ -66,7 +66,7 @@ describe "status_handler plugin" do
       route{}
     end
 
-    header('Content-Length').must_equal "1"
+    header(RodaResponseHeaders::CONTENT_LENGTH).must_equal "1"
   end
 
   it "clears existing headers" do
@@ -78,34 +78,34 @@ describe "status_handler plugin" do
       end
 
       route do |r|
-        response['Content-Type'] = 'text/pdf'
-        response['Foo'] = 'bar'
+        response[RodaResponseHeaders::CONTENT_TYPE] = 'text/pdf'
+        response['foo'] = 'bar'
         nil
       end
     end
 
-    header('Content-Type').must_equal 'text/html'
-    header('Foo').must_be_nil
+    header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'text/html'
+    header('foo').must_be_nil
   end
 
   it "keeps specific existing headers if :keep_headers option is used with an array value" do
     app(:bare) do
       plugin :status_handler
 
-      status_handler(404, :keep_headers=>['Foo']) do
+      status_handler(404, :keep_headers=>['foo']) do
         "a"
       end
 
       route do |r|
-        response['Content-Type'] = 'text/pdf'
-        response['Foo'] = 'bar'
+        response[RodaResponseHeaders::CONTENT_TYPE] = 'text/pdf'
+        response['foo'] = 'bar'
         nil
       end
     end
 
-    header('Content-Length').must_equal '1'
-    header('Content-Type').must_equal 'text/html'
-    header('Foo').must_equal 'bar'
+    header(RodaResponseHeaders::CONTENT_LENGTH).must_equal '1'
+    header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'text/html'
+    header('foo').must_equal 'bar'
   end
 
   it "raises for invalid :keep_headers option" do

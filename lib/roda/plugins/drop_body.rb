@@ -27,8 +27,8 @@ class Roda
           when DROP_BODY_RANGE, 204, 304
             r[2] = EMPTY_ARRAY
             h = r[1]
-            h.delete("Content-Length")
-            h.delete("Content-Type")
+            h.delete(RodaResponseHeaders::CONTENT_LENGTH)
+            h.delete(RodaResponseHeaders::CONTENT_TYPE)
           when 205
             r[2] = EMPTY_ARRAY
             empty_205_headers(r[1])

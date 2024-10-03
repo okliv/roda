@@ -25,7 +25,7 @@ class Roda
     #   plugin :public, root: 'static', prefix: 'public'
     #
     #   # Assuming public is the location of files, and static is the path prefix
-    #   r.route do
+    #   route do
     #     # Make GET /static/1238099123/images/foo.png look for public/images/foo.png 
     #     r.timestamp_public
     #

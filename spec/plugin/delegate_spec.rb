@@ -12,12 +12,12 @@ describe "delegate plugin" do
 
       route do
         root do
-          headers['Content-Type'] = a
+          headers[RodaResponseHeaders::CONTENT_TYPE] = a
         end
       end
     end
     
-    header('Content-Type').must_equal 'foo'
+    header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'foo'
     status('/foo').must_equal 404
   end
 end

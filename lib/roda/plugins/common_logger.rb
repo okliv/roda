@@ -46,7 +46,7 @@ class Roda
 
         # Log request/response information in common log format to logger.
         def _roda_after_90__common_logger(result)
-          return unless result && result[0] && result[1]
+          return unless result && (status = result[0]) && (headers = result[1])
 
           elapsed_time = if timer = @_request_timer
             '%0.4f' % (CommonLogger.start_timer - timer)
@@ -56,7 +56,7 @@ class Roda
 
           env = @_request.env
 
-          line = "#{env['HTTP_X_FORWARDED_FOR'] || env["REMOTE_ADDR"] || "-"} - #{env["REMOTE_USER"] || "-"} [#{Time.now.strftime("%d/%b/%Y:%H:%M:%S %z")}] \"#{env["REQUEST_METHOD"]} #{env["SCRIPT_NAME"]}#{env["PATH_INFO"]}#{"?#{env["QUERY_STRING"]}" if ((qs = env["QUERY_STRING"]) && !qs.empty?)} #{@_request.http_version}\" #{result[0]} #{((length = result[1]['Content-Length']) && (length unless length == '0')) || '-'} #{elapsed_time}\n"
+          line = "#{env['HTTP_X_FORWARDED_FOR'] || env["REMOTE_ADDR"] || "-"} - #{env["REMOTE_USER"] || "-"} [#{Time.now.strftime("%d/%b/%Y:%H:%M:%S %z")}] \"#{env["REQUEST_METHOD"]} #{env["SCRIPT_NAME"]}#{env["PATH_INFO"]}#{"?#{env["QUERY_STRING"]}" if ((qs = env["QUERY_STRING"]) && !qs.empty?)} #{@_request.http_version}\" #{status} #{((length = headers[RodaResponseHeaders::CONTENT_LENGTH]) && (length unless length == '0')) || '-'} #{elapsed_time}\n"
           if MUTATE_LINE
             line.gsub!(/[^[:print:]\n]/){|c| sprintf("\\x%x", c.ord)}
           # :nocov:

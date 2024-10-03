@@ -5,4 +5,4 @@
 /www/public/rdoc/
 /spec/iv-*.erb
 /spec/pid-*
-Gemfile.lock
+/spec/render_coverage-*

@@ -21,7 +21,7 @@ class Roda
     #     !request.path.start_with?('/admin/')
     #   end
     module FilterCommonLogger
-      def self.load_dependencies(app)
+      def self.load_dependencies(app, &_)
         app.plugin :common_logger
       end
 

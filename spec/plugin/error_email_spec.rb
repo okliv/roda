@@ -48,6 +48,16 @@ describe "error_email plugin" do
     b.must_match(/^Backtrace:$.+^ENV:$.+^"rack\.input" => .+^Params:$\s+^"b" => "c"$\s+^Session:$\s+^"d" => "e"$/m)
   end
 
+  it "supports :filter plugin option for filtering parameters, environment variables, and session values" do
+    app.route do |r|
+      raise ArgumentError, 'bad foo' rescue error_email_content($!)
+    end
+    app.plugin :error_email, :filter=>proc{|k, v| k == 'b' || k == 'd' || k == 'rack.input'}
+    b = body('rack.input'=>rack_input, 'QUERY_STRING'=>'b=c&f=g', 'rack.session'=>{'d'=>'e', 'h'=>'i'})
+    b.must_match(/^Subject: ArgumentError: bad foo/)
+    b.must_match(/^Backtrace:.+^ENV:.+^"rack\.input" => FILTERED.+^Params:\s+^"b" => FILTERED\s+"f" => "g"\s+^Session:\s+^"d" => FILTERED\s+"h" => "i"/m)
+  end
+
   it "handles invalid parameters in error_email_content" do
     app.route do |r|
       raise ArgumentError, 'bad foo' rescue error_email_content($!)

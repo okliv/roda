@@ -10,7 +10,6 @@ rescue OpenSSL::Cipher::CipherError
   # :nocov:
 end
 
-require 'base64'
 require 'json'
 require 'securerandom'
 require 'zlib'
@@ -41,7 +40,8 @@ class Roda
     #
     # Session secrets can be rotated.  See options below.
     #
-    # The sessions plugin can transparently upgrade sessions from Rack::Session::Cookie
+    # The sessions plugin can transparently upgrade sessions from versions of Rack::Session::Cookie
+    # shipped with Rack before Rack 3,
     # if the default Rack::Session::Cookie coder and HMAC are used, see options below.
     # It is recommended to only enable transparent upgrades for a brief transition period,
     # and remove support for them once old sessions have converted or timed out.
@@ -169,6 +169,10 @@ class Roda
         hmac_secret = secret = secret.dup.force_encoding('BINARY')
         cipher_secret = secret.slice!(0, 32)
         [cipher_secret.freeze, hmac_secret.freeze]
+      end
+
+      def self.load_dependencies(app, opts=OPTS)
+        app.plugin :_base64
       end
 
       # Configure the plugin, see Sessions for details on options.
@@ -344,7 +348,7 @@ class Roda
           opts = roda_class.opts[:sessions]
 
           begin
-            data = Base64.urlsafe_decode64(data)
+            data = Base64_.urlsafe_decode64(data)
           rescue ArgumentError
             return _session_serialization_error("Unable to decode session: invalid base64")
           end
@@ -472,7 +476,7 @@ class Roda
           serialized_data << json_data
 
           cipher_secret = opts[:cipher_secret]
-          if per_cookie_secret = opts[:per_cookie_cipher_secret]
+          if opts[:per_cookie_cipher_secret]
             version = "\1"
             per_cookie_secret_base = SecureRandom.random_bytes(32)
             cipher_secret = OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, cipher_secret, per_cookie_secret_base)
@@ -493,7 +497,7 @@ class Roda
           data << encrypted_data
           data << OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, opts[:hmac_secret], data+opts[:key])
 
-          data = Base64.urlsafe_encode64(data)
+          data = Base64_.urlsafe_encode64(data)
 
           if data.bytesize >= 4096
             raise CookieTooLarge, "attempted to create cookie larger than 4096 bytes"

@@ -15,6 +15,12 @@ class Roda
     # inside templates.  It can be combined with the inject_erb plugin
     # to wrap template blocks with arbitrary output and then inject the
     # wrapped output into the template.
+    #
+    # If the output buffer object responds to +capture+ and is not
+    # an instance of String (e.g. when +erubi/capture_block+ is being
+    # used as the template engine), this will call +capture+ on the
+    # output buffer object, instead of setting the output buffer object
+    # temporarily to a new object.
     module CaptureERB
       def self.load_dependencies(app)
         app.plugin :render
@@ -25,13 +31,20 @@ class Roda
         # with an empty string, and then yield to the block.
         # Return the value of the block, converted to a string.
         # Restore the previous ERB output buffer before returning.
-        def capture_erb
+        def capture_erb(&block)
           outvar = render_opts[:template_opts][:outvar]
           buf_was = instance_variable_get(outvar)
-          instance_variable_set(outvar, String.new)
-          yield.to_s
-        ensure
-          instance_variable_set(outvar, buf_was) if outvar && buf_was
+
+          if buf_was.respond_to?(:capture) && !buf_was.instance_of?(String)
+            buf_was.capture(&block)
+          else
+            begin
+              instance_variable_set(outvar, String.new)
+              yield.to_s
+            ensure
+              instance_variable_set(outvar, buf_was) if outvar && buf_was
+            end
+          end
         end
       end
     end

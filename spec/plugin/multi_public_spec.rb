@@ -74,11 +74,11 @@ describe "multi_public plugin" do
     end
 
     body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
-    header('Content-Type', '/about/_test.erb').must_equal 'text/plain'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/about/_test.erb').must_equal 'text/plain'
     header('x-foo', '/about/_test.erb').must_equal 'bar'
 
     body('/static/views/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
-    header('Content-Type', '/static/views/about/_test.erb').must_equal 'foo/bar'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/static/views/about/_test.erb').must_equal 'foo/bar'
     header('x-foo', '/static/views/about/_test.erb').must_be_nil
   end
 
@@ -93,78 +93,66 @@ describe "multi_public plugin" do
     end
 
     body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
-    header('Content-Type', '/about/_test.erb').must_equal 'foo/bar'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/about/_test.erb').must_equal 'foo/bar'
     header('x-foo', '/about/_test.erb').must_equal 'bar'
   end
 
-  it "handles serving gzip files in gzip mode if client supports gzip" do
-    app(:bare) do
-      plugin :multi_public, {:a => 'spec/views', :b => 'spec'}, :gzip=>true
+  types = [
+    [:gzip, 'gzip', '.gz'],
+    [:brotli, 'br', '.br'],
+    [:zstd, 'zstd', '.zst'],
+  ]
+  types.each do  |type, accept, ext|
+    [true, false].each do |use_encodings|
+      opts = {}
+      if use_encodings
+        opts[:encodings] = [[accept, ext]]
+        opts[:encodings] << ['zstd', '.zst'] if type == :brotli
+        opts[:encodings] << ['gzip', '.gz'] unless type == :gzip
+      else
+        opts[:gzip] = opts[type] = true
+      end
 
-      route do |r|
-        r.on 'static' do
-          r.multi_public(:b)
+      it "handles serving files with #{ext} extension if client supports accepts #{accept} encoding when :encodings is #{'not ' unless use_encodings}given" do
+        app(:bare) do
+          plugin :multi_public, {:a => 'spec/views', :b => 'spec'}, opts
+
+          route do |r|
+            r.on 'static' do
+              r.multi_public(:b)
+            end
+
+            r.multi_public(:a)
+          end
         end
 
-        r.multi_public(:a)
-      end
-    end
+        ['', '/static/views'].each do |prefix|
+          body("#{prefix}/about/_test.erb").must_equal File.read('spec/views/about/_test.erb')
+          header(RodaResponseHeaders::CONTENT_ENCODING, '/about/_test.erb').must_be_nil
 
-    body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
-    header('Content-Encoding', '/about/_test.erb').must_be_nil
+          body("#{prefix}/about.erb").must_equal File.read('spec/views/about.erb')
+          header(RodaResponseHeaders::CONTENT_ENCODING, '/about.erb').must_be_nil
+          
+          accept_encoding = "deflate,#{' gzip,' unless type == :gzip} #{accept}"
 
-    body('/about.erb').must_equal File.read('spec/views/about.erb')
-    header('Content-Encoding', '/about.erb').must_be_nil
+          body("#{prefix}/about/_test.erb", 'HTTP_ACCEPT_ENCODING'=>accept_encoding).must_equal File.binread("spec/views/about/_test.erb.gz")
+          h = req("#{prefix}/about/_test.erb", 'HTTP_ACCEPT_ENCODING'=>accept_encoding)[1]
+          h[RodaResponseHeaders::CONTENT_ENCODING].must_equal 'gzip'
+          h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/plain'
 
-    body('/about/_test.erb', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.binread('spec/views/about/_test.erb.gz')
-    h = req('/about/_test.erb', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')[1]
-    h['Content-Encoding'].must_equal 'gzip'
-    h['Content-Type'].must_equal 'text/plain'
+          body("#{prefix}/about/_test2.css", 'HTTP_ACCEPT_ENCODING'=>accept_encoding).must_equal File.binread("spec/views/about/_test2.css#{ext}")
+          h = req("#{prefix}/about/_test2.css", 'HTTP_ACCEPT_ENCODING'=>accept_encoding)[1]
+          h[RodaResponseHeaders::CONTENT_ENCODING].must_equal accept
+          h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/css'
 
-    body('/static/views/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.binread('spec/views/about/_test.css.gz')
-    h = req('/static/views/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')[1]
-    h['Content-Encoding'].must_equal 'gzip'
-    h['Content-Type'].must_equal 'text/css'
-
-    s, h, b = req('/static/views/about/_test.css', 'HTTP_IF_MODIFIED_SINCE'=>h["Last-Modified"], 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')
-    s.must_equal 304
-    h['Content-Encoding'].must_be_nil
-    h['Content-Type'].must_be_nil
-    b.must_equal []
-  end
-
-  it "handles serving brotli files in brotli mode if client supports brotli and falls back gracefully" do
-    app(:bare) do
-      plugin :multi_public, {:a => 'spec/views', :b => 'spec'}, :gzip=>true, :brotli=>true
-
-      route do |r|
-        r.on 'static' do
-          r.multi_public(:b)
+          s, h, b = req("#{prefix}/about/_test2.css", 'HTTP_IF_MODIFIED_SINCE'=>h[RodaResponseHeaders::LAST_MODIFIED], 'HTTP_ACCEPT_ENCODING'=>accept_encoding)
+          s.must_equal 304
+          h[RodaResponseHeaders::CONTENT_ENCODING].must_be_nil
+          h[RodaResponseHeaders::CONTENT_TYPE].must_be_nil
+          b.must_equal []
         end
-
-        r.multi_public(:a)
       end
     end
-    
-    body('/about/_test2.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip, br').must_equal File.binread('spec/views/about/_test2.css.br')
-    h = req('/about/_test2.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip, br')[1]
-    h['Content-Encoding'].must_equal 'br'
-    h['Content-Type'].must_equal 'text/css'
-
-    body('/about/_test2.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.binread('spec/views/about/_test2.css.gz')
-    h = req('/about/_test2.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')[1]
-    h['Content-Encoding'].must_equal 'gzip'
-    h['Content-Type'].must_equal 'text/css'
-
-    body('/static/views/about/_test2.css').must_equal File.binread('spec/views/about/_test2.css')
-    h = req('/static/views/about/_test2.css')[1]
-    h['Content-Encoding'].must_be_nil
-    h['Content-Type'].must_equal 'text/css'
-
-    body('/static/views/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip, br').must_equal File.binread('spec/views/about/_test.css.gz')
-    h = req('/static/views/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip, br')[1]
-    h['Content-Encoding'].must_equal 'gzip'
-    h['Content-Type'].must_equal 'text/css'
   end
 
   it "does not handle non-GET requests" do

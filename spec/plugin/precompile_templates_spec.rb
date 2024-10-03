@@ -126,9 +126,9 @@ end
 end
 
 begin
-  require 'tilt/sass'
+  require 'tilt/plain'
 rescue LoadError
-  warn "tilt or sass not installed, skipping precompiled_templates plugin sass test"  
+  warn "tilt/plain not installed, skipping precompiled_templates plugin test"  
 else
 describe "precompile_templates plugin" do 
   it "adds support for template precompilation for tilt template types that do not support precompilation" do
@@ -136,12 +136,12 @@ describe "precompile_templates plugin" do
       plugin :render, :views=>'spec/views'
       plugin :precompile_templates
       route do |r|
-        render(:path=>File.expand_path('spec/assets/css/app.scss'), :template_opts=>{:cache=>false})
+        render(:path=>File.expand_path('spec/assets/css/app.html'), :template_opts=>{:cache=>false})
       end
     end
-    key = [File.expand_path("spec/assets/css/app.scss"), nil, nil, {:cache=>false}, nil]
+    key = [File.expand_path("spec/assets/css/app.html"), nil, nil, {:cache=>false}, nil]
     app.render_opts[:cache][key].must_be_nil
-    app.precompile_templates(:path=>File.expand_path('spec/assets/css/app.scss'), :template_opts=>{:cache=>false})
+    app.precompile_templates(:path=>File.expand_path('spec/assets/css/app.html'), :template_opts=>{:cache=>false})
     app.render_opts[:cache][key].wont_be_nil
     app.freeze_template_caches!
     body.must_match(/color: red;/)

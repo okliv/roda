@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
     "source_code_uri"   => "https://github.com/jeremyevans/roda" 
   }
 
-  s.files = %w'README.rdoc MIT-LICENSE CHANGELOG' + Dir['doc/*.rdoc'] + Dir['doc/release_notes/3.*.txt'] + Dir['lib/**/*.rb']
-  s.extra_rdoc_files = %w'README.rdoc MIT-LICENSE CHANGELOG' + Dir["doc/*.rdoc"] + Dir['doc/release_notes/3.*.txt']
+  s.files = %w'MIT-LICENSE' + Dir['lib/**/*.rb']
+  s.extra_rdoc_files = %w'MIT-LICENSE'
 
   s.add_dependency "rack"
   s.add_development_dependency "rake"
@@ -28,7 +28,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "tilt"
   s.add_development_dependency "erubi"
   s.add_development_dependency "rack_csrf"
-  s.add_development_dependency "sassc"
   s.add_development_dependency "json"
   s.add_development_dependency "mail"
 end

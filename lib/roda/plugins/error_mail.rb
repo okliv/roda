@@ -21,6 +21,9 @@ class Roda
     #
     # Options:
     #
+    # :filter :: Callable called with the key and value for each parameter, environment
+    #            variable, and session value.  If it returns true, the value of the
+    #            parameter is filtered in the email.
     # :from :: The From address to use in the email (required)
     # :headers :: A hash of additional headers to use in the email (default: empty hash)
     # :prefix :: A prefix to use in the email's subject line (default: no prefix)
@@ -36,9 +39,12 @@ class Roda
     # for low traffic web applications.  For high traffic web applications,
     # use an error reporting service instead of this plugin.
     module ErrorMail
+      DEFAULT_FILTER = lambda{|k,v| false}
+      private_constant :DEFAULT_FILTER
+
       # Set default opts for plugin.  See ErrorEmail module RDoc for options.
       def self.configure(app, opts=OPTS)
-        app.opts[:error_mail] = email_opts = (app.opts[:error_mail] || OPTS).merge(opts).freeze
+        app.opts[:error_mail] = email_opts = (app.opts[:error_mail] || {:filter=>DEFAULT_FILTER}).merge(opts).freeze
         unless email_opts[:to] && email_opts[:from]
           raise RodaError, "must provide :to and :from options to error_mail plugin"
         end
@@ -68,8 +74,13 @@ class Roda
             e.to_s
           end
           subject = "#{email_opts[:prefix]}#{subject}"
+          filter = email_opts[:filter]
 
-          format = lambda{|h| h.map{|k, v| "#{k.inspect} => #{v.inspect}"}.sort.join("\n")}
+          format = lambda do |h|
+            h = h.map{|k, v| "#{k.inspect} => #{filter.call(k, v) ? 'FILTERED' : v.inspect}"}
+            h.sort!
+            h.join("\n")
+          end 
 
           begin
             params = request.params

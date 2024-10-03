@@ -23,18 +23,9 @@ class Roda
     #     :foo
     #   end
     module SymbolViews
-      module RequestMethods
-        private
-
-        # If the block result is a symbol, consider the symbol a
-        # template name and use the template view as the body.
-        def block_result_body(result)
-          if result.is_a?(Symbol)
-            scope.view(result)
-          else
-            super
-          end
-        end
+      def self.configure(app)
+        app.plugin :custom_block_results
+        app.opts[:custom_block_results][Symbol] = :view
       end
     end
 

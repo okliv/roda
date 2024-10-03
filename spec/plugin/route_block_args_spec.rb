@@ -56,27 +56,27 @@ describe "route_block_args plugin" do
         [request.params, request.env, response.headers]
       end
       route do |p, e, h|
-        h['Foo'] = "#{p['a']}-#{e['B']}"
+        h['foo'] = "#{p['a']}-#{e['B']}"
       end
     end
 
-    header('Foo', 'rack.input'=>rack_input).must_equal('-')
+    header('foo', 'rack.input'=>rack_input).must_equal('-')
     body('rack.input'=>rack_input).must_equal('-')
-    header('Foo', 'QUERY_STRING'=>'a=c', 'B'=>'D', 'rack.input'=>rack_input).must_equal('c-D')
+    header('foo', 'QUERY_STRING'=>'a=c', 'B'=>'D', 'rack.input'=>rack_input).must_equal('c-D')
   end
 
   it "works if given after the route block" do
     app(:bare) do
       route do |p, e, h|
-        h['Foo'] = "#{p['a']}-#{e['B']}"
+        h['foo'] = "#{p['a']}-#{e['B']}"
       end
       plugin :route_block_args do
         [request.params, request.env, response.headers]
       end
     end
 
-    header('Foo', 'rack.input'=>rack_input).must_equal('-')
+    header('foo', 'rack.input'=>rack_input).must_equal('-')
     body('rack.input'=>rack_input).must_equal('-')
-    header('Foo', 'QUERY_STRING'=>'a=c', 'B'=>'D', 'rack.input'=>rack_input).must_equal('c-D')
+    header('foo', 'QUERY_STRING'=>'a=c', 'B'=>'D', 'rack.input'=>rack_input).must_equal('c-D')
   end
 end

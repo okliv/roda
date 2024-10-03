@@ -41,8 +41,8 @@ describe "sinatra_helpers plugin" do
   end
 
   it 'informational? is true only for 1xx status' do
-    status_app(100 + rand(100)){response['X'] = informational?.inspect}
-    header('X').must_equal 'true'
+    status_app(100 + rand(100)){response['x'] = informational?.inspect}
+    header('x').must_equal 'true'
     status_app(200 + rand(400)){informational?}
     body.must_equal 'false'
   end
@@ -50,8 +50,8 @@ describe "sinatra_helpers plugin" do
   it 'success? is true only for 2xx status' do
     status_app(200 + rand(100)){success?}
     body.must_equal 'true'
-    status_app(100 + rand(100)){response['X'] = success?.inspect}
-    header('X').must_equal 'false'
+    status_app(100 + rand(100)){response['x'] = success?.inspect}
+    header('x').must_equal 'false'
     status_app(300 + rand(300)){success?}
     body.must_equal 'false'
   end
@@ -98,7 +98,7 @@ describe "sinatra_helpers plugin" do
     it 'takes a block for deferred body generation' do
       sin_app{body{'Hello World'}; nil}
       body.must_equal 'Hello World'
-      header('Content-Length').must_equal '11'
+      header(RodaResponseHeaders::CONTENT_LENGTH).must_equal '11'
     end
 
     it 'supports #join' do
@@ -109,17 +109,17 @@ describe "sinatra_helpers plugin" do
     it 'takes a String, Array, or other object responding to #each' do
       sin_app{body 'Hello World'; nil}
       body.must_equal 'Hello World'
-      header('Content-Length').must_equal '11'
+      header(RodaResponseHeaders::CONTENT_LENGTH).must_equal '11'
 
       sin_app{body ['Hello ', 'World']; nil}
       body.must_equal 'Hello World'
-      header('Content-Length').must_equal '11'
+      header(RodaResponseHeaders::CONTENT_LENGTH).must_equal '11'
 
       o = Object.new
       def o.each; yield 'Hello World' end
       sin_app{body o; nil}
       body.must_equal 'Hello World'
-      header('Content-Length').must_equal '11'
+      header(RodaResponseHeaders::CONTENT_LENGTH).must_equal '11'
     end
 
     it 'returns previously set body' do
@@ -128,7 +128,7 @@ describe "sinatra_helpers plugin" do
         response.body.join.must_equal 'Hello World'
       end
       body.must_equal 'Hello World'
-      header('Content-Length').must_equal '11'
+      header(RodaResponseHeaders::CONTENT_LENGTH).must_equal '11'
     end
   end
 
@@ -141,35 +141,35 @@ describe "sinatra_helpers plugin" do
 
       status.must_equal 302
       body.must_equal ''
-      header('Location').must_equal '/foo'
+      header(RodaResponseHeaders::LOCATION).must_equal '/foo'
     end
 
     it 'adds script_name if given a path' do
       sin_app{redirect "/foo"}
-      header('Location', '/bar', 'SCRIPT_NAME'=>'/foo').must_equal '/foo'
+      header(RodaResponseHeaders::LOCATION, '/bar', 'SCRIPT_NAME'=>'/foo').must_equal '/foo'
     end
 
     it 'does not adds script_name if not given a path' do
       sin_app{redirect}
-      header('Location', '/bar', 'SCRIPT_NAME'=>'/foo', 'REQUEST_METHOD'=>'POST').must_equal '/foo/bar'
+      header(RodaResponseHeaders::LOCATION, '/bar', 'SCRIPT_NAME'=>'/foo', 'REQUEST_METHOD'=>'POST').must_equal '/foo/bar'
     end
 
     it 'respects :absolute_redirects option' do
       sin_app{redirect}
       app.opts[:absolute_redirects] = true
-      header('Location', '/bar', 'HTTP_HOST'=>'example.org', 'SCRIPT_NAME'=>'/foo', 'REQUEST_METHOD'=>'POST').must_equal 'http://example.org/foo/bar'
+      header(RodaResponseHeaders::LOCATION, '/bar', 'HTTP_HOST'=>'example.org', 'SCRIPT_NAME'=>'/foo', 'REQUEST_METHOD'=>'POST').must_equal 'http://example.org/foo/bar'
     end
 
     it 'respects :prefixed_redirects option' do
       sin_app{redirect "/bar"}
       app.opts[:prefixed_redirects] = true
-      header('Location', 'SCRIPT_NAME'=>'/foo').must_equal '/foo/bar'
+      header(RodaResponseHeaders::LOCATION, 'SCRIPT_NAME'=>'/foo').must_equal '/foo/bar'
     end
 
     it 'ignores :prefix_redirects option if not given a path' do
       sin_app{redirect}
       app.opts[:prefix_redirects] = true
-      header('Location', "/bar", 'SCRIPT_NAME'=>'/foo', 'REQUEST_METHOD'=>'POST').must_equal '/foo/bar'
+      header(RodaResponseHeaders::LOCATION, "/bar", 'SCRIPT_NAME'=>'/foo', 'REQUEST_METHOD'=>'POST').must_equal '/foo/bar'
     end
 
     it 'uses the code given when specified' do
@@ -179,7 +179,7 @@ describe "sinatra_helpers plugin" do
 
     it 'redirects back to request.referer when passed back' do
       sin_app{redirect back}
-      header('Location', 'HTTP_REFERER' => '/foo').must_equal '/foo'
+      header(RodaResponseHeaders::LOCATION, 'HTTP_REFERER' => '/foo').must_equal '/foo'
     end
 
     it 'uses 303 for post requests if request is HTTP 1.1, 302 for 1.0' do
@@ -240,17 +240,17 @@ describe "sinatra_helpers plugin" do
   describe 'headers' do
     it 'sets headers on the response object when given a Hash' do
       sin_app do
-        headers 'X-Foo' => 'bar'
+        headers 'x-foo' => 'bar'
         'kthx'
       end
 
-      header('X-Foo').must_equal 'bar'
+      header('x-foo').must_equal 'bar'
       body.must_equal 'kthx'
     end
 
     it 'returns the response headers hash when no hash provided' do
-      sin_app{headers['X-Foo'] = 'bar'}
-      header('X-Foo').must_equal 'bar'
+      sin_app{headers['x-foo'] = 'bar'}
+      header('x-foo').must_equal 'bar'
     end
   end
 
@@ -291,19 +291,19 @@ describe "sinatra_helpers plugin" do
         'Hello World'
       end
 
-      header('Content-Type').must_equal 'text/plain'
+      header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'text/plain'
       body.must_equal 'Hello World'
     end
 
     it 'takes media type parameters (like charset=)' do
       sin_app{content_type 'text/html', :charset => 'latin1'}
-      header('Content-Type').must_equal 'text/html;charset=latin1'
+      header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'text/html;charset=latin1'
     end
 
     it "looks up symbols in Rack's mime types dictionary" do
       sin_app{content_type :foo}
       Rack::Mime::MIME_TYPES['.foo'] = 'application/foo'
-      header('Content-Type').must_equal 'application/foo'
+      header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'application/foo'
     end
 
     it 'fails when no mime type is registered for the argument provided' do
@@ -313,19 +313,19 @@ describe "sinatra_helpers plugin" do
 
     it 'handles already present params' do
       sin_app{content_type 'foo/bar;level=1', :charset => 'utf-8'}
-      header('Content-Type').must_equal 'foo/bar;level=1, charset=utf-8'
+      header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'foo/bar;level=1, charset=utf-8'
     end
 
     it 'does not add charset if present' do
       sin_app{content_type 'text/plain;charset=utf-16', :charset => 'utf-8'}
-      header('Content-Type').must_equal 'text/plain;charset=utf-16'
+      header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'text/plain;charset=utf-16'
     end
 
     it 'properly encodes parameters with delimiter characters' do
       sin_app{|r| content_type 'image/png', :comment => r.path[1, 1000] }
-      header('Content-Type', '/Hello, world!').must_equal 'image/png;comment="Hello, world!"'
-      header('Content-Type', '/semi;colon').must_equal 'image/png;comment="semi;colon"'
-      header('Content-Type', '/"Whatever."').must_equal 'image/png;comment="\"Whatever.\""'
+      header(RodaResponseHeaders::CONTENT_TYPE, '/Hello, world!').must_equal 'image/png;comment="Hello, world!"'
+      header(RodaResponseHeaders::CONTENT_TYPE, '/semi;colon').must_equal 'image/png;comment="semi;colon"'
+      header(RodaResponseHeaders::CONTENT_TYPE, '/"Whatever."').must_equal 'image/png;comment="\"Whatever.\""'
     end
   end
 
@@ -335,7 +335,7 @@ describe "sinatra_helpers plugin" do
     end
 
     it 'sets the Content-Disposition header' do
-      header('Content-Disposition', '/foo/test.xml').must_equal 'attachment; filename="test.xml"'
+      header(RodaResponseHeaders::CONTENT_DISPOSITION, '/foo/test.xml').must_equal 'attachment; filename="test.xml"'
       body.must_equal 'b'
     end
 
@@ -343,29 +343,29 @@ describe "sinatra_helpers plugin" do
       filename = "/foo/a\u1023b.xml"
       sin_app{|r| attachment filename; 'b'}
 
-      header('Content-Disposition').must_equal 'attachment; filename="a-b.xml"; filename*=UTF-8\'\'a%E1%80%A3b.xml'
+      header(RodaResponseHeaders::CONTENT_DISPOSITION).must_equal 'attachment; filename="a-b.xml"; filename*=UTF-8\'\'a%E1%80%A3b.xml'
       body.must_equal 'b'
 
       filename = "/foo/a\255\255b.xml".dup.force_encoding('ISO-8859-1')
-      header('Content-Disposition').must_equal 'attachment; filename="a-b.xml"; filename*=ISO-8859-1\'\'a%AD%ADb.xml'
+      header(RodaResponseHeaders::CONTENT_DISPOSITION).must_equal 'attachment; filename="a-b.xml"; filename*=ISO-8859-1\'\'a%AD%ADb.xml'
       body.must_equal 'b'
 
       filename = "/foo/a\255\255b.xml".dup.force_encoding('BINARY')
-      header('Content-Disposition').must_equal 'attachment; filename="a-b.xml"'
+      header(RodaResponseHeaders::CONTENT_DISPOSITION).must_equal 'attachment; filename="a-b.xml"'
       body.must_equal 'b'
     end
 
     it 'sets the Content-Disposition header even when a filename is not given' do
       sin_app{attachment}
-      header('Content-Disposition', '/foo/test.xml').must_equal 'attachment'
+      header(RodaResponseHeaders::CONTENT_DISPOSITION, '/foo/test.xml').must_equal 'attachment'
     end
 
     it 'sets the Content-Type header' do
-      header('Content-Type', '/test.xml').must_equal 'application/xml'
+      header(RodaResponseHeaders::CONTENT_TYPE, '/test.xml').must_equal 'application/xml'
     end
 
     it 'does not modify the default Content-Type without a file extension' do
-      header('Content-Type', '/README').must_equal 'text/html'
+      header(RodaResponseHeaders::CONTENT_TYPE, '/README').must_equal 'text/html'
     end
 
     it 'should not modify the Content-Type if it is already set' do
@@ -374,7 +374,7 @@ describe "sinatra_helpers plugin" do
         attachment 'test.xml'
       end
 
-      header('Content-Type', '/README').must_equal 'application/atom+xml'
+      header(RodaResponseHeaders::CONTENT_TYPE, '/README').must_equal 'application/atom+xml'
     end
   end
 
@@ -391,29 +391,29 @@ describe "sinatra_helpers plugin" do
     end
 
     it 'sets the Content-Type response header if a mime-type can be located' do
-      header('Content-Type').must_equal 'text/css'
+      header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'text/css'
     end
 
     it 'sets the Content-Type response header if type option is set to a file extension' do
-      header('Content-Type', 'rack.OPTS'=>{:type => 'html'}).must_equal 'text/html'
+      header(RodaResponseHeaders::CONTENT_TYPE, 'rack.OPTS'=>{:type => 'html'}).must_equal 'text/html'
     end
 
     it 'sets the Content-Type response header if type option is set to a mime type' do
-      header('Content-Type', 'rack.OPTS'=>{:type => 'application/octet-stream'}).must_equal 'application/octet-stream'
+      header(RodaResponseHeaders::CONTENT_TYPE, 'rack.OPTS'=>{:type => 'application/octet-stream'}).must_equal 'application/octet-stream'
     end
 
     it 'sets the Content-Length response header' do
-      header('Content-Length').must_equal @content.length.to_s
+      header(RodaResponseHeaders::CONTENT_LENGTH).must_equal @content.length.to_s
     end
 
     it 'sets the Last-Modified response header' do
-      header('Last-Modified').must_equal File.mtime(@file).httpdate
+      header(RodaResponseHeaders::LAST_MODIFIED).must_equal File.mtime(@file).httpdate
     end
 
     it 'allows passing in a different Last-Modified response header with :last_modified' do
       time = Time.now
       @app.plugin :caching
-      header('Last-Modified', 'rack.OPTS'=>{:last_modified => time}).must_equal time.httpdate
+      header(RodaResponseHeaders::LAST_MODIFIED, 'rack.OPTS'=>{:last_modified => time}).must_equal time.httpdate
     end
 
     it "returns a 404 when not found" do
@@ -422,23 +422,23 @@ describe "sinatra_helpers plugin" do
     end
 
     it "does not set the Content-Disposition header by default" do
-      header('Content-Disposition').must_be_nil
+      header(RodaResponseHeaders::CONTENT_DISPOSITION).must_be_nil
     end
 
     it "sets the Content-Disposition header when :disposition set to 'attachment'" do
-      header('Content-Disposition', 'rack.OPTS'=>{:disposition => 'attachment'}).must_equal 'attachment; filename="raw.css"'
+      header(RodaResponseHeaders::CONTENT_DISPOSITION, 'rack.OPTS'=>{:disposition => 'attachment'}).must_equal 'attachment; filename="raw.css"'
     end
 
     it "does not set add a file name if filename is false" do
-      header('Content-Disposition', 'rack.OPTS'=>{:disposition => 'inline', :filename=>false}).must_equal 'inline'
+      header(RodaResponseHeaders::CONTENT_DISPOSITION, 'rack.OPTS'=>{:disposition => 'inline', :filename=>false}).must_equal 'inline'
     end
 
     it "sets the Content-Disposition header when :disposition set to 'inline'" do
-      header('Content-Disposition', 'rack.OPTS'=>{:disposition => 'inline'}).must_equal 'inline; filename="raw.css"'
+      header(RodaResponseHeaders::CONTENT_DISPOSITION, 'rack.OPTS'=>{:disposition => 'inline'}).must_equal 'inline; filename="raw.css"'
     end
 
     it "sets the Content-Disposition header when :filename provided" do
-      header('Content-Disposition', 'rack.OPTS'=>{:filename => 'foo.txt'}).must_equal 'attachment; filename="foo.txt"'
+      header(RodaResponseHeaders::CONTENT_DISPOSITION, 'rack.OPTS'=>{:filename => 'foo.txt'}).must_equal 'attachment; filename="foo.txt"'
     end
 
     it 'allows setting a custom status code' do
@@ -446,7 +446,7 @@ describe "sinatra_helpers plugin" do
     end
 
     it "is able to send files with unknown mime type" do
-      header('Content-Type', 'rack.OPTS'=>{:type => '.foobar'}).must_equal 'application/octet-stream'
+      header(RodaResponseHeaders::CONTENT_TYPE, 'rack.OPTS'=>{:type => '.foobar'}).must_equal 'application/octet-stream'
     end
 
     it "does not override Content-Type if already set and no explicit type is given" do
@@ -455,7 +455,7 @@ describe "sinatra_helpers plugin" do
         content_type :png
         send_file file
       end
-      header('Content-Type').must_equal 'image/png'
+      header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'image/png'
     end
 
     it "does override Content-Type even if already set, if explicit type is given" do
@@ -464,7 +464,7 @@ describe "sinatra_helpers plugin" do
         content_type :png
         send_file file, :type => :gif
       end
-      header('Content-Type').must_equal 'image/gif'
+      header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'image/gif'
     end
   end
 

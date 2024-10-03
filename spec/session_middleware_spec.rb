@@ -23,11 +23,11 @@ describe "RodaSessionMiddleware" do
     end
 
     _, h, b = req('/')
-    h['Set-Cookie'].must_be_nil
+    h[RodaResponseHeaders::SET_COOKIE].must_be_nil
     b.must_equal ['']
 
     _, h, b = req('/s/foo/bar')
-    h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/; HttpOnly(; SameSite=Lax)?\z/mi)
+    h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda\.session=(.*); path=\/; HttpOnly(; SameSite=Lax)?\z/mi)
     b.must_equal ['bar']
     body('/s/foo/bar').must_equal 'bar'
     body('/g/foo').must_equal 'bar'

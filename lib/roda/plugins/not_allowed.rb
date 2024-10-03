@@ -138,7 +138,7 @@ class Roda
         def method_not_allowed(verbs)
           res = response
           res.status = 405
-          res['Allow'] = verbs
+          res[RodaResponseHeaders::ALLOW] = verbs
           nil
         end
       end

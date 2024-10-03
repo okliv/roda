@@ -198,7 +198,7 @@ END
         def exception_page(exception, opts=OPTS)
           message = exception_page_exception_message(exception)
           if opts[:json]
-            @_response['Content-Type'] = "application/json"
+            @_response[RodaResponseHeaders::CONTENT_TYPE] = "application/json"
             {
               "exception"=>{
                 "class"=>exception.class.to_s,
@@ -207,7 +207,7 @@ END
               }
             }
           elsif env['HTTP_ACCEPT'] =~ /text\/html/
-            @_response['Content-Type'] = "text/html"
+            @_response[RodaResponseHeaders::CONTENT_TYPE] = "text/html"
 
             context = opts[:context] || 7
             css_file = opts[:css_file]
@@ -227,7 +227,7 @@ END
 
             css = case css_file
             when nil
-              "<style type=\"text/css\">#{ExceptionPage.css}</style>"
+              "<style type=\"text/css\">#{exception_page_css}</style>"
             when false
               # :nothing
             else
@@ -236,7 +236,7 @@ END
 
             js = case js_file
             when nil
-              "<script type=\"text/javascript\">\n//<!--\n#{ExceptionPage.js}\n//-->\n</script>"
+              "<script type=\"text/javascript\">\n//<!--\n#{exception_page_js}\n//-->\n</script>"
             when false
               # :nothing
             else
@@ -245,7 +245,7 @@ END
 
             frames = exception.backtrace.map.with_index do |line, i|
               frame = {:id=>i}
-              if line =~ /\A(.*?):(\d+)(?::in `(.*)')?\Z/
+              if line =~ /\A(.*?):(\d+)(?::in [`'](.*)')?\Z/
                 filename = frame[:filename] = $1
                 lineno = frame[:lineno] = $2.to_i
                 frame[:function] = $3
@@ -394,14 +394,24 @@ END1
 </html>
 END
           else
-            @_response['Content-Type'] = "text/plain"
+            @_response[RodaResponseHeaders::CONTENT_TYPE] = "text/plain"
             "#{exception.class}: #{message}\n#{exception.backtrace.map{|l| "\t#{l}"}.join("\n")}"
           end
         end
 
+        # The CSS to use on the exception page
+        def exception_page_css
+          ExceptionPage.css
+        end
+
+        # The JavaScript to use on the exception page
+        def exception_page_js
+          ExceptionPage.js
+        end
+
         private
 
-        if RUBY_VERSION >= '3.2'
+        if Exception.method_defined?(:detailed_message)
           def exception_page_exception_message(exception)
             exception.detailed_message(highlight: false).to_s
           end
@@ -419,12 +429,12 @@ END
         # Serve exception page assets
         def exception_page_assets
           get 'exception_page.css' do
-            response['Content-Type'] = "text/css"
-            ExceptionPage.css
+            response[RodaResponseHeaders::CONTENT_TYPE] = "text/css"
+            scope.exception_page_css
           end
           get 'exception_page.js' do
-            response['Content-Type'] = "application/javascript"
-            ExceptionPage.js
+            response[RodaResponseHeaders::CONTENT_TYPE] = "application/javascript"
+            scope.exception_page_js
           end
         end
       end

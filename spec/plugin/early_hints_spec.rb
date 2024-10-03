@@ -4,7 +4,7 @@ describe "early_hints plugin" do
   it "allows sending early hints to rack.early_hints" do
     queue = []
     app(:early_hints) do |r|
-      send_early_hints('Link'=>'</foo.js>; rel=preload; as=script')
+      send_early_hints('link'=>'</foo.js>; rel=preload; as=script')
       queue << 'OK'
       'OK'
     end
@@ -14,6 +14,6 @@ describe "early_hints plugin" do
 
     queue = []
     body('rack.early_hints'=>proc{|h| queue << h}).must_equal 'OK'
-    queue.must_equal [{'Link'=>'</foo.js>; rel=preload; as=script'}, 'OK']
+    queue.must_equal [{'link'=>'</foo.js>; rel=preload; as=script'}, 'OK']
   end
 end

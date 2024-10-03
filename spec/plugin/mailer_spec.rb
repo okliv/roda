@@ -176,7 +176,7 @@ describe "mailer plugin" do
     app(:mailer) do |r|
       r.mail do
         instance_exec(&setup_email)
-        response.headers['Content-Type'] = 'text/plain'
+        response[RodaResponseHeaders::CONTENT_TYPE] = 'text/plain'
         response.mail.body 'c'
         response.mail.add_file :filename=>'a.html', :content=>'b'
         response.mail.parts.first.content_type = 'text/html'
@@ -287,7 +287,7 @@ describe "mailer plugin" do
     app(:bare) do
       plugin :mailer, :content_type=>'text/html'
       route do
-        response['Content-Type'] = 'text/foo'
+        response[RodaResponseHeaders::CONTENT_TYPE] = 'text/foo'
         ""
       end
     end

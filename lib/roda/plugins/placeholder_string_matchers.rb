@@ -21,6 +21,10 @@ class Roda
     #
     #   r.is "foo", String
     #   r.is "foo", :bar 
+    #
+    # If used with the symbol_matchers plugin, this plugin respects the regexps
+    # for the registered symbols, but it does not perform the conversions, the
+    # captures for the regexp are used directly as the captures for the match method.
     module PlaceholderStringMatchers
       def self.load_dependencies(app)
         app.plugin :_symbol_regexp_matchers

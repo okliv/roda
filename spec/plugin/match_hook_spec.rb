@@ -73,7 +73,5 @@ describe "match hook plugin" do
     matches.clear
     body("/foo/bar/baz").must_equal 'fbb'
     matches.must_equal [["/foo", "/bar/baz"], :x, ["/foo/bar", "/baz"], :x, ["/foo/bar/baz", ""], :x]
-
-    app.opts[:match_hooks].must_be :frozen?
   end
 end

@@ -225,7 +225,7 @@ describe "matchers" do
 
     body("/u:jdoe/posts:123").must_equal 'jdoe123'
     status("/u:jdoe/poss:123").must_equal 404
-  end
+  end unless ENV['LINT']
 
   it "symbol matching" do
     app do |r|
@@ -658,7 +658,9 @@ describe "root/empty segment matching" do
       end
     end
 
-    body("/events").must_equal 'Foo'
+    unless_lint do
+      body("/events").must_equal 'Foo'
+    end
     body("/events/").must_equal 'Hooray'
     status("/events/foo").must_equal 404
   end

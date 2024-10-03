@@ -12,9 +12,9 @@ describe "relative_plath plugin" do
     body('/a/b').must_equal '../a'
     body('/a/b/c').must_equal '../../a'
     body('/a/b/c', 'SCRIPT_NAME'=>'/d').must_equal '../../../a'
-    body('', 'SCRIPT_NAME'=>'/d').must_equal './a'
-    body('', 'SCRIPT_NAME'=>'').must_equal '/a'
     unless_lint do
+      body('', 'SCRIPT_NAME'=>'/d').must_equal './a'
+      body('', 'SCRIPT_NAME'=>'').must_equal '/a'
       body('a', 'SCRIPT_NAME'=>'').must_equal '/a'
       body('/', 'SCRIPT_NAME'=>'d').must_equal '/a'
     end
@@ -31,9 +31,9 @@ describe "relative_plath plugin" do
     body('/a/b').must_equal '../a'
     body('/a/b/c').must_equal '../../a'
     body('/a/b/c', 'SCRIPT_NAME'=>'/d').must_equal '../../../a'
-    body('', 'SCRIPT_NAME'=>'/d').must_equal './a'
-    body('', 'SCRIPT_NAME'=>'').must_equal '/a'
     unless_lint do
+      body('', 'SCRIPT_NAME'=>'/d').must_equal './a'
+      body('', 'SCRIPT_NAME'=>'').must_equal '/a'
       body('a', 'SCRIPT_NAME'=>'').must_equal '/a'
       body('/', 'SCRIPT_NAME'=>'d').must_equal '/a'
     end
@@ -50,9 +50,9 @@ describe "relative_plath plugin" do
     body('/a/b').must_equal '../a'
     body('/a/b/c').must_equal '../../a'
     body('/a/b/c', 'SCRIPT_NAME'=>'/d').must_equal '../../../a'
-    body('', 'SCRIPT_NAME'=>'/d').must_equal './a'
-    body('', 'SCRIPT_NAME'=>'').must_equal '/a'
     unless_lint do
+      body('', 'SCRIPT_NAME'=>'/d').must_equal './a'
+      body('', 'SCRIPT_NAME'=>'').must_equal '/a'
       body('a', 'SCRIPT_NAME'=>'').must_equal '/a'
       body('/', 'SCRIPT_NAME'=>'d').must_equal '/a'
     end

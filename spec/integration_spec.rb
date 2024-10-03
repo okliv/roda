@@ -219,7 +219,7 @@ describe "integration" do
       def call(env)
         status, headers, _body = @app.call(env)
 
-        [status, headers.merge('Content-Length'=>@key.length.to_s), [@key]]
+        [status, headers.merge(RodaResponseHeaders::CONTENT_LENGTH=>@key.length.to_s), [@key]]
       end
     end
 

@@ -83,7 +83,6 @@ describe "content_for plugin with multiple calls to the same key" do
     body.strip.must_equal "bar foobaz"
   end
 end
-end
 
 describe "content_for plugin with mixed template engines" do
   before do
@@ -129,4 +128,5 @@ describe "content_for plugin when overriding :engine" do
     body.strip.must_equal "bar\nfoo"
     body('/a').strip.must_equal "bar\nfoo"
   end
+end
 end

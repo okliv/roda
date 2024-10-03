@@ -1,5 +1,13 @@
 require_relative "../spec_helper"
 
+begin
+  require 'tilt'
+  require 'tilt/erb'
+  require 'tilt/string'
+  require_relative '../../lib/roda/plugins/render'
+rescue LoadError
+  warn "tilt not installed, skipping render plugin test"  
+else
 describe "additional_render_engines plugin" do 
   it "supports additional render engines" do
     app(:bare) do
@@ -17,4 +25,5 @@ describe "additional_render_engines plugin" do
 
     proc{body('/nonexistent')}.must_raise Errno::ENOENT
   end
+end
 end

@@ -88,6 +88,7 @@ class Roda
           end
           call_meth = meth
 
+          # RODA4: Switch to false # :warn in last Roda 3 version
           if (check_arity = opts.fetch(:check_arity, true)) && !block.lambda?
             required_args, optional_args, rest, keyword = _define_roda_method_arg_numbers(block)
 
@@ -117,6 +118,9 @@ class Roda
                 alias_method meth, meth
                 meth = :"#{meth}_arity"
               elsif required_args > 1
+                if check_arity == :warn
+                  RodaPlugins.warn "Arity mismatch in block passed to define_roda_method. Expected Arity 1, but multiple arguments required for #{block.inspect}"
+                end
                 b = block
                 block = lambda{|r| instance_exec(r, &b)} # Fallback
               end
@@ -204,7 +208,7 @@ class Roda
 
                 alias set_default_headers set_default_headers
                 def set_default_headers
-                  @headers['Content-Type'] ||= 'text/html'
+                  @headers[RodaResponseHeaders::CONTENT_TYPE] ||= 'text/html'
                 end
               end
             end
@@ -565,6 +569,13 @@ WARNING
         #   session # => {}
         def session
           @_request.session
+        end
+
+        private
+
+        # Convert the segment matched by the Integer matcher to an integer.
+        def _convert_class_Integer(value)
+          value.to_i
         end
       end
     end

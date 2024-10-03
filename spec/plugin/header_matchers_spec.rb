@@ -4,7 +4,7 @@ describe "accept matcher" do
   it "should accept mimetypes and set response Content-Type" do
     app(:header_matchers) do |r|
       r.on :accept=>"application/xml" do
-        response["Content-Type"]
+        response[RodaResponseHeaders::CONTENT_TYPE]
       end
     end
 

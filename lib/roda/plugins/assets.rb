@@ -430,8 +430,8 @@ class Roda
           opts[:css_headers] = headers.merge(opts[:css_headers])
           opts[:js_headers]  = headers.merge(opts[:js_headers])
         end
-        opts[:css_headers]['Content-Type'] ||= "text/css; charset=UTF-8".freeze
-        opts[:js_headers]['Content-Type']  ||= "application/javascript; charset=UTF-8".freeze
+        opts[:css_headers][RodaResponseHeaders::CONTENT_TYPE] ||= "text/css; charset=UTF-8".freeze
+        opts[:js_headers][RodaResponseHeaders::CONTENT_TYPE]  ||= "application/javascript; charset=UTF-8".freeze
 
         [:css_headers, :js_headers, :css_opts, :js_opts, :dependencies, :expanded_dependencies].each do |s|
           opts[s].freeze
@@ -748,7 +748,9 @@ class Roda
           paths = assets_paths(type)
           if o[:early_hints]
             early_hint_as = ltype == :js ? 'script' : 'style'
-            send_early_hints('Link'=>paths.map{|p| "<#{p}>; rel=preload; as=#{early_hint_as}"}.join("\n"))
+            early_hints = paths.map{|p| "<#{p}>; rel=preload; as=#{early_hint_as}"}
+            early_hints = early_hints.join("\n") if Rack.release < '3'
+            send_early_hints(RodaResponseHeaders::LINK=>early_hints)
           end
           paths.map{|p| "#{tag_start}#{h(p)}#{tag_end}"}.join("\n")
         end
@@ -766,7 +768,7 @@ class Roda
             file = "#{o[:"compiled_#{type}_path"]}#{file}"
 
             if o[:gzip] && env['HTTP_ACCEPT_ENCODING'] =~ /\bgzip\b/
-              @_response['Content-Encoding'] = 'gzip'
+              @_response[RodaResponseHeaders::CONTENT_ENCODING] = 'gzip'
               file += '.gz'
             end
 

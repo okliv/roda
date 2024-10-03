@@ -33,14 +33,17 @@
       <li><a href="rdoc/classes/Roda/RodaPlugins/AutoloadNamedRoutes.html">autoload_named_routes</a>: Allows autoloading file for a named route when there is a request for that route.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/AllVerbs.html">all_verbs</a>: Adds request routing methods for all http verbs.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/BacktrackingArray.html">backtracking_array</a>: Allows array matchers to backtrack if later matchers do not match.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/Break.html">break</a>: Supports break inside routing blocks for skipping the current matching route block as if it didn't match.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ClassLevelRouting.html">class_level_routing</a>: Adds class level routing methods, for a DSL similar to <a href="https://github.com/sinatra/sinatra">sinatra</a>.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ErrorHandler.html">error_handler</a>: Adds ability to automatically handle errors raised by the application.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/HashBranches.html">hash_branches</a>: Supports O(1) dispatching to multiple branches at all levels in the routing tree.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/HashPaths.html">hash_paths</a>: Supports O(1) dispatching to multiple paths at all levels in the routing tree.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/HashRoutes.html">hash_routes</a>: Provides a DSL to configure the hash_branches and hash_paths plugins.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Head.html">head</a>: Treat HEAD requests like GET requests with an empty response body.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/HmacPaths.html">hmac_paths</a>: Prevent path enumeration and support access control using HMACs in paths.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Hooks.html">hooks</a>: Adds before/after hook methods.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/MatchHook.html">match_hook</a>: Adds a hook method which is called when a path segment is matched.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/MatchHookArgs.html">match_hook_args</a>: Similar to match_hook plugin, but supports passing matchers and block args to hooks.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/MultiRoute.html">multi_route</a>: Allows dispatching to multiple named route blocks in a single call.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/MultiRun.html">multi_run</a>: Adds the ability to dispatch to multiple rack applications based on the request path prefix.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/NamedRoutes.html">named_routes</a>: Allows for multiple named route blocks that can be dispatched to inside the main route block.</li>
@@ -66,6 +69,7 @@
       <li><a href="rdoc/classes/Roda/RodaPlugins/CaptureERB.html">capture_erb</a>: Allows capturing the output of ERB template blocks, instead of injecting them into the template output.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Chunked.html">chunked</a>: Adds support for streaming template responses using Transfer-Encoding: chunked.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ContentFor.html">content_for</a>: Allows storage of content in one template and retrieval of that content in a different template.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/CustomBlockResults.html">custom_block_results</a>: Adds support for arbitrary objects as block results.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ErbH.html">erb_h</a>: Adds faster (if slightly less safe method) h method for html escaping, based on erb/escape.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ExceptionPage.html">exception_page</a>: Shows page with debugging information for exceptions, designed for use in error handler in development mode.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/H.html">h</a>: Adds h method for html escaping.</li>
@@ -83,6 +87,7 @@
       <li><a href="rdoc/classes/Roda/RodaPlugins/RecheckPrecompiledAssets.html">recheck_precompiled_assets</a>: Allows checking for the precompiled assets metadata file for updates.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Render.html">render</a>: Adds render method for rendering templates, using <a href="https://github.com/rtomayko/tilt">tilt</a>.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/RenderEach.html">render_each</a>: Render a template for each value in an enumerable.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/RenderCoverage.html">render_coverage</a>: Sets compiled_path for Tilt templates, allowing coverage of compiled templates before Ruby 3.2 (requires tilt 2.1+).</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/RenderLocals.html">render_locals</a>: Adds ability to specify defaults for template locals.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Static.html">static</a>: Adds support for serving static files using Rack::Static.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Streaming.html">streaming</a>: Adds ability to stream responses.</li>
@@ -91,8 +96,10 @@
       <li><a href="rdoc/classes/Roda/RodaPlugins/ViewOptions.html">view_options</a>: Allows for setting view options on a per-request basis.</li>
     </ul></li>
     <li>Request/Response: <ul>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/AssumeSSL.html">assume_ssl</a>: Makes request ssl? method always return true, for use with SSL-terminating reverse proxies that do not set appropriate headers.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Caching.html">caching</a>: Adds request and response methods related to http caching.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ContentSecurityPolicy.html">content_security_policy</a>: Allows setting an appropriate Content-Security-Policy header for the application/branch/action.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/CookieFlags.html">cookie_flags</a>: Adds checks for certain cookie flags, to update, warn, or error if they are not set correctly.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Cookies.html">cookies</a>: Adds response methods for handling cookies.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/DefaultHeaders.html">default_headers</a>: Allows modifying the default headers for responses.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/DefaultStatus.html">default_status</a>: Allows overriding the default status for responses.</li>
@@ -101,8 +108,13 @@
       <li><a href="rdoc/classes/Roda/RodaPlugins/DisallowFileUploads.html">disallow_file_uploads</a>: Disallow multipart file uploads.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/DropBody.html">drop_body</a>: Automatically drops response body and Content-Type/Content-Length headers for response statuses indicating no body.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Halt.html">halt</a>: Augments request halt method for support for setting response status and/or response body.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/Hsts.html">hsts</a>: Sets Strict-Transport-Security response header.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/InvalidRequestBody.html">invalid_request_body</a>: Allows for custom handling of invalid request bodies.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ModuleInclude.html">module_include</a>: Adds request_module and response_module class methods for adding modules/methods to request/response classes.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/PermissionsPolicy.html">permissions_policy</a>: Allows setting an appropriate Permissions-Policy header for the application/branch/action.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/PlainHashResponseHeaders.html">plain_hash_response_headers</a>: Uses plain hashes for response headers on Rack 3, for much better performance.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/R.html">r</a>: Adds r method for accessing the request, useful when r local variable is not in scope.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/RedirectHttpToHttps.html">redirect_http_to_https</a>: Adds request method to redirect HTTP requests to the same location using HTTPS.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/RequestAref.html">request_aref</a>: Adds configurable handling for [] and []= request methods.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/RequestHeaders.html">request_headers</a>: Adds a headers method to the request object, for easier access to request headers.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ResponseRequest.html">response_request</a>: Gives response object access to request object.</li>
@@ -241,8 +253,9 @@
   <h2>Interviews</h2>
 
   <ul>
+    <li><a href='https://www.contentfor.dev/2095003/12788637-010-advanced-ruby-with-jeremy-evans'>content_for :devs 010: Advanced Ruby with Jeremy Evans</a></li>
+    <li><a href='https://www.rubberduckdevshow.com/episodes/83-all-about-roda-with-jeremy-evans'>Rubber Duck Dev Show 83: All About Roda with Jeremy Evans</a></li>
     <li><a href='https://devchat.tv/ruby-rogues/building-with-just-what-you-need-using-roda-with-jeremy-evans-ruby-507/'>Ruby Rogues 507: Building with Just What You Need Using Roda with Jeremy Evans</a></li>
-
     <li><a href='http://devchat.tv/ruby-rogues/210-rr-roda-and-routing-trees-with-jeremy-evans'>Ruby Rogues 210: Roda and Routing Trees with Jeremy Evans</a></li>
   </ul>
   
@@ -269,12 +282,15 @@
   <p>Here are some open source applications that use Roda:</p>
 
   <ul>
+    <li><a href="https://github.com/ubicloud/ubicloud/tree/main">Ubicloud</a> (Open, Free, and Portable Cloud)</li>
     <li><a href="https://github.com/bridgetownrb/bridgetown">Bridgetown</a> (Progressive Site Generator and Fullstack Framework)</li>
     <li><a href="https://github.com/karafka/karafka-web">Karafka Web</a> (User Inferface for Karafka Framework)</li>
+    <li><a href="https://github.com/tomlobato/riff">Riff</a> (Quickly Build Restful APIs)</li>
     <li><a href="https://github.com/kontena/kontena/tree/master/server">Kontena</a> (Docker Container Management)</li>
     <li><a href="https://github.com/enebo/alienist_viewer">Alienist Viewer</a> (JRuby Memory Dump Viewer)</li>
     <li><a href="https://github.com/mmmries/golf-score-roda">golf-score-roda</a> (Backend for golf-score-frontend)</li>
     <li><a href="https://github.com/janko-m/tus-ruby-server">tus-ruby-server</a> (Backend for Resumable Uploads)</li>
+    <li><a href="https://github.com/rosenfeld/light_blog">LightBlog</a> (Blog Using Markdown Files)</li>
     <li><a href="https://github.com/jeremyevans/spam">SPAM</a> (Simple Personal Accounting Manager)</li>
     <li><a href="https://github.com/jeremyevans/giftsmas">Giftsmas</a> (Gift Tracking)</li>
     <li><a href="https://github.com/jeremyevans/kaeruera">KaeruEra</a> (Exception Tracking)</li>

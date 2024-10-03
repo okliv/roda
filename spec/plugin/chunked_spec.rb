@@ -151,8 +151,8 @@ describe "chunked plugin with :force_chunked_encoding" do
       end
     end
 
-    header('Content-Length', 'HTTP_VERSION'=>'HTTP/1.1').must_be_nil
-    header('Content-Length', 'HTTP_VERSION'=>'HTTP/1.0').must_equal '4'
+    header(RodaResponseHeaders::CONTENT_LENGTH, 'HTTP_VERSION'=>'HTTP/1.1').must_be_nil
+    header(RodaResponseHeaders::CONTENT_LENGTH, 'HTTP_VERSION'=>'HTTP/1.0').must_equal '4'
   end
 
   it "stream template responses for view if :chunk_by_default is used" do
@@ -175,20 +175,20 @@ describe "chunked plugin with :force_chunked_encoding" do
       end
     end
 
-    header('Transfer-Encoding', 'HTTP_VERSION'=>'HTTP/1.1').must_equal 'chunked'
-    header('Transfer-Encoding', 'HTTP_VERSION'=>'HTTP/1.0').must_be_nil
+    header(RodaResponseHeaders::TRANSFER_ENCODING, 'HTTP_VERSION'=>'HTTP/1.1').must_equal 'chunked'
+    header(RodaResponseHeaders::TRANSFER_ENCODING, 'HTTP_VERSION'=>'HTTP/1.0').must_be_nil
   end
 
   it "uses given :headers when chunking" do
     app(:bare) do
-      plugin :chunked, force_chunked_encoding.merge(:headers=>{'Foo'=>'bar'})
+      plugin :chunked, force_chunked_encoding.merge(:headers=>{'foo'=>'bar'})
       route do |r|
         chunked(:inline=>'m', :layout=>{:inline=>'h<%= yield %>t'})
       end
     end
 
-    header('Foo', 'HTTP_VERSION'=>'HTTP/1.1').must_equal 'bar'
-    header('Foo', 'HTTP_VERSION'=>'HTTP/1.0').must_be_nil
+    header('foo', 'HTTP_VERSION'=>'HTTP/1.1').must_equal 'bar'
+    header('foo', 'HTTP_VERSION'=>'HTTP/1.0').must_be_nil
   end
 
   it "handles multiple arguments to chunked" do
@@ -339,7 +339,7 @@ describe "chunked plugin without :force_chunked_encoding" do
       response.write chunked(:inline=>'m', :layout=>{:inline=>'h<%= yield %>t'})
     end
 
-    header('Content-Length').must_be_nil
+    header(RodaResponseHeaders::CONTENT_LENGTH).must_be_nil
   end
 
   it "stream template responses for view if :chunk_by_default is used" do
@@ -369,30 +369,30 @@ describe "chunked plugin without :force_chunked_encoding" do
       chunked(:inline=>'m', :layout=>{:inline=>'h<%= yield %>t'})
     end
 
-    header('Transfer-Encoding').must_be_nil
+    header(RodaResponseHeaders::TRANSFER_ENCODING).must_be_nil
   end
 
   it "uses given :headers when chunking" do
     app(:bare) do
-      plugin :chunked, :headers=>{'Foo'=>'bar'}
+      plugin :chunked, :headers=>{'foo'=>'bar'}
       route do |r|
         chunked(:inline=>'m', :layout=>{:inline=>'h<%= yield %>t'})
       end
     end
 
-    header('Foo').must_equal 'bar'
+    header('foo').must_equal 'bar'
   end
 
   it "does not use given :headers when not chunking" do
     app(:bare) do
-      plugin :chunked, :headers=>{'Foo'=>'bar'}, :chunk_by_default=>true
+      plugin :chunked, :headers=>{'foo'=>'bar'}, :chunk_by_default=>true
       route do |r|
         no_chunk!
         view(:inline=>'m', :layout=>{:inline=>'h<%= yield %>t'})
       end
     end
 
-    header('Foo').must_be_nil
+    header('foo').must_be_nil
   end
 
   it "handles multiple arguments to chunked" do

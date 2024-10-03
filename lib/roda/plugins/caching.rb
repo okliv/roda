@@ -86,7 +86,7 @@ class Roda
           return unless time
           res = response
           e = env
-          res['Last-Modified'] = time.httpdate
+          res[RodaResponseHeaders::LAST_MODIFIED] = time.httpdate
           return if e['HTTP_IF_NONE_MATCH']
           status = res.status
 
@@ -122,7 +122,7 @@ class Roda
 
           res = response
           e = env
-          res['ETag'] = etag = "#{'W/' if weak}\"#{value}\""
+          res[RodaResponseHeaders::ETAG] = etag = "#{'W/' if weak}\"#{value}\""
           status = res.status
 
           if (!status || (status >= 200 && status < 300) || status == 304)
@@ -176,7 +176,7 @@ class Roda
             values << (v == true ? k : "#{k}=#{v}")
           end
 
-          self['Cache-Control'] = values.join(', ') unless values.empty?
+          @headers[RodaResponseHeaders::CACHE_CONTROL] = values.join(', ') unless values.empty?
         end
 
         # Set Cache-Control header with the max_age given.  max_age should
@@ -185,7 +185,7 @@ class Roda
         # HTTP 1.0 clients (Cache-Control is an HTTP 1.1 header).
         def expires(max_age, opts=OPTS)
           cache_control(Hash[opts].merge!(:max_age=>max_age))
-          self['Expires'] = (Time.now + max_age).httpdate
+          @headers[RodaResponseHeaders::EXPIRES] = (Time.now + max_age).httpdate
         end
 
         # Remove Content-Type and Content-Length for 304 responses.
@@ -193,8 +193,8 @@ class Roda
           a = super
           if a[0] == 304
             h = a[1]
-            h.delete('Content-Type')
-            h.delete('Content-Length')
+            h.delete(RodaResponseHeaders::CONTENT_TYPE)
+            h.delete(RodaResponseHeaders::CONTENT_LENGTH)
           end
           a
         end

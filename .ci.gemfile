@@ -25,12 +25,6 @@ else
   gem 'json'
 end
 
-if RUBY_VERSION < '2.2.0'
-  gem 'sass', '< 3.5'
-else
-  gem 'sassc'
-end
-
 case RUBY_VERSION[0, 3]
 when '1.9', '2.0'
   gem 'rack', '<1.6'
@@ -42,7 +36,9 @@ when '2.5'
   gem 'rack', '<2.2'
 when '2.6'
   gem 'rack', '<3'
-when '2.4', '3.1'
+when '2.7'
+  gem 'rack', '<3.1'
+when '2.4', '3.3'
   # Test main branch of Rack for lowest and highest supported
   # Ruby version
   gem 'rack', :git => 'https://github.com/rack/rack'

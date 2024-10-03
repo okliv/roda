@@ -48,7 +48,7 @@ class Roda
     #
     # :allowed_paths :: Set the template paths to allow.  Attempts to render paths outside
     #                   of these paths will raise an error.  Defaults to the +:views+ directory.
-    # :cache :: nil/false to explicitly disable premanent template caching.  By default, permanent
+    # :cache :: nil/false to explicitly disable permanent template caching.  By default, permanent
     #           template caching is disabled by default if RACK_ENV is development.  When permanent
     #           template caching is disabled, for templates with paths in the file system, the
     #           modification time of the file will be checked on every render, and if it has changed,
@@ -147,6 +147,19 @@ class Roda
     # In general, these methods are used to wrap the content of the block and
     # inject the content into the output. To get similar behavior with Roda, you have
     # a few different options you can use.
+    #
+    # == Use Erubi::CaptureBlockEngine
+    #
+    # Roda defaults to using Erubi for erb template rendering.  Erubi 1.13.0+ includes
+    # support for an erb variant that supports blocks in <tt><%=</tt> and <tt><%==</tt>
+    # tags.  To use it:
+    #
+    #   require 'erubi/capture_block'
+    #   plugin :render, template_opts: {engine_class: Erubi::CaptureBlockEngine}
+    #
+    # See the Erubi documentation for how to capture data inside the block.  Make sure
+    # the method call (+some_method+ in the example) returns the output you want added
+    # to the rendered body.
     #
     # == Directly Inject Template Output
     #
@@ -320,21 +333,28 @@ class Roda
       # template file has been modified.  This is an internal class and
       # the API is subject to change at any time.
       class TemplateMtimeWrapper
-        def initialize(template_class, path, dependencies, *template_args)
-          @template_class = template_class
-          @path = path
-          @template_args = template_args
-          @dependencies = ([path] + Array(dependencies)) if dependencies
+        def initialize(roda_class, opts, template_opts)
+          @roda_class = roda_class
+          @opts = opts
+          @template_opts = template_opts
+          reset_template
 
-          @mtime = template_last_modified if File.file?(path)
-          @template = template_class.new(path, *template_args)
+          @path = opts[:path]
+          deps = opts[:dependencies]
+          @dependencies = ([@path] + Array(deps)) if deps
+          @mtime = template_last_modified
         end
 
         # If the template file exists and the modification time has
         # changed, rebuild the template file, then call render on it.
         def render(*args, &block)
-          modified?
-          @template.render(*args, &block)
+          res = nil
+          modified = false
+          if_modified do
+            res = @template.render(*args, &block)
+            modified = true
+          end
+          modified ? res : @template.render(*args, &block)
         end
 
         # Return when the template was last modified.  If the template depends on any
@@ -350,20 +370,18 @@ class Roda
 
         # If the template file has been updated, return true and update
         # the template object and the modification time. Other return false.
-        def modified?
+        def if_modified
           begin
             mtime = template_last_modified
           rescue
             # ignore errors
           else
             if mtime != @mtime
+              reset_template
+              yield
               @mtime = mtime
-              @template = @template_class.new(@path, *@template_args)
-              return true
             end
           end
-
-          false
         end
 
         if COMPILED_METHOD_SUPPORT
@@ -373,13 +391,13 @@ class Roda
             mod = roda_class::RodaCompiledTemplates
             internal_method_name = :"_#{method_name}"
             begin
-              mod.send(:define_method, internal_method_name, send(:compiled_method, locals_keys, roda_class))
+              mod.send(:define_method, internal_method_name, compiled_method(locals_keys, roda_class))
             rescue ::NotImplementedError
               return false
             end
 
             mod.send(:private, internal_method_name)
-            mod.send(:define_method, method_name, &compiled_method_lambda(self, roda_class, internal_method_name, locals_keys))
+            mod.send(:define_method, method_name, &compiled_method_lambda(roda_class, internal_method_name, locals_keys))
             mod.send(:private, method_name)
 
             method_name
@@ -395,10 +413,11 @@ class Roda
           # Return the lambda used to define the compiled template method.  This
           # is separated into its own method so the lambda does not capture any
           # unnecessary local variables
-          def compiled_method_lambda(template, roda_class, method_name, locals_keys=EMPTY_ARRAY)
+          def compiled_method_lambda(roda_class, method_name, locals_keys=EMPTY_ARRAY)
             mod = roda_class::RodaCompiledTemplates
+            template = self
             lambda do |locals, &block|
-              if template.modified?
+              template.if_modified do
                 mod.send(:define_method, method_name, Render.tilt_template_compiled_method(template, locals_keys, roda_class))
                 mod.send(:private, method_name)
               end
@@ -406,6 +425,14 @@ class Roda
               send(method_name, locals, &block)
             end
           end
+        end
+
+        private
+
+        # Reset the template, done every time the template or one of its
+        # dependencies is modified.
+        def reset_template
+          @template = @roda_class.create_template(@opts, @template_opts)
         end
       end
 
@@ -425,6 +452,17 @@ class Roda
 
             super
           end
+        end
+
+        # Return an Tilt::Template object based on the given opts and template_opts.
+        def create_template(opts, template_opts)
+          opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
+        end
+
+        # A proc that returns content, used for inline templates, so that the template
+        # doesn't hold a reference to the instance of the class
+        def inline_template_block(content)
+          Proc.new{content}
         end
 
         # Copy the rendering options into the subclass, duping
@@ -656,7 +694,7 @@ class Roda
           if content = opts[:inline]
             path = opts[:path] = content
             template_class = opts[:template_class] ||= ::Tilt[engine]
-            opts[:template_block] = Proc.new{content}
+            opts[:template_block] = self.class.inline_template_block(content)
           else
             opts[:views] ||= render_opts[:views]
             path = opts[:path] ||= template_path(opts)
@@ -730,14 +768,14 @@ class Roda
                !opts[:inline]
 
             if render_opts[:check_template_mtime] && !opts[:template_block] && !cache
-              template = TemplateMtimeWrapper.new(opts[:template_class], opts[:path], opts[:dependencies], 1, template_opts)
+              template = TemplateMtimeWrapper.new(self.class, opts, template_opts)
 
               if define_compiled_method
                 method_name = :"_roda_template_#{self.class.object_id}_#{method_cache_key}"
                 method_cache[method_cache_key] = template.define_compiled_method(self.class, method_name)
               end
             else
-              template = opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
+              template = self.class.create_template(opts, template_opts)
 
               if define_compiled_method && cache != false
                 begin

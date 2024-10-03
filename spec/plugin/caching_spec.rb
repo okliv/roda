@@ -5,21 +5,21 @@ describe 'response.cache_control' do
     app(:caching) do |r|
       response.cache_control :public=>true, :no_cache=>true, :max_age => 60
     end
-    header('Cache-Control').split(', ').sort.must_equal ['max-age=60', 'no-cache', 'public']
+    header(RodaResponseHeaders::CACHE_CONTROL).split(', ').sort.must_equal ['max-age=60', 'no-cache', 'public']
   end
 
   it 'does not add a Cache-Control header if it would be empty' do
     app(:caching) do |r|
       response.cache_control({})
     end
-    header('Cache-Control').must_be_nil
+    header(RodaResponseHeaders::CACHE_CONTROL).must_be_nil
   end
 
   it 'skips Cache-Control nil parameters' do
     app(:caching) do |r|
       response.cache_control(:max_age=>nil)
     end
-    header('Cache-Control').must_be_nil
+    header(RodaResponseHeaders::CACHE_CONTROL).must_be_nil
   end
 end
 
@@ -28,16 +28,16 @@ describe 'response.expires' do
     app(:caching) do |r|
       response.expires 60, :public=>true, :no_cache=>true
     end
-    header('Cache-Control').split(', ').sort.must_equal ['max-age=60', 'no-cache', 'public']
-    ((Time.httpdate(header('Expires')) - Time.now).round - 60).abs.must_be :<=, 1
+    header(RodaResponseHeaders::CACHE_CONTROL).split(', ').sort.must_equal ['max-age=60', 'no-cache', 'public']
+    ((Time.httpdate(header(RodaResponseHeaders::EXPIRES)) - Time.now).round - 60).abs.must_be :<=, 1
   end
 
   it 'can be called with only one argument' do
     app(:caching) do |r|
       response.expires 60
     end
-    header('Cache-Control').split(', ').sort.must_equal ['max-age=60']
-    ((Time.httpdate(header('Expires')) - Time.now).round - 60).abs.must_be :<=, 1
+    header(RodaResponseHeaders::CACHE_CONTROL).split(', ').sort.must_equal ['max-age=60']
+    ((Time.httpdate(header(RodaResponseHeaders::EXPIRES)) - Time.now).round - 60).abs.must_be :<=, 1
   end
 end
 
@@ -47,8 +47,8 @@ describe 'response.finish' do
       response.status = 304
       nil
     end
-    header('Content-Type').must_be_nil
-    header('Content-Length').must_be_nil
+    header(RodaResponseHeaders::CONTENT_TYPE).must_be_nil
+    header(RodaResponseHeaders::CONTENT_LENGTH).must_be_nil
   end
 
   it 'does not change non-304 responses' do
@@ -56,8 +56,8 @@ describe 'response.finish' do
       response.status = 200
       nil
     end
-    header('Content-Type').must_equal 'text/html'
-    header('Content-Length').must_equal '0'
+    header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'text/html'
+    header(RodaResponseHeaders::CONTENT_LENGTH).must_equal '0'
   end
 end
 
@@ -66,7 +66,7 @@ describe 'request.last_modified' do
     app(:caching) do |r|
       r.last_modified nil
     end
-    header('Last-Modified').must_be_nil
+    header(RodaResponseHeaders::LAST_MODIFIED).must_be_nil
   end
 
   it 'does not change a status other than 200' do
@@ -83,7 +83,7 @@ end
 describe 'request.last_modified' do
   def res(a={})
     s, h, b = req(a)
-    h['Last-Modified'].must_equal @last_modified.httpdate
+    h[RodaResponseHeaders::LAST_MODIFIED].must_equal @last_modified.httpdate
     [s, b.join]
   end
 
@@ -149,12 +149,12 @@ describe 'request.etag' do
   def res(a={})
     a['status'] = a['status'].to_s if a['status']
     s, h, b = req(a)
-    h['ETag'].must_equal '"foo"'
+    h[RodaResponseHeaders::ETAG].must_equal '"foo"'
     [s, b.join]
   end
 
   it 'uses a weak etag with the :weak option' do
-    header('ETag', 'weak'=>'true').must_equal 'W/"foo"'
+    header(RodaResponseHeaders::ETAG, 'weak'=>'true').must_equal 'W/"foo"'
   end
 
   describe 'for GET requests' do

@@ -1,5 +1,13 @@
 require_relative "../spec_helper"
 
+begin
+  require 'tilt'
+  require 'tilt/erb'
+  require 'tilt/string'
+  require_relative '../../lib/roda/plugins/render'
+rescue LoadError
+  warn "tilt not installed, skipping render plugin test"  
+else
 describe "additional_view_directories plugin" do 
   it "supports additional view directories" do
     app(:bare) do
@@ -40,4 +48,5 @@ describe "additional_view_directories plugin" do
     app.plugin :render
     app.render_opts[:allowed_paths].must_equal expected
   end
+end
 end

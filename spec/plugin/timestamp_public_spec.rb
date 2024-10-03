@@ -67,20 +67,20 @@ describe "timestamp_public plugin" do
     end
 
     body('/static/1/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
-    header('Content-Encoding', '/about/_test.erb').must_be_nil
+    header(RodaResponseHeaders::CONTENT_ENCODING, '/about/_test.erb').must_be_nil
 
     body('/static/1/about.erb').must_equal File.read('spec/views/about.erb')
-    header('Content-Encoding', '/about.erb').must_be_nil
+    header(RodaResponseHeaders::CONTENT_ENCODING, '/about.erb').must_be_nil
 
     body('/static/1/about/_test.erb', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.binread('spec/views/about/_test.erb.gz')
     h = req('/static/1/about/_test.erb', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')[1]
-    h['Content-Encoding'].must_equal 'gzip'
-    h['Content-Type'].must_equal 'text/plain'
+    h[RodaResponseHeaders::CONTENT_ENCODING].must_equal 'gzip'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/plain'
 
     body('/static/1/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.binread('spec/views/about/_test.css.gz')
     h = req('/static/1/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')[1]
-    h['Content-Encoding'].must_equal 'gzip'
-    h['Content-Type'].must_equal 'text/css'
+    h[RodaResponseHeaders::CONTENT_ENCODING].must_equal 'gzip'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/css'
   end
 
   it "returns 404 for non-GET requests" do

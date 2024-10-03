@@ -6,6 +6,22 @@ rescue LoadError
 end
 
 class Roda
+  # Contains constants for response headers.  This approach is used so that all
+  # headers used internally by Roda can be lower case on Rack 3, so that it is
+  # possible to use a plain hash of response headers instead of using Rack::Headers.
+  module RodaResponseHeaders
+    downcase = defined?(Rack::Headers) && Rack::Headers.is_a?(Class)
+
+    %w'Allow Cache-Control Content-Disposition Content-Encoding Content-Length
+       Content-Security-Policy Content-Security-Policy-Report-Only Content-Type
+       ETag Expires Last-Modified Link Location Set-Cookie Transfer-Encoding Vary
+       Permissions-Policy Permissions-Policy-Report-Only Strict-Transport-Security'.
+      each do |value|
+        value = value.downcase if downcase
+        const_set(value.gsub('-', '_').upcase!.to_sym, value.freeze)
+      end
+  end
+
   # Base class used for Roda responses.  The instance methods for this
   # class are added by Roda::RodaPlugins::Base::ResponseMethods, the class
   # methods are added by Roda::RodaPlugins::Base::ResponseClassMethods.
@@ -30,7 +46,7 @@ class Roda
 
       # Instance methods for RodaResponse
       module ResponseMethods
-        DEFAULT_HEADERS = {"Content-Type" => "text/html".freeze}.freeze
+        DEFAULT_HEADERS = {RodaResponseHeaders::CONTENT_TYPE => "text/html".freeze}.freeze
 
         # The body for the current response.
         attr_reader :body
@@ -42,20 +58,11 @@ class Roda
         # code for non-empty responses and a 404 code for empty responses.
         attr_accessor :status
 
-        if defined?(Rack::Headers) && Rack::Headers.is_a?(Class)
-          # Set the default headers when creating a response.
-          def initialize
-            @headers = Rack::Headers.new
-            @body    = []
-            @length  = 0
-          end
-        else
-          # Set the default headers when creating a response.
-          def initialize
-            @headers = {}
-            @body    = []
-            @length  = 0
-          end
+        # Set the default headers when creating a response.
+        def initialize
+          @headers = _initialize_headers
+          @body    = []
+          @length  = 0
         end
 
         # Return the response header with the given key. Example:
@@ -108,15 +115,15 @@ class Roda
           if b.empty?
             s = @status || 404
             if (s == 304 || s == 204 || (s >= 100 && s <= 199))
-              h.delete("Content-Type")
+              h.delete(RodaResponseHeaders::CONTENT_TYPE)
             elsif s == 205
               empty_205_headers(h)
             else
-              h["Content-Length"] ||= '0'
+              h[RodaResponseHeaders::CONTENT_LENGTH] ||= '0'
             end
           else
             s = @status || default_status
-            h["Content-Length"] ||= @length.to_s
+            h[RodaResponseHeaders::CONTENT_LENGTH] ||= @length.to_s
           end
 
           [s, h, b]
@@ -149,7 +156,7 @@ class Roda
         #   response.redirect('foo', 301)
         #   response.redirect('bar')
         def redirect(path, status = 302)
-          @headers["Location"] = path
+          @headers[RodaResponseHeaders::LOCATION] = path
           @status  = status
           nil
         end
@@ -171,18 +178,30 @@ class Roda
 
         private
 
+        if defined?(Rack::Headers) && Rack::Headers.is_a?(Class)
+          # Use Rack::Headers for headers by default on Rack 3
+          def _initialize_headers
+            Rack::Headers.new
+          end
+        else
+          # Use plain hash for headers by default on Rack 1-2
+          def _initialize_headers
+            {}
+          end
+        end
+
         if Rack.release < '2.0.2'
           # Don't use a content length for empty 205 responses on
           # rack 1, as it violates Rack::Lint in that version.
           def empty_205_headers(headers)
-            headers.delete("Content-Type")
-            headers.delete("Content-Length")
+            headers.delete(RodaResponseHeaders::CONTENT_TYPE)
+            headers.delete(RodaResponseHeaders::CONTENT_LENGTH)
           end
         else
           # Set the content length for empty 205 responses to 0
           def empty_205_headers(headers)
-            headers.delete("Content-Type")
-            headers["Content-Length"] = '0'
+            headers.delete(RodaResponseHeaders::CONTENT_TYPE)
+            headers[RodaResponseHeaders::CONTENT_LENGTH] = '0'
           end
         end
 
