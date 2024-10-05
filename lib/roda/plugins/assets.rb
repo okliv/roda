@@ -633,7 +633,7 @@ class Roda
             # :nocov:
           end
           
-          Terser.compile(content)
+          Terser.compile(content, compress: { drop_console: true })
         end
 
         # Compress the CSS using YUI Compressor, requires java runtime
